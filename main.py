@@ -11,6 +11,7 @@ import sys
 from sys import platform
 from subprocess import Popen
 import openpyxl
+import git
 
 if platform == "linux" or platform == "linux2":
     pass
@@ -175,10 +176,12 @@ class SettingFrame(ttk.Frame):
 		
 		chromeFolder.filename = config['chrome_user_data']
 		chromeButton = ttk.Button(self, text='Chrome Tester', command = lambda: self.openChrome())
+		pullButton = ttk.Button(self, text='Update Script', command=lambda:self.gitPull())
+
 		#layout
 		titleLabel.grid(column = 0, row = 0, sticky=(W, E, N, S), padx=15, pady=5)
+		pullButton.grid(column = 0, row = 3, sticky = (W), padx=20, pady=10)
 		chromeButton.grid(column = 0, row = 3, sticky = (E), padx=20, pady=10)
-		
 		saveButton.grid	(column = 0, row = 3, sticky = (N, S), padx=20, pady=10)
 	
 	
@@ -206,6 +209,12 @@ class SettingFrame(ttk.Frame):
 			CHROME = "chrome.exe"
 		if chromeUserData != '':
 			Popen([CHROME, "https://amazon.com","--user-data-dir={}".format(chromeUserData), "--profile-directory={}".format(chromeProfile)])
+
+	def gitPull(self):
+		git_dir = os.getcwd() 
+		g = git.cmd.Git(git_dir)
+		g.pull()		
+		messagebox.showinfo(title='Info', message='the scripts has updated..')
 
 class MainFrame(ttk.Frame):
 	def __init__(self, window) -> None:
