@@ -976,7 +976,8 @@ if __name__ == "__main__":
 			}
 		elif platform == "win32":
 			dict = {
-				"chrome_user_data": "{}\\user-data".format(dir),
+
+				"chrome_user_data": "{}\\AppData\\Local\\Google\Chrome\\User Data".format(os.getenv('USERPROFILE')),
 				"chrome_profile": "Default"
 
 			}
