@@ -160,4 +160,5 @@ cython_debug/
 #.idea/
 /setting.json
 /address.csv
+/gitme.sh
 modules/__pycache__/
