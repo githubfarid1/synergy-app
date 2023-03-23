@@ -24,7 +24,7 @@ import glob
 import string
 from datetime import date
 import json
-
+import amazon_lib as lib
 def explicit_wait():
     time.sleep(randint(1, 3))
 def getConfig():
@@ -113,8 +113,7 @@ def browser_init(chrome_data, pdfoutput_folder):
                 "download.prompt_for_download": False,
                 "download.directory_upgrade": True,
                 "plugins.always_open_pdf_externally": True #It will not show PDF directly in chrome                    
-
-                }
+            }
     options.add_experimental_option("prefs", profile)
     return webdriver.Chrome(service=Service(CM().install()), options=options)
 
@@ -391,7 +390,7 @@ def main():
                 shutil.rmtree(folder)
             except OSError as e:
                 print("Error: %s : %s" % (folder, e.strerror))            
-            
+        lib.join_pdfs(source_folder=complete_output_folder + file_delimeter() + "combined", output_folder=complete_output_folder, tag="FDA_All")            
     input("data generating completed...")
 
 if __name__ == '__main__':

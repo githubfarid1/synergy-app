@@ -1090,7 +1090,7 @@ def main():
             continue
         break
     addressfile = Path("address.csv")
-    resultfile = lib.join_pdfs(source_folder=args.pdfoutput + lib.file_delimeter() + "combined" , output_folder = args.pdfoutput)
+    resultfile = lib.join_pdfs(source_folder=args.pdfoutput + lib.file_delimeter() + "combined" , output_folder = args.pdfoutput, tag='Labels')
     if resultfile != "":
         lib.add_page_numbers(resultfile)
         lib.generate_xls_from_pdf(resultfile, addressfile)

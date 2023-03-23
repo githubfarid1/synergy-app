@@ -21,7 +21,7 @@ def main():
         sys.exit()
 
     addressfile = Path("address.csv")
-    resultfile = lib.join_pdfs(source_folder=args.sourcefolder, output_folder = args.outputfolder)
+    resultfile = lib.join_pdfs(source_folder=args.sourcefolder, output_folder = args.outputfolder, tag='Labels')
     if resultfile != "":
         lib.add_page_numbers(resultfile)
         lib.generate_xls_from_pdf(resultfile, addressfile)

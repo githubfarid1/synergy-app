@@ -71,7 +71,7 @@ def checkdimension(value=""):
     return True
 
 
-def join_pdfs(source_folder, output_folder):
+def join_pdfs(source_folder, output_folder, tag='Labels'):
     merger = PdfMerger()
     print("Merging PDF files in one PDF File..", end=" ", flush=True)
     time.sleep(1)
@@ -80,7 +80,7 @@ def join_pdfs(source_folder, output_folder):
         file_delimeter = "\\"
     time.sleep(1)
     now = datetime.now()
-    fname = "{} {}.pdf".format(now.strftime("%B %d"), "Labels")
+    fname = "{} {}.pdf".format(now.strftime("%B %d"), tag)
     # pdfoutput_folder_combined = pdfoutput_folder # + file_delimeter + "combined"
     tmpname = "{}{}{}.pdf".format(source_folder, file_delimeter, "tmp")
     isExist = os.path.exists(tmpname)
