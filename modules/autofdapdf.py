@@ -205,7 +205,9 @@ def xls_dataframe_generator(filename, sname):
 def xls_data_generator(filename, sname):
     global worksheet
     global workbook
-    workbook = load_workbook(filename=filename, read_only=False)#, keep_vba=True, data_only=True)
+    # workbook = load_workbook(filename=filename, read_only=False)#, keep_vba=True, data_only=True)
+    workbook = load_workbook(filename=filename, read_only=False, data_only=True)
+
     worksheet = workbook[sname]
     allData = {}
     wcode = []
@@ -266,9 +268,9 @@ def xls_data_generator(filename, sname):
         wbox.append(str(worksheet['D{}'.format(i)].value).strip())
         wentrycode.append(str(worksheet['A{}'.format(i)].value).strip())
         wsku.append(str(worksheet['E{}'.format(i)].value).strip())
-
-
     return allData
+
+
 def choose_pdf_file(file_list, entry_id):
     for file in file_list:
         doc = fitz.open(file)
