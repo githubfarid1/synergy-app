@@ -12,6 +12,9 @@ from sys import platform
 from subprocess import Popen
 import openpyxl
 import git
+import warnings
+
+warnings.filterwarnings("ignore", category=UserWarning)
 
 if platform == "linux" or platform == "linux2":
     pass
@@ -19,7 +22,7 @@ elif platform == "win32":
 	from subprocess import CREATE_NEW_CONSOLE
 import json
 
-VERSION = "1.03"
+VERSION = "1.04"
 def getConfig():
 	file = open("setting.json", "r")
 	config = json.load(file)

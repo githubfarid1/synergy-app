@@ -385,6 +385,7 @@ def main():
     else:
         del_non_annot_page(allsavedfiles, complete_output_folder)
         join_folderpdf(allsavedfiles, complete_output_folder)
+        lib.join_pdfs(source_folder=complete_output_folder + file_delimeter() + "combined", output_folder=complete_output_folder, tag="FDA_All")
         # Delete all file folder
         for filename in list_of_files:
             folder = filename[:-4]
@@ -392,7 +393,7 @@ def main():
                 shutil.rmtree(folder)
             except OSError as e:
                 print("Error: %s : %s" % (folder, e.strerror))            
-        lib.join_pdfs(source_folder=complete_output_folder + file_delimeter() + "combined", output_folder=complete_output_folder, tag="FDA_All")            
+        
     input("data generating completed...")
 
 if __name__ == '__main__':
