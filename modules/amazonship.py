@@ -67,7 +67,7 @@ def killAllChrome():
 class AmazonShipment:
     def __init__(self, xlsfile, sname, chrome_data, download_folder) -> None:
         try:
-            self.__workbook = load_workbook(filename=xlsfile, read_only=False, data_only=True)
+            self.__workbook = load_workbook(filename=xlsfile, read_only=False, keep_vba=True, data_only=True)
             self.__worksheet = self.__workbook[sname]
         except Exception as e:
             logger.error(e)
@@ -293,7 +293,6 @@ class AmazonShipment:
                     pass
 
                 explicit_wait()
-
 
                 now = datetime.now()
                 maxdate = now + timedelta(days=105)
@@ -1040,8 +1039,8 @@ def main():
     parser.add_argument('-output', '--pdfoutput', type=str,help="PDF output folder")
     parser.add_argument('-cdata', '--chromedata', type=str,help="Chrome User Data Directory")
     args = parser.parse_args()
-    if args.xlsinput[-5:] != '.xlsx':
-        input('2nd File input have to XLSX file')
+    if not (args.xlsinput[-5:] == '.xlsx' or args.xlsinput[-5:] == '.xlsm'):
+        input('2nd File input have to XLSX or XLSM file')
         sys.exit()
     isExist = os.path.exists(args.xlsinput)
     if not isExist:

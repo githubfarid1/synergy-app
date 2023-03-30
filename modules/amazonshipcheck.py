@@ -74,7 +74,7 @@ def file_delimeter():
 class AmazonShipmentCheck:
     def __init__(self, xlsfile, sname) -> None:
         try:
-            self.__workbook = load_workbook(filename=xlsfile, read_only=False, data_only=True)
+            self.__workbook = load_workbook(filename=xlsfile, read_only=False, keep_vba=True, data_only=True)
             self.__worksheet = self.__workbook[sname]
         except Exception as e:
             logger.error(e)
@@ -559,8 +559,8 @@ def main():
     parser.add_argument('-xls', '--xlsinput', type=str,help="XLSX File Input")
     parser.add_argument('-sname', '--sheetname', type=str,help="Sheet Name of XLSX file")
     args = parser.parse_args()
-    if args.xlsinput[-5:] != '.xlsx':
-        input('input the right XLSX file')
+    if not (args.xlsinput[-5:] == '.xlsx' or args.xlsinput[-5:] == '.xlsm'):
+        input('input the right XLSX or XLSM file')
         sys.exit()
     isExist = os.path.exists(args.xlsinput)
     if not isExist:

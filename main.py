@@ -22,7 +22,7 @@ elif platform == "win32":
 	from subprocess import CREATE_NEW_CONSOLE
 import json
 
-VERSION = "1.04"
+VERSION = "1.05"
 def getConfig():
 	file = open("setting.json", "r")
 	config = json.load(file)
@@ -367,7 +367,7 @@ class TrackingUpdateFrame(ttk.Frame):
 		titleLabel = TitleLabel(self, text="Amazon Tracking Update")
 		closeButton = CloseButton(self)
 		
-		xlsInputFile = FileChooserFrame(self, btype="file", label="Select XLSM Input File:", filetypes=(("xlsm files", "*.xlsm"),("all files", "*.*")))
+		xlsInputFile = FileChooserFrame(self, btype="file", label="Select XLSM or XLSX Input File:", filetypes=(("excel files", "*.xlsm *.xlsx"),("all files", "*.*")))
 		runButton = ttk.Button(self, text='Run Process', command = lambda:self.run_process(input=xlsInputFile.filename))
 		
 		# layout
@@ -679,7 +679,8 @@ class AmazonShippingFrame(ttk.Frame):
 		# populate
 		titleLabel = TitleLabel(self, text="Amazon Shipment")
 		closeButton = CloseButton(self)
-		xlsInputFile = FileChooserFrame(self, btype="file", label="Select Input XLSX File:", filetypes=(("xlsx files", "*.xlsx"),("all files", "*.*")), sheetlist=sheetlist)
+		xlsInputFile = FileChooserFrame(self, btype="file", label="Select Input Excel File:", filetypes=(("Excel files", "*.xlsx *.xlsm"),("all files", "*.*")), sheetlist=sheetlist)
+
 		outputfolder = FileChooserFrame(self, btype="folder", label="Output PDF Folder:", filetypes=())
 
 		labelsname = Label(self, text="Sheet Name:")
@@ -730,7 +731,8 @@ class FdaEntryPdfFrame(ttk.Frame):
 		titleLabel = TitleLabel(self, text="FDA Entry + PDF Generator")
 		closeButton = CloseButton(self)
 	
-		xlsInputFile = FileChooserFrame(self, btype="file", label="Select XLSX Input File:", filetypes=(("xlsx files", "*.xlsx"),("all files", "*.*")), sheetlist=sheetlist)
+		xlsInputFile = FileChooserFrame(self, btype="file", label="Select Input Excel File:", filetypes=(("Excel files", "*.xlsx *.xlsm"),("all files", "*.*")), sheetlist=sheetlist)
+
 		labeldate = Label(self, text="Anticipated Date Arrival:")
 		labelsname = Label(self, text="Sheet Name:")
 		# sheetName = Entry(self, width=45)
@@ -784,7 +786,7 @@ class AmazonShippingCheckFrame(ttk.Frame):
 		# populate
 		titleLabel = TitleLabel(self, text="Amazon Shipment Check")
 		closeButton = CloseButton(self)
-		xlsInputFile = FileChooserFrame(self, btype="file", label="Select Input XLSX File:", filetypes=(("xlsx files", "*.xlsx"),("all files", "*.*")), sheetlist=sheetlist)
+		xlsInputFile = FileChooserFrame(self, btype="file", label="Select Input Excel File:", filetypes=(("Excel files", "*.xlsx *.xlsm"),("all files", "*.*")), sheetlist=sheetlist)
 
 		labelsname = Label(self, text="Sheet Name:")
 		runButton = ttk.Button(self, text='Run Process', command = lambda:self.run_process(xlsinput=xlsInputFile.filename, sname=sheetlist))
@@ -934,7 +936,6 @@ class CanadaPostPdfFrame(ttk.Frame):
 		else:
 			# messagebox.showwarning(title='Warning', message='This process will update the excel file. make sure you have closed the file.')
 			run_module(comlist=[PYLOC, "modules/cpostconvert.py", "-pdf", kwargs['pdfinput'], "-output", kwargs['pdfoutput'] ])
-
 
 class CloseButton(ttk.Button):
 	def __init__(self, parent):

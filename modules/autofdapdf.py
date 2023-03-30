@@ -206,7 +206,7 @@ def xls_data_generator(filename, sname):
     global worksheet
     global workbook
     # workbook = load_workbook(filename=filename, read_only=False)#, keep_vba=True, data_only=True)
-    workbook = load_workbook(filename=filename, read_only=False, data_only=True)
+    workbook = load_workbook(filename=filename, read_only=False, keep_vba=True, data_only=True)
 
     worksheet = workbook[sname]
     allData = {}
@@ -306,8 +306,8 @@ def main():
     parser.add_argument('-o', '--output', type=str,help="PDF output folder")
     
     args = parser.parse_args()
-    if args.input[-5:] != '.xlsx':
-        input('File input have to XLSX file')
+    if not (args.input[-5:] == '.xlsx' or args.input[-5:] == '.xlsm'):
+        input('input the right XLSX or XLSM file')
         sys.exit()
     isExist = os.path.exists(args.chromedata)
     if isExist == False :
@@ -315,7 +315,7 @@ def main():
         sys.exit()
     isExist = os.path.exists(args.input)
     if isExist == False :
-        input('Please check XLSX file')
+        input('Please check XLSX or XLSM file')
         sys.exit()
     if len(args.date) != 10:
         input('Date Arrival is wrong')

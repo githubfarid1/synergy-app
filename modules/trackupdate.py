@@ -36,7 +36,7 @@ def parse(fileinput, chrome_data):
     os.system('cls')
     print('File Selected:', fileinput)
 
-    wb = load_workbook(filename=trackupdate_source , read_only=False, keep_vba=True)
+    wb = load_workbook(filename=trackupdate_source, read_only=False, keep_vba=True, data_only=True)
     ws = wb['dyk_manifest_template']
     # Use the active cell when the file was loaded
     ws = wb.active
@@ -145,8 +145,8 @@ def main():
     parser.add_argument('-i', '--input', type=str,help="File Input")
     parser.add_argument('-d', '--data', type=str,help="Chrome User Data Directory")
     args = parser.parse_args()
-    if args.input[-5:] != '.xlsm':
-        print('File input have to XLSM file')
+    if not (args.input[-5:] == '.xlsx' or args.input[-5:] == '.xlsm'):
+        print('File input have to XLSM or XLSX file')
         exit()
     isExist = os.path.exists(args.data)
     if isExist == False :
