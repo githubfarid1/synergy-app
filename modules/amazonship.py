@@ -68,7 +68,10 @@ class AmazonShipment:
     def __init__(self, xlsfile, sname, chrome_data, download_folder) -> None:
         try:
             self.__workbook = load_workbook(filename=xlsfile, read_only=False, keep_vba=True, data_only=True)
+
             self.__worksheet = self.__workbook[sname]
+            self.__worksheet = self.__workbook.active
+
         except Exception as e:
             logger.error(e)
             input("XLSX file or Sheet name not found")
