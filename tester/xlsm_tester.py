@@ -4,3 +4,4 @@ xlsfile = 'C:\\synergy-data-tester\\shipmentall\\xUSA Small Shipment Creation V1
 sname = 'Shipment summary'
 workbook = load_workbook(filename=xlsfile, read_only=False, keep_vba=True, data_only=True)
 worksheet = workbook[sname]
+workbook.save(xlsfile)
