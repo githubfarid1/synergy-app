@@ -260,7 +260,7 @@ class MainFrame(ttk.Frame):
 		amazonLabelXlsButton = FrameButton(self, window, text="Amazon Join PDF", class_frame=AmazonJoinPdfFrame)
 		amazonReviewButton = FrameButton(self, window, text="Amazon Review Request", class_frame=AmazonReviewFrame)
 		canadaPostPdfButton = FrameButton(self, window, text="Canada Post PDF Convert", class_frame=CanadaPostPdfFrame)
-		amazonAllButton = FrameButton(self, window, text="Amazon Shipment + FDA + Tracking", class_frame=AmazonAllFrame)
+		amazonAllButton = FrameButton(self, window, text="Amazon Shipment + FDA", class_frame=AmazonAllFrame)
 
 		# layout
 		titleLabel.grid(column = 0, row = 0, sticky=(W, E, N, S), padx=15, pady=5, columnspan=3)
