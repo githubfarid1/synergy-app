@@ -963,7 +963,7 @@ class AmazonAllFrame(ttk.Frame):
 		sheetlist3 = ttk.Combobox(self, textvariable=StringVar(), state="readonly")
 		
 		# populate
-		titleLabel = TitleLabel(self, text="Amazon Shipment + FDA + Tracking")
+		titleLabel = TitleLabel(self, text="Amazon Shipment + FDA")
 		closeButton = CloseButton(self)
 		xlsInputFile = FileChooserFrame(self, btype="file", label="Select Input Excel File:", filetypes=(("Excel files", "*.xlsx *.xlsm"),("all files", "*.*")), sheetlist=(sheetlist1, sheetlist2, sheetlist3))
 
