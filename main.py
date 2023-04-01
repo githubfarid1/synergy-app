@@ -115,8 +115,13 @@ class FileChooserFrame(ttk.Frame):
 			self.filename = filenametmp
 			if kwargs['sheetlist'] != None:
 				wb = openpyxl.load_workbook(filenametmp)
-				kwargs['sheetlist']['values'] = wb.sheetnames
-				kwargs['sheetlist'].current(0)
+				if type(kwargs['sheetlist']) == tuple:
+					for idx, sl in enumerate(kwargs['sheetlist']):
+						kwargs['sheetlist'][idx]['values'] = wb.sheetnames
+						kwargs['sheetlist'][idx].current(0)
+				else:
+					kwargs['sheetlist']['values'] = wb.sheetnames
+					kwargs['sheetlist'].current(0)
 
 class FileChooserMultipleFrame(ttk.Frame):
 	def __init__(self, window, **kwargs):
@@ -255,6 +260,7 @@ class MainFrame(ttk.Frame):
 		amazonLabelXlsButton = FrameButton(self, window, text="Amazon Join PDF", class_frame=AmazonJoinPdfFrame)
 		amazonReviewButton = FrameButton(self, window, text="Amazon Review Request", class_frame=AmazonReviewFrame)
 		canadaPostPdfButton = FrameButton(self, window, text="Canada Post PDF Convert", class_frame=CanadaPostPdfFrame)
+		amazonAllButton = FrameButton(self, window, text="Amazon Shipment + FDA + Tracking", class_frame=AmazonAllFrame)
 
 		# layout
 		titleLabel.grid(column = 0, row = 0, sticky=(W, E, N, S), padx=15, pady=5, columnspan=3)
@@ -274,6 +280,7 @@ class MainFrame(ttk.Frame):
 		amazonLabelXlsButton.grid(column = 1, row = 5, sticky=(W, E, N, S), padx=15, pady=5)
 		amazonReviewButton.grid(column = 2, row = 5, sticky=(W, E, N, S), padx=15, pady=5)
 		canadaPostPdfButton.grid(column = 0, row = 6, sticky=(W, E, N, S), padx=15, pady=5)
+		amazonAllButton.grid(column = 1, row = 6, sticky=(W, E, N, S), padx=15, pady=5)
 
 class PdfConvertFrame(ttk.Frame):
 	def __init__(self, window) -> None:
@@ -936,6 +943,67 @@ class CanadaPostPdfFrame(ttk.Frame):
 		else:
 			# messagebox.showwarning(title='Warning', message='This process will update the excel file. make sure you have closed the file.')
 			run_module(comlist=[PYLOC, "modules/cpostconvert.py", "-pdf", kwargs['pdfinput'], "-output", kwargs['pdfoutput'] ])
+
+class AmazonAllFrame(ttk.Frame):
+	def __init__(self, window) -> None:
+		super().__init__(window)
+		# configure
+		self.grid(column=0, row=0, sticky=(N, E, W, S))
+		self.config(padding="20 20 20 20", borderwidth=1, relief='groove')
+
+		self.columnconfigure(0, weight=1)
+		self.rowconfigure(0, weight=1)
+		self.rowconfigure(1, weight=1)
+		self.rowconfigure(2, weight=1)
+		self.rowconfigure(3, weight=1)
+		self.rowconfigure(4, weight=1)
+		self.rowconfigure(5, weight=1)
+		sheetlist1 = ttk.Combobox(self, textvariable=StringVar(), state="readonly")
+		sheetlist2 = ttk.Combobox(self, textvariable=StringVar(), state="readonly")
+		sheetlist3 = ttk.Combobox(self, textvariable=StringVar(), state="readonly")
+		
+		# populate
+		titleLabel = TitleLabel(self, text="Amazon Shipment + FDA + Tracking")
+		closeButton = CloseButton(self)
+		xlsInputFile = FileChooserFrame(self, btype="file", label="Select Input Excel File:", filetypes=(("Excel files", "*.xlsx *.xlsm"),("all files", "*.*")), sheetlist=(sheetlist1, sheetlist2, sheetlist3))
+
+		outputfolder = FileChooserFrame(self, btype="folder", label="Output PDF Folder:", filetypes=())
+
+		labelsname1 = Label(self, text="Shipment Sheet:")
+		labelsname2 = Label(self, text="Prior Notice Sheet:")
+		labelsname3 = Label(self, text="Tracking Update Sheet:")
+		
+		# sheetName = Entry(self, width=45)
+		
+		runButton = ttk.Button(self, text='Run Process', command = lambda:self.run_process(xlsinput=xlsInputFile.filename, shipsheet=sheetlist1, pnsheet=sheetlist2, tracksheet=sheetlist3, pdfoutput=outputfolder.filename))
+		
+		# layout
+		titleLabel.grid(column = 0, row = 0, sticky = (W, E, N, S))
+		xlsInputFile.grid(column = 0, row = 2, sticky = (W,E))
+		labelsname1.grid(column = 0, row = 3, sticky=(W))
+		labelsname2.grid(column = 0, row = 4, sticky=(W))
+		labelsname3.grid(column = 0, row = 5, sticky=(W))
+		sheetlist1.grid(column=0, row = 3, pady=10)
+		sheetlist2.grid(column=0, row = 4, pady=10)
+		sheetlist3.grid(column=0, row = 5, pady=10)
+
+		outputfolder.grid(column = 0, row = 6, sticky = (W,E))
+		runButton.grid(column = 0, row = 7, sticky = (E))
+		closeButton.grid(column = 0, row = 8, sticky = "n")
+
+
+		# self.runButton.state(['disabled'])
+
+	def run_process(self, **kwargs):
+		if kwargs['xlsinput'] == "": 
+			messagebox.showwarning(title='Warning', message='Please make sure you have choosed the files')
+		else:
+			pdffolder = kwargs['pdfoutput']
+			if platform == "win32":
+				pdffolder = pdffolder.replace("/", "\\")
+
+			messagebox.showwarning(title='Warning', message='This process will update the excel file. make sure you have closed the file.')
+			run_module(comlist=[PYLOC, "modules/amazonall.py", "-xls", kwargs['xlsinput'], "-shipsheet", kwargs['shipsheet'].get(), "-pnsheet", kwargs['pnsheet'].get(), "-tracksheet", kwargs['tracksheet'].get(), "-output", pdffolder, "-cdata",  getConfig()['chrome_user_data']])
 
 class CloseButton(ttk.Button):
 	def __init__(self, parent):
