@@ -70,7 +70,7 @@ class AmazonShipment:
             self.__workbook = load_workbook(filename=xlsfile, read_only=False, keep_vba=True, data_only=True)
 
             self.__worksheet = self.__workbook[sname]
-            self.__worksheet = self.__workbook.active
+            # self.__worksheet = self.__workbook.active
 
         except Exception as e:
             logger.error(e)
