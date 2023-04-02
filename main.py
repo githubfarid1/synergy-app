@@ -962,6 +962,7 @@ class AmazonAllFrame(ttk.Frame):
 		sheetlist1 = ttk.Combobox(self, textvariable=StringVar(), state="readonly")
 		sheetlist2 = ttk.Combobox(self, textvariable=StringVar(), state="readonly")
 		sheetlist3 = ttk.Combobox(self, textvariable=StringVar(), state="readonly")
+		dateArrival = DateEntry(self, width= 20, date_pattern='mm/dd/yyyy')
 		
 		# populate
 		titleLabel = TitleLabel(self, text="Amazon Shipment + FDA")
@@ -973,6 +974,7 @@ class AmazonAllFrame(ttk.Frame):
 		labelsname1 = Label(self, text="Shipment Sheet:")
 		labelsname2 = Label(self, text="Prior Notice Sheet:")
 		labelsname3 = Label(self, text="Tracking Update Sheet:")
+		labeldate = Label(self, text="Anticipated Date Arrival:")
 		
 		# sheetName = Entry(self, width=45)
 		
@@ -984,9 +986,12 @@ class AmazonAllFrame(ttk.Frame):
 		labelsname1.grid(column = 0, row = 3, sticky=(W))
 		labelsname2.grid(column = 0, row = 4, sticky=(W))
 		labelsname3.grid(column = 0, row = 5, sticky=(W))
+		labeldate.grid(column = 0, row = 6, sticky=(W))
+
 		sheetlist1.grid(column=0, row = 3, pady=10)
 		sheetlist2.grid(column=0, row = 4, pady=10)
 		sheetlist3.grid(column=0, row = 5, pady=10)
+		dateArrival.grid(column=0, row = 6)
 
 		outputfolder.grid(column = 0, row = 6, sticky = (W,E))
 		runButton.grid(column = 0, row = 7, sticky = (E))

@@ -40,13 +40,19 @@ def main():
         sys.exit()
     strdate = str(date.today())
     foldername = "{}{}_{}".format(args.pdfoutput + lib.file_delimeter(), 'shipment_creation', strdate) 
-
     isExist = os.path.exists(foldername)
     if not isExist:
         os.makedirs(foldername)
-
+    print("Step 1: Shipment Creation")
     comlist=[PYLOC, "modules/amazonship.py", "-xls", args.xlsinput, "-sname", args.shipsheet, "-output", foldername, "-cdata",  args.chromedata]
     Popen(comlist)    
+    foldername = "{}{}_{}".format(args.pdfoutput + lib.file_delimeter(), 'prior_notice', strdate) 
+    isExist = os.path.exists(foldername)
+    if not isExist:
+        os.makedirs(foldername)
+	
+    # comlist=[PYLOC, "modules/autofdapdf.py", "-i", args.xlsinput, "-d", args.chromedata, "-s", args.shipsheet, "-dt", str(kwargs['datearrival'].get_date()), "-o", foldername]
+
 
 if __name__ == '__main__':
     main()
