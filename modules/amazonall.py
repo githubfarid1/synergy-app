@@ -46,7 +46,7 @@ def main():
     if not isExist:
         os.makedirs(foldername)
     # print("Step 1: Shipment Creation", flush=True)
-    comlist=[PYLOC, "modules/amazonship.py", "-xls", args.xlsinput, "-sname", args.shipsheet, "-output", foldername, "-cdata",  args.chromedata]
+    comlist=[PYLOC, "modules/amazonship.py", "-xls", '"' + args.xlsinput + '"', "-sname", '"' + args.shipsheet + '"', "-output", '"' + foldername + '"', "-cdata", '"' + args.chromedata + '"']
     # Popen(comlist)
     print(" ".join(comlist))
     os.popen(" ".join(comlist))
@@ -56,7 +56,7 @@ def main():
         os.makedirs(foldername)
 
     # print("Step 2: Prior Notice", flush=True)
-    comlist=[PYLOC, "modules/autofdapdf.py", "-i", args.xlsinput, "-d", args.chromedata, "-s", args.shipsheet, "-dt", args.date, "-o", foldername]
+    comlist=[PYLOC, "modules/autofdapdf.py", "-i", '"' + args.xlsinput + '"', "-d", '"' + args.chromedata + '"', "-s", '"' + args.shipsheet + '"', "-dt", '"' + args.date + '"', "-o", '"' + foldername + '"']
     # Popen(comlist)
     os.popen(" ".join(comlist))
 
