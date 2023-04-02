@@ -80,13 +80,13 @@ def main():
     logger2.addHandler(file_handler2)
 
     logger2.info("###### Start ######")
-    logger2.info("Filename: {}\nSheet Name:{}\nPDF Output Folder:{}".format(args.xlsinput, args.shipsheet, args.pdfoutput))
+    logger2.info("Filename: {}\nSheet Name:{}\nPDF Output Folder:{}".format(args.xlsinput, args.shipsheet, folderamazonship))
     maxrun = 10
     for i in range(1, maxrun+1):
         if i > 1:
             print("Process will be reapeated")
         try:    
-            shipment = amazonship.AmazonShipment(xlsfile=args.xlsinput, sname=args.shipsheet, chrome_data=args.chromedata, download_folder=args.pdfoutput)
+            shipment = amazonship.AmazonShipment(xlsfile=args.xlsinput, sname=args.shipsheet, chrome_data=args.chromedata, download_folder=folderamazonship)
             shipment.data_sanitizer()
             if len(shipment.datalist) == 0:
                 break
@@ -101,7 +101,7 @@ def main():
             continue
         break
     addressfile = Path("address.csv")
-    resultfile = lib.join_pdfs(source_folder=args.pdfoutput + lib.file_delimeter() + "combined" , output_folder = args.pdfoutput, tag='Labels')
+    resultfile = lib.join_pdfs(source_folder=folderamazonship + lib.file_delimeter() + "combined" , output_folder = folderamazonship, tag='Labels')
     if resultfile != "":
         lib.add_page_numbers(resultfile)
         lib.generate_xls_from_pdf(resultfile, addressfile)
