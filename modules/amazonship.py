@@ -548,7 +548,9 @@ class AmazonShipment:
                                     self.worksheet['{}{}'.format(boxcol, dimrow+1)].value = s['label']
                                     self.worksheet['{}{}'.format(boxcol, dimrow+2)].value = s['trackid']
 
-            self.workbook.save(self.xlsfile)
+            # self.workbook.save(self.xlsfile)
+            self.workbook.save('tmp.xlsm')
+
             print(dlist['name'], 'Saved to', self.xlsfile)
             print(dlist['name'], 'Extract PDF..')
 
