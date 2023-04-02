@@ -6,9 +6,8 @@
 # worksheet = workbook[sname]
 # workbook.save(xlsfile)
 
-from xlwings import Workbook
+import xlwings as xw
 xlsfile = r'C:/synergy-data-tester/shipmentall/xUSA Small Shipment Creation V12.20.xlsm'
 newfile = r'C:/synergy-data-tester/shipmentall/yUSA Small Shipment Creation V12.20.xlsm'
 sname = 'Shipment summary'
-wb = Workbook(xlsfile)
-wb.save(newfile)
+sheet1 = xw.Book(xlsfile).sheets[0]
