@@ -136,7 +136,7 @@ def main():
         fda_entry.parse()
         pdf_filename = fda.pdf_rename(pdfoutput_folder=complete_output_folder)
         if pdf_filename != "":
-            fda.webentry_update(pdffile=pdf_filename, xlsfilename=args.input, pdffolder=complete_output_folder)
+            fda.webentry_update(pdffile=pdf_filename, xlsfilename=args.xlsinput, pdffolder=complete_output_folder)
         else:
             print("rename the file was failed")
         first = False
@@ -152,7 +152,7 @@ def main():
         prior = FdaPdf(filename=pdf_filename, datalist=xlsdata, pdfoutput=complete_output_folder)
         prior.highlightpdf_generator()
         prior.insert_text()
-        fda.save_to_xls(pnlist=prior.pnlist, filename=args.input)
+        fda.save_to_xls(pnlist=prior.pnlist, filename=args.xlsinput)
         allsavedfiles.extend(prior.savedfiles)
     
     setall = set(allsavedfiles)
