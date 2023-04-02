@@ -2,8 +2,8 @@ from openpyxl import Workbook, load_workbook
 
 # filename1 = "/home/farid/dev/python/synergy-github/data/sample/copy_sheet/xUSA Small Shipment Creation V12.20.xlsm"
 # filename2 = "/home/farid/dev/python/synergy-github/data/sample/copy_sheet/April 01 Labels.xlsx"
-filename1 = r"C:/synergy-data-tester/copy_sheet/copy_sheet/USA Small Shipment Creation V12.20.xlsm"
-filename2 = r"C:/synergy-data-tester/copy_sheet/copy_sheet/April 01 Labels.xlsx"
+filename1 = r"C:/synergy-data-tester/copy_sheet/xUSA Small Shipment Creation V12.20.xlsm"
+filename2 = r"C:/synergy-data-tester/copy_sheet/April 01 Labels.xlsx"
 
 
 wb1 = load_workbook(filename=filename1, read_only=False, keep_vba=True, data_only=True)
