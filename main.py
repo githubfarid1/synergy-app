@@ -994,8 +994,8 @@ class AmazonAllFrame(ttk.Frame):
 		dateArrival.grid(column=0, row = 7)
 
 		outputfolder.grid(column = 0, row = 6, sticky = (W,E))
-		runButton.grid(column = 0, row = 7, sticky = (E))
-		closeButton.grid(column = 0, row = 8, sticky = "n")
+		runButton.grid(column = 0, row = 8, sticky = (E))
+		closeButton.grid(column = 0, row = 9, sticky = "n")
 
 
 		# self.runButton.state(['disabled'])
