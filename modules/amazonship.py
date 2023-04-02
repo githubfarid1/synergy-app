@@ -549,9 +549,7 @@ class AmazonShipment:
                                     self.worksheet['{}{}'.format(boxcol, dimrow+2)].value = s['trackid']
 
             # self.workbook.save(self.xlsfile)
-            self.workbook.save('tmp.xlsm')
-
-            print(dlist['name'], 'Saved to', self.xlsfile)
+            # print(dlist['name'], 'Saved to', self.xlsfile)
             print(dlist['name'], 'Extract PDF..')
 
             print('#' * 5, dlist['name'], "End Process", '#' * 5)
@@ -572,6 +570,8 @@ class AmazonShipment:
                     self.driver.switch_to.window(handle)
                     self.driver.close()
             self.driver.switch_to.window(original_window)
+        self.workbook.save(self.xlsfile)
+        print(dlist['name'], 'Saved to', self.xlsfile)
         self.driver.quit()
         print('All Shipment has Created...')
         
