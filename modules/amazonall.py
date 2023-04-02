@@ -91,6 +91,8 @@ def main():
             if len(shipment.datalist) == 0:
                 break
             shipment.parse()
+            shipment.workbook.save(shipment.xlsfile)
+            shipment.workbook.close()
         except Exception as e:
             logger.error(e)
             print("There is an error, check logs/amazonship-err.log")
@@ -105,6 +107,8 @@ def main():
     if resultfile != "":
         lib.add_page_numbers(resultfile)
         lib.generate_xls_from_pdf(resultfile, addressfile)
+    
+    lib.copysheet(destination=args.xlsinput, source=resultfile, cols=('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'), sheetsource="Sheet", sheetdestination="Shipment labels summary")
     # input("End Process..")    
     # -----------------
 
