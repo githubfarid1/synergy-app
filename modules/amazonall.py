@@ -22,6 +22,8 @@ def main():
     parser.add_argument('-tracksheet', '--tracksheet', type=str,help="Tracking Sheet of XLSX file")
     parser.add_argument('-output', '--pdfoutput', type=str,help="PDF output folder")
     parser.add_argument('-cdata', '--chromedata', type=str,help="Chrome User Data Directory")
+    parser.add_argument('-dt', '--date', type=str,help="Arrival Date")
+
     args = parser.parse_args()
     if not (args.xlsinput[-5:] == '.xlsx' or args.xlsinput[-5:] == '.xlsm'):
         input('File input have to XLSX or XLSM file')
@@ -45,13 +47,15 @@ def main():
         os.makedirs(foldername)
     print("Step 1: Shipment Creation")
     comlist=[PYLOC, "modules/amazonship.py", "-xls", args.xlsinput, "-sname", args.shipsheet, "-output", foldername, "-cdata",  args.chromedata]
-    Popen(comlist)    
+    Popen(comlist)
     foldername = "{}{}_{}".format(args.pdfoutput + lib.file_delimeter(), 'prior_notice', strdate) 
     isExist = os.path.exists(foldername)
     if not isExist:
         os.makedirs(foldername)
-	
-    # comlist=[PYLOC, "modules/autofdapdf.py", "-i", args.xlsinput, "-d", args.chromedata, "-s", args.shipsheet, "-dt", str(kwargs['datearrival'].get_date()), "-o", foldername]
+
+    print("Step 2: Prior Notice")
+    comlist=[PYLOC, "modules/autofdapdf.py", "-i", args.xlsinput, "-d", args.chromedata, "-s", args.shipsheet, "-dt", args.date, "-o", foldername]
+    Popen(comlist)
 
 
 if __name__ == '__main__':

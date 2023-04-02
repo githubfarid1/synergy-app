@@ -978,7 +978,7 @@ class AmazonAllFrame(ttk.Frame):
 		
 		# sheetName = Entry(self, width=45)
 		
-		runButton = ttk.Button(self, text='Run Process', command = lambda:self.run_process(xlsinput=xlsInputFile.filename, shipsheet=sheetlist1, pnsheet=sheetlist2, tracksheet=sheetlist3, pdfoutput=outputfolder.filename))
+		runButton = ttk.Button(self, text='Run Process', command = lambda:self.run_process(xlsinput=xlsInputFile.filename, shipsheet=sheetlist1, pnsheet=sheetlist2, tracksheet=sheetlist3, pdfoutput=outputfolder.filename, datearrival=dateArrival))
 		
 		# layout
 		titleLabel.grid(column = 0, row = 0, sticky = (W, E, N, S))
@@ -1009,7 +1009,7 @@ class AmazonAllFrame(ttk.Frame):
 				pdffolder = pdffolder.replace("/", "\\")
 
 			messagebox.showwarning(title='Warning', message='This process will update the excel file. make sure you have closed the file.')
-			run_module(comlist=[PYLOC, "modules/amazonall.py", "-xls", kwargs['xlsinput'], "-shipsheet", kwargs['shipsheet'].get(), "-pnsheet", kwargs['pnsheet'].get(), "-tracksheet", kwargs['tracksheet'].get(), "-output", pdffolder, "-cdata",  getConfig()['chrome_user_data']])
+			run_module(comlist=[PYLOC, "modules/amazonall.py", "-xls", kwargs['xlsinput'], "-shipsheet", kwargs['shipsheet'].get(), "-pnsheet", kwargs['pnsheet'].get(), "-tracksheet", kwargs['tracksheet'].get(), "-output", pdffolder, "-cdata",  getConfig()['chrome_user_data'], "-dt", str(kwargs['datearrival'].get_date())])
 
 class CloseButton(ttk.Button):
 	def __init__(self, parent):
