@@ -58,10 +58,10 @@ def main():
     if not isExist:
         os.makedirs(folderamazonship)
 
-    # foldernamepn = "{}{}_{}".format(args.pdfoutput + lib.file_delimeter(), 'prior_notice', strdate) 
-    # isExist = os.path.exists(foldernamepn)
-    # if not isExist:
-    #     os.makedirs(foldernamepn)
+    foldernamepn = "{}{}_{}".format(args.pdfoutput + lib.file_delimeter(), 'prior_notice', strdate) 
+    isExist = os.path.exists(foldernamepn)
+    if not isExist:
+        os.makedirs(foldernamepn)
 
 
 
@@ -119,7 +119,7 @@ def main():
     xlsfilename = os.path.basename(args.xlsinput)
     strdate = str(date.today())
     foldername = fda.format_filename("{}_{}_{}".format(xlsfilename.replace(".xlsx", ""), args.pnsheet, strdate) )
-    complete_output_folder = args.pdfoutput + lib.file_delimeter() + foldername
+    complete_output_folder = foldernamepn + lib.file_delimeter() + foldername
     isExist = os.path.exists(complete_output_folder)
     if not isExist:
         os.makedirs(complete_output_folder)
