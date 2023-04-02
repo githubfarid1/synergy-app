@@ -11,4 +11,6 @@ xlsfile = r'C:/synergy-data-tester/shipmentall/xUSA Small Shipment Creation V12.
 newfile = r'C:/synergy-data-tester/shipmentall/yUSA Small Shipment Creation V12.20.xlsm'
 sname = 'Shipment summary'
 sheet1 = xw.Book(xlsfile).sheets[sname]
-sheet1['A4'].value = 'Hello'
+sheet1['A4'].value = 'Hellox'
+xw.Book(xlsfile).save()
+xw.Book(xlsfile).close()
