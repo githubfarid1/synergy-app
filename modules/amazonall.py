@@ -47,7 +47,8 @@ def main():
         os.makedirs(foldername)
     # print("Step 1: Shipment Creation", flush=True)
     comlist=[PYLOC, "modules/amazonship.py", "-xls", args.xlsinput, "-sname", args.shipsheet, "-output", foldername, "-cdata",  args.chromedata]
-    Popen(comlist)
+    # Popen(comlist)
+    os.popen(" ".join(comlist))
     foldername = "{}{}_{}".format(args.pdfoutput + lib.file_delimeter(), 'prior_notice', strdate) 
     isExist = os.path.exists(foldername)
     if not isExist:
@@ -55,7 +56,8 @@ def main():
 
     # print("Step 2: Prior Notice", flush=True)
     comlist=[PYLOC, "modules/autofdapdf.py", "-i", args.xlsinput, "-d", args.chromedata, "-s", args.shipsheet, "-dt", args.date, "-o", foldername]
-    Popen(comlist)
+    # Popen(comlist)
+    os.popen(" ".join(comlist))
 
 
 if __name__ == '__main__':
