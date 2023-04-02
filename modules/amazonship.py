@@ -571,6 +571,7 @@ class AmazonShipment:
                     self.driver.close()
             self.driver.switch_to.window(original_window)
         self.workbook.save(self.xlsfile)
+        self.workbook.close()
         print(dlist['name'], 'Saved to', self.xlsfile)
         self.driver.quit()
         print('All Shipment has Created...')
@@ -1089,6 +1090,8 @@ def main():
         except Exception as e:
             logger.error(e)
             print("There is an error, check logs/amazonship-err.log")
+            shipment.workbook.save(shipment.xlsfile)
+            shipment.workbook.close()
             if i == maxrun:
                 logger.error("Execution Limit reached, Please check the script")
             continue
