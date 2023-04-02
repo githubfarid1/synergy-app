@@ -91,8 +91,6 @@ def main():
             if len(shipment.datalist) == 0:
                 break
             shipment.parse()
-            shipment.workbook.save(shipment.xlsfile)
-            shipment.workbook.close()
         except Exception as e:
             logger.error(e)
             print("There is an error, check logs/amazonship-err.log")
