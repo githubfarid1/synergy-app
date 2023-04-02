@@ -48,6 +48,7 @@ def main():
     # print("Step 1: Shipment Creation", flush=True)
     comlist=[PYLOC, "modules/amazonship.py", "-xls", args.xlsinput, "-sname", args.shipsheet, "-output", foldername, "-cdata",  args.chromedata]
     # Popen(comlist)
+    print(" ".join(comlist))
     os.popen(" ".join(comlist))
     foldername = "{}{}_{}".format(args.pdfoutput + lib.file_delimeter(), 'prior_notice', strdate) 
     isExist = os.path.exists(foldername)
