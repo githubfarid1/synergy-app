@@ -986,12 +986,12 @@ class AmazonAllFrame(ttk.Frame):
 		labelsname1.grid(column = 0, row = 3, sticky=(W))
 		labelsname2.grid(column = 0, row = 4, sticky=(W))
 		labelsname3.grid(column = 0, row = 5, sticky=(W))
-		labeldate.grid(column = 0, row = 6, sticky=(W))
+		labeldate.grid(column = 0, row = 7, sticky=(W))
 
 		sheetlist1.grid(column=0, row = 3, pady=10)
 		sheetlist2.grid(column=0, row = 4, pady=10)
 		sheetlist3.grid(column=0, row = 5, pady=10)
-		dateArrival.grid(column=0, row = 6)
+		dateArrival.grid(column=0, row = 7)
 
 		outputfolder.grid(column = 0, row = 6, sticky = (W,E))
 		runButton.grid(column = 0, row = 7, sticky = (E))
