@@ -199,8 +199,6 @@ def copysheet(source, destination, cols, sheetsource, sheetdestination):
     for i in range(1, ws2.max_row + 1):
         for col in cols:
             ws1['{}{}'.format(col, i)].value = ws2['{}{}'.format(col, i)].value
-            print(ws2['{}{}'.format(col, i)].value)
-
     wb1.save(destination)
     wb1.close()    
     print("Finished")
