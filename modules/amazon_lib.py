@@ -185,29 +185,25 @@ def generate_xls_from_pdf(fileinput, addressfile):
     print("Finished")
 
 def copysheet(source, destination, cols, sheetsource, sheetdestination):
-
-    # filename1 = r"C:/synergy-data-tester/copy_sheet/xUSA Small Shipment Creation V12.20.xlsm"
-    # filename2 = r"C:/synergy-data-tester/copy_sheet/April 01 Labels.xlsx"
-
-
+    print("Insert Labels summary to {}...".format(destination), end=" ", flush=True)
     wb1 = load_workbook(filename=destination, read_only=False, keep_vba=True, data_only=True)
     wb2 = load_workbook(filename=source, read_only=False, keep_vba=True, data_only=True)
     try:
-        del wb1[sheetsource]
+        del wb1[sheetdestination]
     except:
         pass
 
-    wb1.create_sheet(sheetsource)
-    ws1 = wb1[sheetsource]
-    ws2 = wb2[sheetdestination]
+    wb1.create_sheet(sheetdestination)
+    ws1 = wb1[sheetdestination]
+    ws2 = wb2[sheetsource]
     for i in range(1, ws2.max_row + 1):
-        # cols = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H')
         for col in cols:
             ws1['{}{}'.format(col, i)].value = ws2['{}{}'.format(col, i)].value
             print(ws2['{}{}'.format(col, i)].value)
 
     wb1.save(destination)
     wb1.close()    
+    print("Finished")
 
 if __name__ == "__main__":
     pdfoutput = "/home/farid/dev/python/synergy-github/data/sample/Feb 21/combined"
