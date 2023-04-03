@@ -185,7 +185,7 @@ def generate_xls_from_pdf(fileinput, addressfile):
     print("Finished")
 
 def copysheet(source, destination, cols, sheetsource, sheetdestination, tracksheet):
-    print("Insert {} and {} to {}...".format(sheetsource, tracksheet, destination), end=" ", flush=True)
+    print("Insert {} and {} to {}...".format(sheetdestination, tracksheet, destination), end=" ", flush=True)
     wb1 = load_workbook(filename=destination, read_only=False, keep_vba=True, data_only=True)
     wb2 = load_workbook(filename=source, read_only=False, keep_vba=True, data_only=True)
     try:
