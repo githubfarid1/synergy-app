@@ -184,8 +184,8 @@ def generate_xls_from_pdf(fileinput, addressfile):
     wb.save(filepath)
     print("Finished")
 
-def copysheet(source, destination, cols, sheetsource, sheetdestination):
-    print("Insert Labels summary to {}...".format(destination), end=" ", flush=True)
+def copysheet(source, destination, cols, sheetsource, sheetdestination, tracksheet):
+    print("Insert {} and {} to {}...".format(sheetsource, tracksheet, destination), end=" ", flush=True)
     wb1 = load_workbook(filename=destination, read_only=False, keep_vba=True, data_only=True)
     wb2 = load_workbook(filename=source, read_only=False, keep_vba=True, data_only=True)
     try:
@@ -195,10 +195,19 @@ def copysheet(source, destination, cols, sheetsource, sheetdestination):
 
     wb1.create_sheet(sheetdestination)
     ws1 = wb1[sheetdestination]
+    wstrack = wb1[tracksheet]
     ws2 = wb2[sheetsource]
     for i in range(1, ws2.max_row + 1):
         for col in cols:
             ws1['{}{}'.format(col, i)].value = ws2['{}{}'.format(col, i)].value
+
+    for i in range(2, wstrack.max_row + 1):
+        for j in range(2, ws2.max_row + 1):
+            if wstrack['O{}'.format(i)].value == ws2['A{}'.format(j)].value:
+                wstrack['M{}'.format(i)].value = ws2['B{}'.format(j)].value
+                wstrack['A{}'.format(i)].value = ws2['H{}'.format(j)].value
+                break
+
     wb1.save(destination)
     wb1.close()    
     print("Finished")

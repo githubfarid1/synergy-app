@@ -496,7 +496,7 @@ class AmazonShipment:
             self.driver.find_element(By.CSS_SELECTOR, "kat-button[data-testid='proceed-tracking-details-button']").click()
             WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div[data-testid='spd-tracking-table']")))
             explicit_wait()
-            print(dlist['name'], 'Saving to XLSX file..')
+            # print(dlist['name'], 'Saving to XLSX file..')
             tabs = self.driver.find_elements(By.CSS_SELECTOR, "div[data-testid='shipment-tracking-tab']")
             # tabcount = 0
             shiplist = []
@@ -572,7 +572,7 @@ class AmazonShipment:
             self.driver.switch_to.window(original_window)
         self.workbook.save(self.xlsfile)
         self.workbook.close()
-        print(dlist['name'], 'Saved to', self.xlsfile)
+        print('Saved All Shipment to', self.xlsfile)
         self.driver.quit()
         print('All Shipment has Created...')
         
