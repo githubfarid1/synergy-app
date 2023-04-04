@@ -250,7 +250,6 @@ class MainFrame(ttk.Frame):
 		scrapeWalmartButton = FrameButton(self, window, text="Scrape Walmart", class_frame=ScrapeWalmartFrame)
 		trackingUpdateButton = FrameButton(self, window, text="Amazon Tracking Update", class_frame=TrackingUpdateFrame)
 		statisticsButton = FrameButton(self, window, text="Statistics", class_frame=StatisticsFrame)
-		canadaPostButton = FrameButton(self, window, text="Canada Post", class_frame=CanadaPostFrame)
 		dykShippedButton = FrameButton(self, window, text="DYK Shipped", class_frame=DykShippedFrame)
 		costLookupButton = FrameButton(self, window, text="Cost Lookup", class_frame=CostLookupFrame)
 		fdaEntryButton = FrameButton(self, window, text="FDA Entry", class_frame=FdaEntryFrame)
@@ -262,6 +261,7 @@ class MainFrame(ttk.Frame):
 		amazonReviewButton = FrameButton(self, window, text="Amazon Review Request", class_frame=AmazonReviewFrame)
 		canadaPostPdfButton = FrameButton(self, window, text="Canada Post PDF Convert", class_frame=CanadaPostPdfFrame)
 		amazonAllButton = FrameButton(self, window, text="Amazon Shipment + FDA", class_frame=AmazonAllFrame)
+		canadaPostButton = FrameButton(self, window, text="Canada Post Tracker", class_frame=CanadaPostFrame)
 
 		# layout
 		titleLabel.grid(column = 0, row = 0, sticky=(W, E, N, S), padx=15, pady=5, columnspan=3)
@@ -270,18 +270,18 @@ class MainFrame(ttk.Frame):
 		trackingUpdateButton.grid(column = 2, row = 1, sticky=(W, E, N, S), padx=15, pady=5)
 		scrapeWalmartButton.grid(column = 0, row = 2, sticky=(W, E, N, S), padx=15, pady=5)
 		statisticsButton.grid(column = 1, row = 2, sticky=(W, E, N, S), padx=15, pady=5)
-		canadaPostButton.grid(column = 2, row = 2, sticky=(W, E, N, S), padx=15, pady=5)
-		dykShippedButton.grid(column = 0, row = 3, sticky=(W, E, N, S), padx=15, pady=5)
-		costLookupButton.grid(column = 1, row = 3, sticky=(W, E, N, S), padx=15, pady=5)
-		fdaEntryButton.grid(column = 2, row = 3, sticky=(W, E, N, S), padx=15, pady=5)
-		fdaPdfButton.grid(column = 0, row = 4, sticky=(W, E, N, S), padx=15, pady=5)
-		amazonShipmentButton.grid(column = 1, row = 4, sticky=(W, E, N, S), padx=15, pady=5)
-		fdaEntryPdfButton.grid(column = 2, row = 4, sticky=(W, E, N, S), padx=15, pady=5)
-		amazonShipmentCheckButton.grid(column = 0, row = 5, sticky=(W, E, N, S), padx=15, pady=5)
-		amazonLabelXlsButton.grid(column = 1, row = 5, sticky=(W, E, N, S), padx=15, pady=5)
-		amazonReviewButton.grid(column = 2, row = 5, sticky=(W, E, N, S), padx=15, pady=5)
-		canadaPostPdfButton.grid(column = 0, row = 6, sticky=(W, E, N, S), padx=15, pady=5)
-		amazonAllButton.grid(column = 1, row = 6, sticky=(W, E, N, S), padx=15, pady=5)
+		dykShippedButton.grid(column = 2, row = 2, sticky=(W, E, N, S), padx=15, pady=5)
+		costLookupButton.grid(column = 0, row = 3, sticky=(W, E, N, S), padx=15, pady=5)
+		fdaEntryButton.grid(column = 1, row = 3, sticky=(W, E, N, S), padx=15, pady=5)
+		fdaPdfButton.grid(column = 2, row = 3, sticky=(W, E, N, S), padx=15, pady=5)
+		amazonShipmentButton.grid(column = 0, row = 4, sticky=(W, E, N, S), padx=15, pady=5)
+		fdaEntryPdfButton.grid(column = 1, row = 4, sticky=(W, E, N, S), padx=15, pady=5)
+		amazonShipmentCheckButton.grid(column = 2, row = 4, sticky=(W, E, N, S), padx=15, pady=5)
+		amazonLabelXlsButton.grid(column = 0, row = 5, sticky=(W, E, N, S), padx=15, pady=5)
+		amazonReviewButton.grid(column = 1, row = 5, sticky=(W, E, N, S), padx=15, pady=5)
+		canadaPostPdfButton.grid(column = 2, row = 5, sticky=(W, E, N, S), padx=15, pady=5)
+		amazonAllButton.grid(column = 0, row = 6, sticky=(W, E, N, S), padx=15, pady=5)
+		canadaPostButton.grid(column = 1, row = 6, sticky=(W, E, N, S), padx=15, pady=5)
 
 class PdfConvertFrame(ttk.Frame):
 	def __init__(self, window) -> None:
@@ -442,10 +442,9 @@ class CanadaPostFrame(ttk.Frame):
 		self.rowconfigure(4, weight=1)
 		self.rowconfigure(5, weight=1)
 
-		titleLabel = TitleLabel(self, text="Canada Post")
+		titleLabel = TitleLabel(self, text="Canada Post Tracker")
 		closeButton = CloseButton(self)
-		xlsInputFile = FileChooserFrame(self, btype="file", label="Select XLSX Input File:", filetypes=(("xlsx files", "*.xlsx"),("all files", "*.*")))
-
+		xlsInputFile = FileChooserFrame(self, btype="file", label="Select CSV Input File:", filetypes=(("CSV files", "*.csv"),("all files", "*.*")))
 		runButton = ttk.Button(self, text='Run Process', command = lambda:self.run_process(input=xlsInputFile.filename))
 		
 			# layout
@@ -458,9 +457,7 @@ class CanadaPostFrame(ttk.Frame):
 		if kwargs['input'] == "": 
 			messagebox.showwarning(title='Warning', message='Please make sure you have choosed the files')
 		else:
-			# print(PYLOC, "canadapost.py", "-i", kwargs['input'], "-d", getConfig()['chrome_user_data'])	
-			# Popen([PYLOC, "canadapost.py", "-i", kwargs['input'], "-d", getConfig()['chrome_user_data']], creationflags=CREATE_NEW_CONSOLE)
-			run_module(comlist=[PYLOC, "modules/canadapost.py", "-i", kwargs['input'], "-d", getConfig()['chrome_user_data']])
+			run_module(comlist=[PYLOC, "modules/cposttracker.py", "-i", kwargs['input']])
 
 class DykShippedFrame(ttk.Frame):
 	def __init__(self, window) -> None:
@@ -925,7 +922,7 @@ class CanadaPostPdfFrame(ttk.Frame):
 		titleLabel = TitleLabel(self, text="Canada Post PDF Converter")
 		closeButton = CloseButton(self)
 		pdfInputFiles = FileChooserMultipleFrame(self, btype="file", label="Select Input PDF File:", filetypes=(("pdf files", "*.pdf"),("all files", "*.*")))
-		outputfolder = FileChooserFrame(self, btype="folder", label="Output PDF Folder:", filetypes=())
+		outputfolder = FileChooserFrame(self, btype="folder", label="Output CSV Folder:", filetypes=())
 
 		runButton = ttk.Button(self, text='Run Process', command = lambda:self.run_process(pdfinput=pdfInputFiles.filenames, pdfoutput=outputfolder.filename))
 		
