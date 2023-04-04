@@ -74,7 +74,7 @@ def main():
             print(d['Tracking'], 'Failed')
 
             tracklist.append("Failed")
-        # time.sleep(0.8)
+        time.sleep(0.8)
     print("Tracking Finished..", end="\n\n")
         
     data['Status'] = tracklist
