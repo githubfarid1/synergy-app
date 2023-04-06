@@ -128,7 +128,7 @@ class FileChooserMultipleFrame(ttk.Frame):
 	def __init__(self, window, **kwargs):
 		super().__init__(window)
 		label1 = ttk.Label(self, text=kwargs['label'])
-		chooseButton = ttk.Button(self, text="...", command=lambda:self.chooseButtonClick(kwargs['btype'], filetypes=kwargs['filetypes']))
+		chooseButton = ttk.Button(self, text="...", command=lambda:self.chooseButtonClick(filetypes=kwargs['filetypes']))
 		delButton = ttk.Button(self, text="Del", command=lambda:self.delButtonClick())
 		scrollbarx = Scrollbar(self, orient=HORIZONTAL)
 		
@@ -154,15 +154,12 @@ class FileChooserMultipleFrame(ttk.Frame):
 	def delButtonClick(self):
 		self.__filelist.delete(ANCHOR)
 
-	def chooseButtonClick(self, btype, **kwargs):
-		if btype == 'folder':
-			filenametmp = filedialog.askdirectory(title='Select Folder')
-		else:
-			filenametmp = filedialog.askopenfilename(title='Select File', filetypes=kwargs['filetypes'])
-
+	def chooseButtonClick(self, **kwargs):
+		filenametmp = filedialog.askopenfilenames(title='Select File', filetypes=kwargs['filetypes'])
 		if filenametmp != '':
-			self.__filelist.insert(tkinter.END, filenametmp)
-
+			for fl in filenametmp:
+				self.__filelist.insert(tkinter.END, fl)
+		
 class SettingFrame(ttk.Frame):
 	def __init__(self, window) -> None:
 		super().__init__(window)
@@ -634,7 +631,7 @@ class FdaPdfFrame(ttk.Frame):
 		titleLabel = TitleLabel(self, text="FDA PDF Extractor")
 		closeButton = CloseButton(self)
 		
-		pdfInputFiles = FileChooserMultipleFrame(self, btype="file", label="Select Input PDF File:", filetypes=(("pdf files", "*.pdf"),("all files", "*.*")))
+		pdfInputFiles = FileChooserMultipleFrame(self, label="Select Input PDF File:", filetypes=(("pdf files", "*.pdf"),("all files", "*.*")))
 
 		xlsInputFile = FileChooserFrame(self, btype="file", label="Select Input XLSX File:", filetypes=(("xlsx files", "*.xlsx"),("all files", "*.*")))
 		outputfolder = FileChooserFrame(self, btype="folder", label="Output PDF Folder:", filetypes=())
@@ -921,7 +918,7 @@ class CanadaPostPdfFrame(ttk.Frame):
 		# populate
 		titleLabel = TitleLabel(self, text="Canada Post PDF Converter")
 		closeButton = CloseButton(self)
-		pdfInputFiles = FileChooserMultipleFrame(self, btype="file", label="Select Input PDF File:", filetypes=(("pdf files", "*.pdf"),("all files", "*.*")))
+		pdfInputFiles = FileChooserMultipleFrame(self, label="Select Input PDF File:", filetypes=(("pdf files", "*.pdf"),("all files", "*.*")))
 		outputfolder = FileChooserFrame(self, btype="folder", label="Output CSV Folder:", filetypes=())
 
 		runButton = ttk.Button(self, text='Run Process', command = lambda:self.run_process(pdfinput=pdfInputFiles.filenames, pdfoutput=outputfolder.filename))

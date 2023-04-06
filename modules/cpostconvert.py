@@ -6,7 +6,7 @@ import argparse
 import sys
 from sys import platform
 import time
-
+from datetime import date
 def file_delimeter():
     dm = "/" 
     if platform == "win32":
@@ -112,6 +112,31 @@ def get_result(presult):
 
     return result
 
+def split_values(item):
+    if len(item) != 7:
+        trackid = dim = billdim = weight = billweight = total = ''
+        trackid = item[0]
+
+        stext = lambda ts: [s for s in item[0:-1] if s.find(ts)!=-1]
+        if len(stext('$')) == 1:
+            total = stext('$')[0]
+
+        if len(stext('x')) == 2:
+            dim = stext('x')[0]
+            billdim = stext('x')[1]
+            weight = item[3]
+            billweight = item[4]
+        elif len(stext('x')) == 1:
+            dim = stext('x')[0]
+            weight = item[2]
+            billweight = item[3]
+        else:
+            weight = item[1]
+            billweight = item[2]
+    else:
+        trackid, dim, billdim, weight, billweight, total, no1 = item
+    return trackid, dim, billdim, weight, billweight, total
+
 def main():
     parser = argparse.ArgumentParser(description="Canada Post PDF Converter")
     parser.add_argument('-pdf', '--pdfinput', type=str,help="PDF File Input")
@@ -132,6 +157,8 @@ def main():
         input(args.pdfoutput + "output folder does not exist")
         sys.exit()
     print("#"*10, "Convert Canada Post PDF to CSV", "#"*10)
+    reclist = []
+    strdate = str(date.today())
     for file in filelist:
         basefilename = os.path.basename(file)
         print("Trying to Convert", basefilename, "...", end=" ", flush=True)
@@ -141,28 +168,43 @@ def main():
             invoice_date = get_invoice_date(fileinput=file)
             presult = parse_data(sourcelist=sourcelist)
             result = get_result(presult)
-            reclist = []
+            # reclist = []
             for res in result:
                 for item in res['items']:
+                    trackid, dim, billdim, weight, billweight, total = split_values(item)
                     pdict = {
                         "Invoice Date": invoice_date,	
                         "Date": res['order_date'],	
                         "Order No":res['order_id'],
-                        "Tracking": item[0],	
-                        "Dimensions":item[1],	
-                        "Weight":item[3],	
-                        "Billed dimensions": item[2],
-                        "Billed Weight": item[4],
-                        "Total":item[5]
+                        "Tracking": trackid,	
+                        "Dimensions":dim,	
+                        "Weight":weight,	
+                        "Billed dimensions": billdim,
+                        "Billed Weight": billweight,
+                        "Total":total
                     }
                     reclist.append(pdict)
-            
-            df = pd.DataFrame(reclist)
-            
-            df.to_csv(args.pdfoutput + file_delimeter() + basefilename.replace(".pdf", "") + ".csv" , index=False)
+
+                    # pdict = {
+                    #     "Invoice Date": invoice_date,	
+                    #     "Date": res['order_date'],	
+                    #     "Order No":res['order_id'],
+                    #     "Tracking": item[0],	
+                    #     "Dimensions":item[1],	
+                    #     "Weight":item[3],	
+                    #     "Billed dimensions": item[2],
+                    #     "Billed Weight": item[4],
+                    #     "Total":item[5]
+                    # }
+                    # reclist.append(pdict)
+            # df = pd.DataFrame(reclist)
+            # df.to_csv(args.pdfoutput + file_delimeter() + basefilename.replace(".pdf", "") + ".csv" , index=False)
             print("Successfully")
         except Exception as e:
-            print("Failed")
+            print(e, "Failed")
+    df = pd.DataFrame(reclist)
+    filenamesaved = "{}_{}.csv".format(args.pdfoutput + file_delimeter(), 'canada_post_pdf_convert', strdate) 
+    df.to_csv(filenamesaved, index=False)
     input("End Process, Press any key to exit")
 if __name__ == '__main__':
     main()
