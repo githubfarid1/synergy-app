@@ -75,7 +75,11 @@ def main():
     file_handler2_format = '%(asctime)s | %(levelname)s | %(lineno)d: %(message)s'
     file_handler2.setFormatter(logging.Formatter(file_handler2_format))
     logger2.addHandler(file_handler2)
-
+    fnameinput = os.path.basename(args.xlsinput)
+    pathinput = args.xlsinput[0:-len(fnameinput)]
+    destfile = "{}{}_new{}".format(pathinput, os.path.splitext(fnameinput)[0], os.path.splitext(fnameinput)[1])
+    shutil.copy(args.xlsinput, destfile)
+    exit()
     logger2.info("###### Start ######")
     logger2.info("Filename: {}\nSheet Name:{}\nPDF Output Folder:{}".format(args.xlsinput, args.shipsheet, folderamazonship))
     maxrun = 10

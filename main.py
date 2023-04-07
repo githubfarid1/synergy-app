@@ -279,6 +279,8 @@ class MainFrame(ttk.Frame):
 		canadaPostPdfButton.grid(column = 2, row = 5, sticky=(W, E, N, S), padx=15, pady=5)
 		amazonAllButton.grid(column = 0, row = 6, sticky=(W, E, N, S), padx=15, pady=5)
 		canadaPostButton.grid(column = 1, row = 6, sticky=(W, E, N, S), padx=15, pady=5)
+		amazonShipmentButton['state'] = DISABLED
+		fdaEntryPdfButton['state'] = DISABLED
 
 class PdfConvertFrame(ttk.Frame):
 	def __init__(self, window) -> None:
