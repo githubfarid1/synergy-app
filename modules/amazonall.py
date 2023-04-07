@@ -13,6 +13,7 @@ from single_fdapdf import FdaPdf
 from selenium.webdriver.common.by import By
 import glob
 import shutil
+import xlwings as xw
 
 if platform == "linux" or platform == "linux2":
     PYLOC = "python"
@@ -79,23 +80,28 @@ def main():
     pathinput = args.xlsinput[0:-len(fnameinput)]
     destfile = "{}{}_new{}".format(pathinput, os.path.splitext(fnameinput)[0], os.path.splitext(fnameinput)[1])
     shutil.copy(args.xlsinput, destfile)
-    exit()
+    xlbook = xw.Book[destfile]
+    # exit()
     logger2.info("###### Start ######")
-    logger2.info("Filename: {}\nSheet Name:{}\nPDF Output Folder:{}".format(args.xlsinput, args.shipsheet, folderamazonship))
+    logger2.info("Filename: {}\nSheet Name:{}\nPDF Output Folder:{}".format(destfile, args.shipsheet, folderamazonship))
     maxrun = 10
     for i in range(1, maxrun+1):
         if i > 1:
             print("Process will be reapeated")
         try:    
-            shipment = amazonship.AmazonShipment(xlsfile=args.xlsinput, sname=args.shipsheet, chrome_data=args.chromedata, download_folder=folderamazonship)
+            shipment = amazonship.AmazonShipment(xlsfile=destfile, sname=args.shipsheet, chrome_data=args.chromedata, download_folder=folderamazonship, xlworkbook=xlbook)
             shipment.data_sanitizer()
             if len(shipment.datalist) == 0:
                 break
             shipment.parse()
+            shipment.xlworkbook.save(shipment.xlsfile)
+            shipment.workbook.close()
         except Exception as e:
             logger.error(e)
             print("There is an error, check logs/amazonship-err.log")
-            shipment.workbook.save(shipment.xlsfile)
+            # shipment.workbook.save(shipment.xlsfile)
+            # shipment.workbook.close()
+            shipment.xlworkbook.save(shipment.xlsfile)
             shipment.workbook.close()
             if i == maxrun:
                 logger.error("Execution Limit reached, Please check the script")
@@ -106,74 +112,74 @@ def main():
     if resultfile != "":
         lib.add_page_numbers(resultfile)
         lib.generate_xls_from_pdf(resultfile, addressfile)
-    lib.copysheet(destination=args.xlsinput, source=resultfile[:-4] + ".xlsx", cols=('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'), sheetsource="Sheet", sheetdestination="Shipment labels summary", tracksheet=args.tracksheet)
+    lib.copysheet(destination=destfile, source=resultfile[:-4] + ".xlsx", cols=('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'), sheetsource="Sheet", sheetdestination="Shipment labels summary", tracksheet=args.tracksheet)
     # input("End Process..")    
     # -----------------
 
-    xlsdictall = fda.xls_data_generator(args.xlsinput, args.pnsheet)
-    xlsdictwcode = {}
-    for idx, xls in xlsdictall.items():
-        for data in xls['data']:
-            if data[20] == 'None':
-                xlsdictwcode[idx] = xls
-                break
+    # xlsdictall = fda.xls_data_generator(destfile, args.pnsheet)
+    # xlsdictwcode = {}
+    # for idx, xls in xlsdictall.items():
+    #     for data in xls['data']:
+    #         if data[20] == 'None':
+    #             xlsdictwcode[idx] = xls
+    #             break
 
-    xlsfilename = os.path.basename(args.xlsinput)
-    strdate = str(date.today())
-    foldername = fda.format_filename("{}_{}_{}".format(xlsfilename.replace(".xlsx", ""), args.pnsheet, strdate) )
-    complete_output_folder = foldernamepn + lib.file_delimeter() + foldername
-    isExist = os.path.exists(complete_output_folder)
-    if not isExist:
-        os.makedirs(complete_output_folder)
+    # xlsfilename = os.path.basename(destfile)
+    # strdate = str(date.today())
+    # foldername = fda.format_filename("{}_{}_{}".format(xlsfilename.replace(".xlsx", ""), args.pnsheet, strdate) )
+    # complete_output_folder = foldernamepn + lib.file_delimeter() + foldername
+    # isExist = os.path.exists(complete_output_folder)
+    # if not isExist:
+    #     os.makedirs(complete_output_folder)
 
-    driver = fda.browser_init(chrome_data=args.chromedata, pdfoutput_folder=complete_output_folder)
-    driver = fda.browser_login(driver)
-    fda.clear_screan()
-    first = True
-    for xlsdata in xlsdictwcode.values():
-        fda_entry = FdaEntry(driver=driver, datalist=xlsdata, datearrival=args.date, pdfoutput=complete_output_folder)
-        if not first:
-            driver.find_element(By.CSS_SELECTOR, "img[alt='Create WebEntry Button']").click()
+    # driver = fda.browser_init(chrome_data=args.chromedata, pdfoutput_folder=complete_output_folder)
+    # driver = fda.browser_login(driver)
+    # fda.clear_screan()
+    # first = True
+    # for xlsdata in xlsdictwcode.values():
+    #     fda_entry = FdaEntry(driver=driver, datalist=xlsdata, datearrival=args.date, pdfoutput=complete_output_folder)
+    #     if not first:
+    #         driver.find_element(By.CSS_SELECTOR, "img[alt='Create WebEntry Button']").click()
         
-        fda_entry.parse()
-        pdf_filename = fda.pdf_rename(pdfoutput_folder=complete_output_folder)
-        if pdf_filename != "":
-            fda.webentry_update(pdffile=pdf_filename, xlsfilename=args.xlsinput, pdffolder=complete_output_folder)
-        else:
-            print("rename the file was failed")
-        first = False
+    #     fda_entry.parse()
+    #     pdf_filename = fda.pdf_rename(pdfoutput_folder=complete_output_folder)
+    #     if pdf_filename != "":
+    #         fda.webentry_update(pdffile=pdf_filename, xlsfilename=destfile, pdffolder=complete_output_folder)
+    #     else:
+    #         print("rename the file was failed")
+    #     first = False
     
-    list_of_files = glob.glob(complete_output_folder + lib.file_delimeter() + "*.pdf")
-    allsavedfiles = []
-    #regenerate data
-    xlsdictall = fda.xls_data_generator(args.xlsinput, args.pnsheet)
-    for xlsdata in xlsdictall.values():
-        entry_id = xlsdata['data'][0][20]
-        pdf_filename = fda.choose_pdf_file(list_of_files, entry_id)
-        print('PDF File processing: ', pdf_filename)
-        prior = FdaPdf(filename=pdf_filename, datalist=xlsdata, pdfoutput=complete_output_folder)
-        prior.highlightpdf_generator()
-        prior.insert_text()
-        fda.save_to_xls(pnlist=prior.pnlist, filename=args.xlsinput)
-        allsavedfiles.extend(prior.savedfiles)
+    # list_of_files = glob.glob(complete_output_folder + lib.file_delimeter() + "*.pdf")
+    # allsavedfiles = []
+    # #regenerate data
+    # xlsdictall = fda.xls_data_generator(destfile, args.pnsheet)
+    # for xlsdata in xlsdictall.values():
+    #     entry_id = xlsdata['data'][0][20]
+    #     pdf_filename = fda.choose_pdf_file(list_of_files, entry_id)
+    #     print('PDF File processing: ', pdf_filename)
+    #     prior = FdaPdf(filename=pdf_filename, datalist=xlsdata, pdfoutput=complete_output_folder)
+    #     prior.highlightpdf_generator()
+    #     prior.insert_text()
+    #     fda.save_to_xls(pnlist=prior.pnlist, filename=destfile)
+    #     allsavedfiles.extend(prior.savedfiles)
     
-    setall = set(allsavedfiles)
+    # setall = set(allsavedfiles)
 
-    if len(setall) != len(allsavedfiles):
-        input("Combining all pdf files Failed because there are one or more files is has the same name.")
-    else:
-        fda.del_non_annot_page(allsavedfiles, complete_output_folder)
-        fda.join_folderpdf(allsavedfiles, complete_output_folder)
-        lib.join_pdfs(source_folder=complete_output_folder + lib.file_delimeter() + "combined", output_folder=complete_output_folder, tag="FDA_All")
-        # Delete all file folder
-        for filename in list_of_files:
-            folder = filename[:-4]
-            try:
-                shutil.rmtree(folder)
-            except OSError as e:
-                print("Error: %s : %s" % (folder, e.strerror))            
+    # if len(setall) != len(allsavedfiles):
+    #     input("Combining all pdf files Failed because there are one or more files is has the same name.")
+    # else:
+    #     fda.del_non_annot_page(allsavedfiles, complete_output_folder)
+    #     fda.join_folderpdf(allsavedfiles, complete_output_folder)
+    #     lib.join_pdfs(source_folder=complete_output_folder + lib.file_delimeter() + "combined", output_folder=complete_output_folder, tag="FDA_All")
+    #     # Delete all file folder
+    #     for filename in list_of_files:
+    #         folder = filename[:-4]
+    #         try:
+    #             shutil.rmtree(folder)
+    #         except OSError as e:
+    #             print("Error: %s : %s" % (folder, e.strerror))            
         
-    input("data generating completed...")
+    # input("data generating completed...")
 
 
 if __name__ == '__main__':

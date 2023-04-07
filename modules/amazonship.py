@@ -22,6 +22,8 @@ import warnings
 import logging
 from pathlib import Path
 import amazon_lib as lib
+import xlwings as xw
+import shutil
 
 logger = logging.getLogger()
 logger.setLevel(logging.NOTSET)
@@ -65,12 +67,14 @@ def killAllChrome():
         os.system("taskkill /f /im chrome.exe")
 
 class AmazonShipment:
-    def __init__(self, xlsfile, sname, chrome_data, download_folder) -> None:
+    def __init__(self, xlsfile, sname, chrome_data, download_folder, xlworkbook) -> None:
         try:
-            self.__workbook = load_workbook(filename=xlsfile, read_only=False, keep_vba=True, data_only=True)
-
+            xltmp = 'xlstmp' + xlsfile[-5:]
+            shutil.copy(xlsfile, xltmp)            
+            self.__workbook = load_workbook(filename=xltmp, read_only=False, keep_vba=True, data_only=True)
             self.__worksheet = self.__workbook[sname]
-            # self.__worksheet = self.__workbook.active
+            self.__xlworkbook = xlworkbook
+            self.__xlworksheet = xlworkbook.sheets[sname]
 
         except Exception as e:
             logger.error(e)
@@ -125,7 +129,7 @@ class AmazonShipment:
 
     def parse(self):
         print("Try to login... ", end="")
-
+        reslist = []
         '''
         # THIS METHOD WILL BE USE IF DIRECT ACCESS TO https://sellercentral.amazon.ca/fba/sendtoamazon?ref=fbacentral_nav_fba FAILED
         
@@ -545,9 +549,12 @@ class AmazonShipment:
                                 if not s['trackid'] in stmp and str(self.worksheet['{}{}'.format(boxcol, dimrow+2)].value) == 'None':
                                     stmp.append(s['trackid'])
                                     self.__extract_pdf(box=box, shipment_id=s['shipmentid'], label=s['label'])
-                                    self.worksheet['{}{}'.format(boxcol, dimrow+1)].value = s['label']
-                                    self.worksheet['{}{}'.format(boxcol, dimrow+2)].value = s['trackid']
-
+                                    # self.worksheet['{}{}'.format(boxcol, dimrow+1)].value = s['label']
+                                    # self.worksheet['{}{}'.format(boxcol, dimrow+2)].value = s['trackid']
+                                    # restup = (f"{boxcol}{dimrow+1}", s['label'], f"{boxcol}{dimrow+2}", s['trackid'])
+                                    # reslist.append(restup)
+                                    self.xlworksheet[f"{boxcol}{dimrow+1}"] = s['label']
+                                    self.xlworksheet[f"{boxcol}{dimrow+2}"] = s['trackid']
             # self.workbook.save(self.xlsfile)
             # print(dlist['name'], 'Saved to', self.xlsfile)
             print(dlist['name'], 'Extract PDF..')
@@ -570,8 +577,10 @@ class AmazonShipment:
                     self.driver.switch_to.window(handle)
                     self.driver.close()
             self.driver.switch_to.window(original_window)
-        self.workbook.save(self.xlsfile)
-        self.workbook.close()
+        # self.workbook.save(self.xlsfile)
+        # self.xlworkbook.save(self.xlsfile)
+        # self.xlworkbook.close()
+        # self.workbook.close()
         print('Saved All Shipment to', self.xlsfile)
         self.driver.quit()
         print('All Shipment has Created...')
@@ -1037,6 +1046,14 @@ class AmazonShipment:
     @property
     def driver(self):
         return self.__driver
+
+    @property
+    def xlworkbook(self):
+        return self.__xlworkbook
+   
+    @property
+    def xlworksheet(self):
+        return self.__xlworksheet
 
 def main():
     parser = argparse.ArgumentParser(description="Amazon Shipment")
