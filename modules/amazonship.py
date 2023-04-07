@@ -553,8 +553,8 @@ class AmazonShipment:
                                     # self.worksheet['{}{}'.format(boxcol, dimrow+2)].value = s['trackid']
                                     # restup = (f"{boxcol}{dimrow+1}", s['label'], f"{boxcol}{dimrow+2}", s['trackid'])
                                     # reslist.append(restup)
-                                    self.xlworksheet[f"{boxcol}{dimrow+1}"] = s['label']
-                                    self.xlworksheet[f"{boxcol}{dimrow+2}"] = s['trackid']
+                                    self.xlworksheet[f"{boxcol}{dimrow+1}"].value = s['label']
+                                    self.xlworksheet[f"{boxcol}{dimrow+2}"].value = s['trackid']
             # self.workbook.save(self.xlsfile)
             # print(dlist['name'], 'Saved to', self.xlsfile)
             print(dlist['name'], 'Extract PDF..')
