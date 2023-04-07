@@ -184,32 +184,37 @@ def generate_xls_from_pdf(fileinput, addressfile):
     wb.save(filepath)
     print("Finished")
 
-def copysheet(source, destination, cols, sheetsource, sheetdestination, tracksheet):
+def copysheet(source, destination, cols, sheetsource, sheetdestination, tracksheet, xlbook):
     print("Insert {} and {} to {}...".format(sheetdestination, tracksheet, destination), end=" ", flush=True)
-    wb1 = load_workbook(filename=destination, read_only=False, keep_vba=True, data_only=True)
+    # wb1 = load_workbook(filename=destination, read_only=False, keep_vba=True, data_only=True)
     wb2 = load_workbook(filename=source, read_only=False, keep_vba=True, data_only=True)
     try:
-        del wb1[sheetdestination]
+        del xlbook.sheets[sheetdestination]
     except:
         pass
-
-    wb1.create_sheet(sheetdestination)
-    ws1 = wb1[sheetdestination]
-    wstrack = wb1[tracksheet]
+    xlbook.sheets.add(sheetdestination)
+    ws1 = xlbook.sheets[sheetdestination]
+    # wb1.create_sheet(sheetdestination)
+    # ws1 = wb1[sheetdestination]
+    wstrack = xlbook.sheets[tracksheet]
     ws2 = wb2[sheetsource]
     for i in range(1, ws2.max_row + 1):
         for col in cols:
             ws1['{}{}'.format(col, i)].value = ws2['{}{}'.format(col, i)].value
 
-    for i in range(2, wstrack.max_row + 1):
-        for j in range(2, ws2.max_row + 1):
-            if wstrack['O{}'.format(i)].value == ws2['A{}'.format(j)].value:
-                wstrack['M{}'.format(i)].value = ws2['B{}'.format(j)].value
-                wstrack['A{}'.format(i)].value = ws2['H{}'.format(j)].value
-                break
+    # for i in range(2, wstrack.max_row + 1):
+    #     for j in range(2, ws2.max_row + 1):
+    #         if wstrack['O{}'.format(i)].value == ws2['A{}'.format(j)].value:
+    #             wstrack['M{}'.format(i)].value = ws2['B{}'.format(j)].value
+    #             wstrack['A{}'.format(i)].value = ws2['H{}'.format(j)].value
+    #             break
+    
+    for j in range(2, ws2.max_row + 1):
+        wstrack['A{}'.format(j)].value = ws2['H{}'.format(j)].value
+        wstrack['M{}'.format(j)].value = ws2['B{}'.format(j)].value
 
-    wb1.save(destination)
-    wb1.close()    
+    # wb1.save(destination)
+    # wb1.close()    
     print("Finished")
 
 if __name__ == "__main__":
