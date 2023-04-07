@@ -80,7 +80,7 @@ def main():
     pathinput = args.xlsinput[0:-len(fnameinput)]
     destfile = "{}{}_new{}".format(pathinput, os.path.splitext(fnameinput)[0], os.path.splitext(fnameinput)[1])
     shutil.copy(args.xlsinput, destfile)
-    xlbook = xw.Book[destfile]
+    xlbook = xw.Book(destfile)
     # exit()
     logger2.info("###### Start ######")
     logger2.info("Filename: {}\nSheet Name:{}\nPDF Output Folder:{}".format(destfile, args.shipsheet, folderamazonship))
