@@ -130,8 +130,8 @@ def main():
                 break
 
     xlsfilename = os.path.basename(destfile)
-    print(xlsdictall)
-    exit()
+    # print(xlsdictall)
+    # exit()
     strdate = str(date.today())
     foldername = fdaauto.format_filename("{}_{}_{}".format(xlsfilename[:-5], args.pnsheet, strdate) )
     complete_output_folder = foldernamepn + lib.file_delimeter() + foldername
