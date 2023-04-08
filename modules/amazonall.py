@@ -120,7 +120,7 @@ def main():
     # -----------------
 
     xlsheet = xlbook.sheets[args.pnsheet]
-    last = xlsheet.range('A' + str(xlsheet.cells.last_cell.row)).end('up').row
+    last = xlsheet.range('B' + str(xlsheet.cells.last_cell.row)).end('up').row
     print(last)
     exit()
     
