@@ -85,8 +85,8 @@ def webentry_update(pdffile, xlsfilename, pdffolder):
         if worksheet['B{}'.format(i)].value == None:
             break
         if worksheet['T{}'.format(i)].value.strip() == submitter:
-            worksheet['A{}'.format(i)].value = entry_id
-    workbook.save(xlsfilename)
+            xlworksheet['A{}'.format(i)].value = entry_id
+    # workbook.save(xlsfilename)
     print(submitter, "Updated")
     time.sleep(1)
 
@@ -202,13 +202,15 @@ def xls_dataframe_generator(filename, sname):
     cols = df.groupby('Shiper Address').first().values.tolist()
     print(cols)
 
-def xls_data_generator(filename, sname):
+def xls_data_generator(filename, sname, xlworkbook):
     global worksheet
     global workbook
+    global xlworksheet
     # workbook = load_workbook(filename=filename, read_only=False)#, keep_vba=True, data_only=True)
     workbook = load_workbook(filename=filename, read_only=False, keep_vba=True, data_only=True)
 
     worksheet = workbook[sname]
+    xlworksheet = xlworkbook.sheets[sname]
     allData = {}
     wcode = []
     wshipper = []
@@ -288,13 +290,13 @@ def save_to_xls(pnlist, filename):
             break
         for pn in pnlist:
             if worksheet['A{}'.format(i)].value == pn['entry_id'] and sku == pn['sku'] and worksheet['D{}'.format(i)].value == pn['boxes']:
-                    worksheet['X{}'.format(i)].value = pn['pnnumber']
+                    xlworksheet['X{}'.format(i)].value = pn['pnnumber']
                     break
-    try:        
-        workbook.save(filename)
-    except:
-        input("Save to excel Failed!!. Make sure you have closed it. Run the script again.")
-        sys.exit()
+    # try:        
+    #     workbook.save(filename)
+    # except:
+    #     input("Save to excel Failed!!. Make sure you have closed it. Run the script again.")
+    #     sys.exit()
 
 
 def main():
