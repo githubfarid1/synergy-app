@@ -81,7 +81,7 @@ def webentry_update(pdffile, xlsfilename, pdffolder):
     entry_id = page.get_text("block", clip=(152.7100067138672, 202.04034423828125, 230.7493438720703, 214.09893798828125)).strip()
 
     # print(submitter, entry_id)
-    for i in range(2, MAXROW):
+    for i in range(2, MAXROW+1):
         if xlworksheet['B{}'.format(i)].value == None:
             break
         if xlworksheet['T{}'.format(i)].value.strip() == submitter:
@@ -237,7 +237,7 @@ def xls_data_generator(xlws, maxrow):
     wentrycode = []
     wsku = []
     wentryid = xlworksheet['B{}'.format(2)].value
-    for i in range(2, MAXROW):
+    for i in range(2, MAXROW+1):
         # if xlworksheet['A{}'.format(i)].value is None:
         # print(xlworksheet['D{}'.format(i)].value)
         if wentryid != xlworksheet['B{}'.format(i)].value:# and xlworksheet['B{}'.format(i)].value != None:
@@ -247,8 +247,10 @@ def xls_data_generator(xlws, maxrow):
             'count' : len(wcode)} 
             wentryid = xlworksheet['B{}'.format(i)].value
             clearlist(wshipper, wcode, wdesc, wsize, wtotal, wmanufact, wmanufact_addr, wmanufact_city, wconsignee, wconsignee_addr, wconsignee_city, wconsignee_postal, wconsignee_stact, wconsignee_state, wsubmitter, wsubmitter_add, wsubmitter_cityetc, wsubmitter_country, wpnumber, wbox, wentrycode, wsku)
+        
         if xlworksheet['B{}'.format(i)].value == None:
             break
+        
         wshipper.append(str(xlworksheet['B{}'.format(i)].value).strip())
         wcode.append(str(xlworksheet['F{}'.format(i)].value).strip())
         strdesc= ud.normalize('NFKD', str(xlworksheet['G{}'.format(i)].value).strip()).encode('ascii', 'ignore').decode('ascii')
@@ -287,7 +289,7 @@ def choose_pdf_file(file_list, entry_id):
     return ""
     
 def save_to_xls(pnlist):
-    for i in range(2, MAXROW):
+    for i in range(2, MAXROW+1):
         # strdesc = ud.normalize('NFKD', str(worksheet['G{}'.format(i)].value).strip()).encode('ascii', 'ignore').decode('ascii')
         sku = xlworksheet['E{}'.format(i)].value
         if sku == None:
