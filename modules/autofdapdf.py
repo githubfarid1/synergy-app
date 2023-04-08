@@ -7,8 +7,8 @@ import os
 import shutil
 import time
 import fitz
-from openpyxl import Workbook, load_workbook
-from openpyxl.utils import get_column_letter
+# from openpyxl import Workbook, load_workbook
+# from openpyxl.utils import get_column_letter
 import unicodedata as ud
 import uuid
 import pandas as pd
@@ -81,10 +81,10 @@ def webentry_update(pdffile, xlsfilename, pdffolder):
     entry_id = page.get_text("block", clip=(152.7100067138672, 202.04034423828125, 230.7493438720703, 214.09893798828125)).strip()
 
     # print(submitter, entry_id)
-    for i in range(2, worksheet.max_row + 1):
-        if worksheet['B{}'.format(i)].value == None:
+    for i in range(2, xlworksheet.max_row + 1):
+        if xlworksheet['B{}'.format(i)].value == None:
             break
-        if worksheet['T{}'.format(i)].value.strip() == submitter:
+        if xlworksheet['T{}'.format(i)].value.strip() == submitter:
             xlworksheet['A{}'.format(i)].value = entry_id
     # workbook.save(xlsfilename)
     print(submitter, "Updated")
@@ -202,15 +202,15 @@ def xls_dataframe_generator(filename, sname):
     cols = df.groupby('Shiper Address').first().values.tolist()
     print(cols)
 
-def xls_data_generator(filename, sname, xlworkbook):
-    global worksheet
-    global workbook
+def xls_data_generator(xlws):
+    # global worksheet
+    # global workbook
     global xlworksheet
     # workbook = load_workbook(filename=filename, read_only=False)#, keep_vba=True, data_only=True)
-    workbook = load_workbook(filename=filename, read_only=False, keep_vba=True, data_only=True)
+    # workbook = load_workbook(filename=filename, read_only=False, keep_vba=True, data_only=True)
 
-    worksheet = workbook[sname]
-    xlworksheet = xlworkbook.sheets[sname]
+    # worksheet = workbook[sname]
+    xlworksheet = xlws #xlworkbook.sheets[sname]
     allData = {}
     wcode = []
     wshipper = []
@@ -234,42 +234,42 @@ def xls_data_generator(filename, sname, xlworkbook):
     wbox = []
     wentrycode = []
     wsku = []
-    wentryid = worksheet['B{}'.format(2)].value
-    for i in range(2, worksheet.max_row + 1):
-        # if worksheet['A{}'.format(i)].value is None:
-        if wentryid != worksheet['B{}'.format(i)].value:# and worksheet['B{}'.format(i)].value != None:
+    wentryid = xlworksheet['B{}'.format(2)].value
+    for i in range(2, xlworksheet.max_row + 1):
+        # if xlworksheet['A{}'.format(i)].value is None:
+        if wentryid != xlworksheet['B{}'.format(i)].value:# and xlworksheet['B{}'.format(i)].value != None:
             rid = uuid.uuid4().hex
             allData[rid] = {'data':list(zip(wshipper, wcode, wdesc, wsize, wtotal, wmanufact, wmanufact_addr, wmanufact_city, wconsignee, wconsignee_addr, wconsignee_city, wconsignee_postal, wconsignee_stact, wconsignee_state, wsubmitter, wsubmitter_add, wsubmitter_cityetc, wsubmitter_country, wpnumber, wbox, wentrycode, wsku)),
             'count' : len(wcode)} 
-            wentryid = worksheet['B{}'.format(i)].value
+            wentryid = xlworksheet['B{}'.format(i)].value
             clearlist(wshipper, wcode, wdesc, wsize, wtotal, wmanufact, wmanufact_addr, wmanufact_city, wconsignee, wconsignee_addr, wconsignee_city, wconsignee_postal, wconsignee_stact, wconsignee_state, wsubmitter, wsubmitter_add, wsubmitter_cityetc, wsubmitter_country, wpnumber, wbox, wentrycode, wsku)
-        if worksheet['B{}'.format(i)].value == None:
+        if xlworksheet['B{}'.format(i)].value == None:
             break
-        wshipper.append(str(worksheet['B{}'.format(i)].value).strip())
-        wcode.append(str(worksheet['F{}'.format(i)].value).strip())
-        strdesc= ud.normalize('NFKD', str(worksheet['G{}'.format(i)].value).strip()).encode('ascii', 'ignore').decode('ascii')
+        wshipper.append(str(xlworksheet['B{}'.format(i)].value).strip())
+        wcode.append(str(xlworksheet['F{}'.format(i)].value).strip())
+        strdesc= ud.normalize('NFKD', str(xlworksheet['G{}'.format(i)].value).strip()).encode('ascii', 'ignore').decode('ascii')
         wdesc.append(strdesc)
-        wsize.append(str(worksheet['H{}'.format(i)].value).strip())
-        wtotal.append(str(worksheet['I{}'.format(i)].value).strip())
-        strmanufact = ud.normalize('NFKD', str(worksheet['K{}'.format(i)].value).strip()).encode('ascii', 'ignore').decode('ascii')
+        wsize.append(str(xlworksheet['H{}'.format(i)].value).strip())
+        wtotal.append(str(xlworksheet['I{}'.format(i)].value).strip())
+        strmanufact = ud.normalize('NFKD', str(xlworksheet['K{}'.format(i)].value).strip()).encode('ascii', 'ignore').decode('ascii')
         wmanufact.append(strmanufact)
-        strmanufact_addr = ud.normalize('NFKD', str(worksheet['L{}'.format(i)].value).strip()).encode('ascii', 'ignore').decode('ascii')
+        strmanufact_addr = ud.normalize('NFKD', str(xlworksheet['L{}'.format(i)].value).strip()).encode('ascii', 'ignore').decode('ascii')
         wmanufact_addr.append(strmanufact_addr)
-        wmanufact_city.append(str(worksheet['M{}'.format(i)].value).strip())
-        wconsignee.append(str(worksheet['N{}'.format(i)].value).strip())
-        wconsignee_addr.append(str(worksheet['O{}'.format(i)].value).strip())
-        wconsignee_city.append(str(worksheet['P{}'.format(i)].value).strip())
-        wconsignee_postal.append(str(worksheet['Q{}'.format(i)].value).strip())
-        wconsignee_state.append(str(worksheet['R{}'.format(i)].value).strip())
-        wconsignee_stact.append(str(worksheet['S{}'.format(i)].value).strip())
-        wsubmitter.append(str(worksheet['T{}'.format(i)].value).strip())
-        wsubmitter_add.append(str(worksheet['U{}'.format(i)].value).strip())
-        wsubmitter_cityetc.append(str(worksheet['V{}'.format(i)].value).strip())
-        wsubmitter_country.append(str(worksheet['W{}'.format(i)].value).strip())
+        wmanufact_city.append(str(xlworksheet['M{}'.format(i)].value).strip())
+        wconsignee.append(str(xlworksheet['N{}'.format(i)].value).strip())
+        wconsignee_addr.append(str(xlworksheet['O{}'.format(i)].value).strip())
+        wconsignee_city.append(str(xlworksheet['P{}'.format(i)].value).strip())
+        wconsignee_postal.append(str(xlworksheet['Q{}'.format(i)].value).strip())
+        wconsignee_state.append(str(xlworksheet['R{}'.format(i)].value).strip())
+        wconsignee_stact.append(str(xlworksheet['S{}'.format(i)].value).strip())
+        wsubmitter.append(str(xlworksheet['T{}'.format(i)].value).strip())
+        wsubmitter_add.append(str(xlworksheet['U{}'.format(i)].value).strip())
+        wsubmitter_cityetc.append(str(xlworksheet['V{}'.format(i)].value).strip())
+        wsubmitter_country.append(str(xlworksheet['W{}'.format(i)].value).strip())
         wpnumber.append("")
-        wbox.append(str(worksheet['D{}'.format(i)].value).strip())
-        wentrycode.append(str(worksheet['A{}'.format(i)].value).strip())
-        wsku.append(str(worksheet['E{}'.format(i)].value).strip())
+        wbox.append(str(xlworksheet['D{}'.format(i)].value).strip())
+        wentrycode.append(str(xlworksheet['A{}'.format(i)].value).strip())
+        wsku.append(str(xlworksheet['E{}'.format(i)].value).strip())
     return allData
 
 
@@ -282,14 +282,14 @@ def choose_pdf_file(file_list, entry_id):
             return file
     return ""
     
-def save_to_xls(pnlist, filename):
-    for i in range(2, worksheet.max_row + 1):
+def save_to_xls(pnlist):
+    for i in range(2, xlworksheet.max_row + 1):
         # strdesc = ud.normalize('NFKD', str(worksheet['G{}'.format(i)].value).strip()).encode('ascii', 'ignore').decode('ascii')
-        sku = worksheet['E{}'.format(i)].value
+        sku = xlworksheet['E{}'.format(i)].value
         if sku == None:
             break
         for pn in pnlist:
-            if worksheet['A{}'.format(i)].value == pn['entry_id'] and sku == pn['sku'] and worksheet['D{}'.format(i)].value == pn['boxes']:
+            if xlworksheet['A{}'.format(i)].value == pn['entry_id'] and sku == pn['sku'] and xlworksheet['D{}'.format(i)].value == pn['boxes']:
                     xlworksheet['X{}'.format(i)].value = pn['pnnumber']
                     break
     # try:        
