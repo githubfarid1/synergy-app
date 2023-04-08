@@ -131,7 +131,7 @@ def main():
     xlsfilename = os.path.basename(destfile)
     print(xlsdictall)
     strdate = str(date.today())
-    foldername = fdaauto.format_filename("{}_{}_{}".format(xlsfilename[-5:], args.pnsheet, strdate) )
+    foldername = fdaauto.format_filename("{}_{}_{}".format(xlsfilename[:-5], args.pnsheet, strdate) )
     complete_output_folder = foldernamepn + lib.file_delimeter() + foldername
     isExist = os.path.exists(complete_output_folder)
     if not isExist:
@@ -158,7 +158,7 @@ def main():
     list_of_files = glob.glob(complete_output_folder + lib.file_delimeter() + "*.pdf")
     allsavedfiles = []
     #regenerate data
-    xlsdictall = fdaauto.xls_data_generator(destfile, args.pnsheet)
+    xlsdictall = fdaauto.xls_data_generator(destfile, args.pnsheet, xlbook)
     for xlsdata in xlsdictall.values():
         entry_id = xlsdata['data'][0][20]
         pdf_filename = fdaauto.choose_pdf_file(list_of_files, entry_id)
