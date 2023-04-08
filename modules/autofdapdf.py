@@ -240,6 +240,7 @@ def xls_data_generator(xlws, maxrow):
     for i in range(2, MAXROW+1):
         # if xlworksheet['A{}'.format(i)].value is None:
         # print(xlworksheet['D{}'.format(i)].value)
+        print('xx',xlworksheet['B{}'.format(i)].value)
         if wentryid != xlworksheet['B{}'.format(i)].value:# and xlworksheet['B{}'.format(i)].value != None:
             rid = uuid.uuid4().hex
             print(rid)
