@@ -120,6 +120,10 @@ def main():
     # -----------------
 
     xlsheet = xlbook.sheets[args.pnsheet]
+    last = xlsheet.range('A' + str(xlsheet.cells.last_cell.row)).end('up').row
+    print(last)
+    exit()
+    
     xlsdictall = fdaauto.xls_data_generator(xlws=xlsheet)
     xlsdictwcode = {}
     for idx, xls in xlsdictall.items():
