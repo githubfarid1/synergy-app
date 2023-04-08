@@ -170,7 +170,7 @@ def main():
         prior = FdaPdf(filename=pdf_filename, datalist=xlsdata, pdfoutput=complete_output_folder)
         prior.highlightpdf_generator()
         prior.insert_text()
-        fdaauto.save_to_xls(pnlist=prior.pnlist, filename=destfile)
+        fdaauto.save_to_xls(pnlist=prior.pnlist)
         xlbook.save(destfile)
         allsavedfiles.extend(prior.savedfiles)
     
