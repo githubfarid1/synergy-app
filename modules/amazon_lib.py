@@ -86,6 +86,7 @@ def join_pdfs(source_folder, output_folder, tag='Labels'):
     isExist = os.path.exists(tmpname)
     if isExist:
         os.remove(tmpname)
+        print('x1')
     resultfile = output_folder + file_delimeter + fname
     pdffiles = glob.glob(source_folder + file_delimeter + "*.pdf")
     if len(pdffiles) != 0:
@@ -93,13 +94,17 @@ def join_pdfs(source_folder, output_folder, tag='Labels'):
         for pdffile in pdffiles:
             try:
                 basefilename = os.path.basename(pdffile)
+                print('x2')
                 dictfiles[int(basefilename.replace(".pdf",""))] = pdffile
             except:
+                print('x3')
                 continue
         sortedfiles = dict(sorted(dictfiles.items()))
 
         for file in sortedfiles:
+            print('x4')
             merger.append(sortedfiles[file])
+        print('x5')
         merger.write(resultfile)
         print("Finished")
         return resultfile
