@@ -81,7 +81,7 @@ def webentry_update(pdffile, xlsfilename, pdffolder):
     entry_id = page.get_text("block", clip=(152.7100067138672, 202.04034423828125, 230.7493438720703, 214.09893798828125)).strip()
 
     # print(submitter, entry_id)
-    for i in range(2, MAXROW+1):
+    for i in range(2, MAXROW+2):
         if xlworksheet['B{}'.format(i)].value == None:
             break
         if xlworksheet['T{}'.format(i)].value.strip() == submitter:
@@ -290,7 +290,7 @@ def choose_pdf_file(file_list, entry_id):
     return ""
     
 def save_to_xls(pnlist):
-    for i in range(2, MAXROW+1):
+    for i in range(2, MAXROW+2):
         # strdesc = ud.normalize('NFKD', str(worksheet['G{}'.format(i)].value).strip()).encode('ascii', 'ignore').decode('ascii')
         sku = xlworksheet['E{}'.format(i)].value
         if sku == None:
