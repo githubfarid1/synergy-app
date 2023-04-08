@@ -161,8 +161,8 @@ def main():
     allsavedfiles = []
     #regenerate data
     xlsdictall = fdaauto.xls_data_generator(xlws=xlsheet, maxrow=maxrow)
-    print(xlsdictall)
-    exit()
+    # print(xlsdictall)
+    # exit()
     for xlsdata in xlsdictall.values():
         entry_id = xlsdata['data'][0][20]
         pdf_filename = fdaauto.choose_pdf_file(list_of_files, entry_id)
