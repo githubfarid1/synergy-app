@@ -120,8 +120,8 @@ def main():
     # -----------------
 
     xlsheet = xlbook.sheets[args.pnsheet]
-    maxrow = xlsheet.range('B' + str(xlsheet.cells.last_cell.row)).end('up').row
-    
+    # maxrow = xlsheet.range('B' + str(xlsheet.cells.last_cell.row)).end('up').row
+    maxrow = 4
     xlsdictall = fdaauto.xls_data_generator(xlws=xlsheet, maxrow=maxrow)
     xlsdictwcode = {}
     for idx, xls in xlsdictall.items():
