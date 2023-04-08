@@ -237,7 +237,7 @@ def xls_data_generator(xlws, maxrow):
     wentrycode = []
     wsku = []
     wentryid = xlworksheet['B{}'.format(2)].value
-    for i in range(2, MAXROW+1):
+    for i in range(2, MAXROW+2):
         # if xlworksheet['A{}'.format(i)].value is None:
         # print(xlworksheet['D{}'.format(i)].value)
         print('xx',xlworksheet['B{}'.format(i)].value)
