@@ -239,7 +239,7 @@ def xls_data_generator(xlws, maxrow):
     wentryid = xlworksheet['B{}'.format(2)].value
     for i in range(2, MAXROW):
         # if xlworksheet['A{}'.format(i)].value is None:
-        print(wentryid)
+        print(xlworksheet['D{}'.format(i)].value)
         if wentryid != xlworksheet['B{}'.format(i)].value:# and xlworksheet['B{}'.format(i)].value != None:
             rid = uuid.uuid4().hex
             allData[rid] = {'data':list(zip(wshipper, wcode, wdesc, wsize, wtotal, wmanufact, wmanufact_addr, wmanufact_city, wconsignee, wconsignee_addr, wconsignee_city, wconsignee_postal, wconsignee_stact, wconsignee_state, wsubmitter, wsubmitter_add, wsubmitter_cityetc, wsubmitter_country, wpnumber, wbox, wentrycode, wsku)),
