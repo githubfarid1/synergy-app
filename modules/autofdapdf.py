@@ -81,7 +81,7 @@ def webentry_update(pdffile, xlsfilename, pdffolder):
     entry_id = page.get_text("block", clip=(152.7100067138672, 202.04034423828125, 230.7493438720703, 214.09893798828125)).strip()
 
     # print(submitter, entry_id)
-    for i in range(2, xlworksheet.max_row + 1):
+    for i in range(2, MAXROW):
         if xlworksheet['B{}'.format(i)].value == None:
             break
         if xlworksheet['T{}'.format(i)].value.strip() == submitter:
@@ -202,15 +202,17 @@ def xls_dataframe_generator(filename, sname):
     cols = df.groupby('Shiper Address').first().values.tolist()
     print(cols)
 
-def xls_data_generator(xlws):
+def xls_data_generator(xlws, maxrow):
     # global worksheet
     # global workbook
     global xlworksheet
+    global MAXROW
     # workbook = load_workbook(filename=filename, read_only=False)#, keep_vba=True, data_only=True)
     # workbook = load_workbook(filename=filename, read_only=False, keep_vba=True, data_only=True)
 
     # worksheet = workbook[sname]
     xlworksheet = xlws #xlworkbook.sheets[sname]
+    MAXROW = maxrow
     allData = {}
     wcode = []
     wshipper = []
@@ -235,7 +237,7 @@ def xls_data_generator(xlws):
     wentrycode = []
     wsku = []
     wentryid = xlworksheet['B{}'.format(2)].value
-    for i in range(2, xlworksheet.max_row + 1):
+    for i in range(2, MAXROW):
         # if xlworksheet['A{}'.format(i)].value is None:
         if wentryid != xlworksheet['B{}'.format(i)].value:# and xlworksheet['B{}'.format(i)].value != None:
             rid = uuid.uuid4().hex
@@ -283,7 +285,7 @@ def choose_pdf_file(file_list, entry_id):
     return ""
     
 def save_to_xls(pnlist):
-    for i in range(2, xlworksheet.max_row + 1):
+    for i in range(2, MAXROW):
         # strdesc = ud.normalize('NFKD', str(worksheet['G{}'.format(i)].value).strip()).encode('ascii', 'ignore').decode('ascii')
         sku = xlworksheet['E{}'.format(i)].value
         if sku == None:

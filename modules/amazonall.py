@@ -120,11 +120,9 @@ def main():
     # -----------------
 
     xlsheet = xlbook.sheets[args.pnsheet]
-    last = xlsheet.range('B' + str(xlsheet.cells.last_cell.row)).end('up').row
-    print(last)
-    exit()
+    maxrow = xlsheet.range('B' + str(xlsheet.cells.last_cell.row)).end('up').row
     
-    xlsdictall = fdaauto.xls_data_generator(xlws=xlsheet)
+    xlsdictall = fdaauto.xls_data_generator(xlws=xlsheet, maxrow=maxrow)
     xlsdictwcode = {}
     for idx, xls in xlsdictall.items():
         for data in xls['data']:
@@ -162,7 +160,7 @@ def main():
     list_of_files = glob.glob(complete_output_folder + lib.file_delimeter() + "*.pdf")
     allsavedfiles = []
     #regenerate data
-    xlsdictall = fdaauto.xls_data_generator(xlws=xlsheet)
+    xlsdictall = fdaauto.xls_data_generator(xlws=xlsheet, maxrow=maxrow)
     for xlsdata in xlsdictall.values():
         entry_id = xlsdata['data'][0][20]
         pdf_filename = fdaauto.choose_pdf_file(list_of_files, entry_id)
