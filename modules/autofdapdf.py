@@ -290,7 +290,7 @@ def save_to_xls(pnlist):
             break
         for pn in pnlist:
             if xlworksheet['A{}'.format(i)].value == pn['entry_id'] and sku == pn['sku'] and xlworksheet['D{}'.format(i)].value == pn['boxes']:
-                    xlworksheet['X{}'.format(i)].value = pn['pnnumber']
+                    xlworksheet['X{}'.format(i)].value = str(pn['pnnumber'])
                     break
     # try:        
     #     workbook.save(filename)
