@@ -84,6 +84,24 @@ def main():
     # exit()
 
 
+
+
+    resultfile = lib.join_pdfs(source_folder=folderamazonship + lib.file_delimeter() + "combined" , output_folder = folderamazonship, tag='Labels')
+
+    xlsfilename = os.path.basename(destfile)
+    strdate = str(date.today())
+    foldername = fdaauto.format_filename("{}_{}_{}".format(xlsfilename[:-5], args.pnsheet, strdate) )
+    complete_output_folder = foldernamepn + lib.file_delimeter() + foldername
+
+
+    resultfile = lib.join_pdfs(source_folder=complete_output_folder + lib.file_delimeter() + "combined", output_folder=complete_output_folder, tag="FDA_All")
+    print(resultfile, "created")
+    exit()
+
+
+
+
+
     logger2.info("###### Start ######")
     logger2.info("Filename: {}\nSheet Name:{}\nPDF Output Folder:{}".format(destfile, args.shipsheet, folderamazonship))
     maxrun = 10
@@ -141,7 +159,7 @@ def main():
 
     driver = fdaauto.browser_init(chrome_data=args.chromedata, pdfoutput_folder=complete_output_folder)
     driver = fdaauto.browser_login(driver)
-    fdaauto.clear_screan()
+    # fdaauto.clear_screan()
     first = True
     for xlsdata in xlsdictwcode.values():
         fda_entry = FdaEntry(driver=driver, datalist=xlsdata, datearrival=args.date, pdfoutput=complete_output_folder)

@@ -99,11 +99,8 @@ def join_pdfs(source_folder, output_folder, tag='Labels'):
         sortedfiles = dict(sorted(dictfiles.items()))
 
         for file in sortedfiles:
-            try:
-                merger.append(sortedfiles[file])
-            except:
-                print("merger")
-                pass
+            merger.append(sortedfiles[file])
+            
         merger.write(resultfile)
         print("Finished")
         return resultfile
