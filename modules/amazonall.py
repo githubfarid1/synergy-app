@@ -83,17 +83,16 @@ def main():
     xlbook = xw.Book(destfile)
     # exit()
 
-
-
-
     resultfile = lib.join_pdfs(source_folder=folderamazonship + lib.file_delimeter() + "combined" , output_folder = folderamazonship, tag='Labels')
     print(resultfile, "created")
+    if resultfile != "":
+        lib.add_page_numbers(resultfile)
+        lib.generate_xls_from_pdf(resultfile, addressfile)
 
     xlsfilename = os.path.basename(destfile)
     strdate = str(date.today())
     foldername = fdaauto.format_filename("{}_{}_{}".format(xlsfilename[:-5], args.pnsheet, strdate) )
     complete_output_folder = foldernamepn + lib.file_delimeter() + foldername
-
 
     resultfile = lib.join_pdfs(source_folder=complete_output_folder + lib.file_delimeter() + "combined", output_folder=complete_output_folder, tag="FDA_All")
     print(resultfile, "created")
