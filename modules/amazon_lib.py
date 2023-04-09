@@ -88,25 +88,30 @@ def join_pdfs(source_folder, output_folder, tag='Labels'):
         os.remove(tmpname)
     resultfile = output_folder + file_delimeter + fname
     pdffiles = glob.glob(source_folder + file_delimeter + "*.pdf")
-    if len(pdffiles) != 0:
-        dictfiles = {}
-        for pdffile in pdffiles:
-            try:
-                basefilename = os.path.basename(pdffile)
-                dictfiles[int(basefilename.replace(".pdf",""))] = pdffile
-            except:
-                continue
-        sortedfiles = dict(sorted(dictfiles.items()))
+    try:
+        if len(pdffiles) != 0:
+            dictfiles = {}
+            for pdffile in pdffiles:
+                try:
+                    basefilename = os.path.basename(pdffile)
+                    dictfiles[int(basefilename.replace(".pdf",""))] = pdffile
+                except:
+                    continue
+            sortedfiles = dict(sorted(dictfiles.items()))
 
-        for file in sortedfiles:
-            merger.append(sortedfiles[file])
+            for file in sortedfiles:
+                merger.append(sortedfiles[file])
+            print('xx')
+            merger.write(resultfile)
+            print('yy')
 
-        merger.write(resultfile)
-        print("Finished")
-        return resultfile
-    else:
-        print("No pdf files was found")
-        return ""
+            print("Finished")
+            return resultfile
+        else:
+            print("No pdf files was found")
+            return ""
+    except:
+        pass
 
 def add_page_numbers(pdffile):
     print("Add page numbering...", end=" ", flush=True)
