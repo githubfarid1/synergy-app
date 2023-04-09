@@ -83,6 +83,12 @@ def main():
     xlbook = xw.Book(destfile)
     # exit()
 
+
+
+
+
+
+
     addressfile = Path("address.csv")
     resultfile = lib.join_pdfs(source_folder=folderamazonship + lib.file_delimeter() + "combined" , output_folder = folderamazonship, tag='Labels')
     print(resultfile, "created")
@@ -92,10 +98,76 @@ def main():
     lib.copysheet(destination=destfile, source=resultfile[:-4] + ".xlsx", cols=('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'), sheetsource="Sheet", sheetdestination="Shipment labels summary", tracksheet=args.tracksheet, xlbook=xlbook)
     xlbook.save(destfile)
 
+    # xlsfilename = os.path.basename(destfile)
+    # strdate = str(date.today())
+    # foldername = fdaauto.format_filename("{}_{}_{}".format(xlsfilename[:-5], args.pnsheet, strdate) )
+    # complete_output_folder = foldernamepn + lib.file_delimeter() + foldername
+    xlsheet = xlbook.sheets[args.pnsheet]
+    maxrow = xlsheet.range('B' + str(xlsheet.cells.last_cell.row)).end('up').row
+    xlsdictall = fdaauto.xls_data_generator(xlws=xlsheet, maxrow=maxrow)
+    xlsdictwcode = {}
+    for idx, xls in xlsdictall.items():
+        for data in xls['data']:
+            if data[20] == 'None':
+                xlsdictwcode[idx] = xls
+                break
+
     xlsfilename = os.path.basename(destfile)
     strdate = str(date.today())
     foldername = fdaauto.format_filename("{}_{}_{}".format(xlsfilename[:-5], args.pnsheet, strdate) )
     complete_output_folder = foldernamepn + lib.file_delimeter() + foldername
+    isExist = os.path.exists(complete_output_folder)
+    if not isExist:
+        os.makedirs(complete_output_folder)
+
+    driver = fdaauto.browser_init(chrome_data=args.chromedata, pdfoutput_folder=complete_output_folder)
+    driver = fdaauto.browser_login(driver)
+    # fdaauto.clear_screan()
+    first = True
+    for xlsdata in xlsdictwcode.values():
+        fda_entry = FdaEntry(driver=driver, datalist=xlsdata, datearrival=args.date, pdfoutput=complete_output_folder)
+        if not first:
+            driver.find_element(By.CSS_SELECTOR, "img[alt='Create WebEntry Button']").click()
+        
+        fda_entry.parse()
+        pdf_filename = fdaauto.pdf_rename(pdfoutput_folder=complete_output_folder)
+        if pdf_filename != "":
+            fdaauto.webentry_update(pdffile=pdf_filename, xlsfilename=destfile, pdffolder=complete_output_folder)
+            xlbook.save(destfile)
+        else:
+            print("rename the file was failed")
+        first = False
+    
+    list_of_files = glob.glob(complete_output_folder + lib.file_delimeter() + "*.pdf")
+    allsavedfiles = []
+    #regenerate data
+    xlsdictall = fdaauto.xls_data_generator(xlws=xlsheet, maxrow=maxrow)
+    for xlsdata in xlsdictall.values():
+        entry_id = xlsdata['data'][0][20]
+        pdf_filename = fdaauto.choose_pdf_file(list_of_files, entry_id)
+        print('PDF File processing: ', pdf_filename)
+        prior = FdaPdf(filename=pdf_filename, datalist=xlsdata, pdfoutput=complete_output_folder)
+        prior.highlightpdf_generator()
+        prior.insert_text()
+        fdaauto.save_to_xls(pnlist=prior.pnlist)
+        xlbook.save(destfile)
+        allsavedfiles.extend(prior.savedfiles)
+    
+    setall = set(allsavedfiles)
+
+    if len(setall) != len(allsavedfiles):
+        input("Combining all pdf files Failed because there are one or more files is has the same name.")
+    else:
+        fdaauto.del_non_annot_page(allsavedfiles, complete_output_folder)
+        fdaauto.join_folderpdf(allsavedfiles, complete_output_folder)
+        # Delete all file folder
+        for filename in list_of_files:
+            folder = filename[:-4]
+            try:
+                shutil.rmtree(folder)
+            except OSError as e:
+                print("Error: %s : %s" % (folder, e.strerror))            
+
 
     resultfile = lib.join_pdfs(source_folder=complete_output_folder + lib.file_delimeter() + "combined", output_folder=complete_output_folder, tag="FDA_All")
     print(resultfile, "created")
