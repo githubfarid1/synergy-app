@@ -25,6 +25,9 @@ import string
 from datetime import date
 import json
 import amazon_lib as lib
+import warnings
+warnings.filterwarnings("ignore", category=Warning)
+
 def explicit_wait():
     time.sleep(randint(1, 3))
 def getConfig():
