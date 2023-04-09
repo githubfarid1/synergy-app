@@ -83,6 +83,7 @@ def main():
     xlbook = xw.Book(destfile)
     # exit()
 
+    addressfile = Path("address.csv")
     resultfile = lib.join_pdfs(source_folder=folderamazonship + lib.file_delimeter() + "combined" , output_folder = folderamazonship, tag='Labels')
     print(resultfile, "created")
     if resultfile != "":
