@@ -90,6 +90,7 @@ def main():
         lib.add_page_numbers(resultfile)
         lib.generate_xls_from_pdf(resultfile, addressfile)
     lib.copysheet(destination=destfile, source=resultfile[:-4] + ".xlsx", cols=('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'), sheetsource="Sheet", sheetdestination="Shipment labels summary", tracksheet=args.tracksheet, xlbook=xlbook)
+    xlbook.save(destfile)
 
     xlsfilename = os.path.basename(destfile)
     strdate = str(date.today())
