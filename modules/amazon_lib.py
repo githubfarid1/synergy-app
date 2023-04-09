@@ -102,6 +102,7 @@ def join_pdfs(source_folder, output_folder, tag='Labels'):
             try:
                 merger.append(sortedfiles[file])
             except:
+                print("merger")
                 pass
         merger.write(resultfile)
         print("Finished")
