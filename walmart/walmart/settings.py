@@ -105,3 +105,4 @@ DOWNLOADER_MIDDLEWARES = {
     "scrapeops_scrapy_proxy_sdk.scrapeops_scrapy_proxy_sdk.ScrapeOpsScrapyProxySdk": 725,
 }
 
+DOWNLOAD_DELAY = 3
