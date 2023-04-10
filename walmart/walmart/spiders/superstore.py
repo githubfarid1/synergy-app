@@ -31,7 +31,7 @@ class SuperstoreSpider(scrapy.Spider):
     def parse(self, response):
         title = response.css("h1[data-automation=product-title] ::text").get()
         # title = response.css("h1::text").get()
-        price = response.css("div[data-automation=price-area] ::text").get()
+        price = response.css("div[data-automation=sold-shipped] ::text").get()
         status = response.css("h1::text").get()
         # title = response.css("h1[itemprop=name] ::text").get()
 
