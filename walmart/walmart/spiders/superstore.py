@@ -12,8 +12,13 @@ class SuperstoreSpider(scrapy.Spider):
 
     def start_requests(self):
         # Creating URL for scrapings
-        workbook = load_workbook(filename=self.xlsinput, read_only=False, keep_vba=True, data_only=True)
-        worksheet = workbook[self.sheetname]
+        # scrapy crawl superstore -a xlsinput=C:/synergy-data-tester/Lookup Listing.xlsx" -a sheetname="Sheet1"
+        # workbook = load_workbook(filename=self.xlsinput, read_only=False, keep_vba=True, data_only=True)
+        workbook = load_workbook(filename=r"C:/synergy-data-tester/Lookup Listing.xlsx", read_only=False, keep_vba=True, data_only=True)
+       
+        # worksheet = workbook[self.sheetname]
+        worksheet = workbook["Sheet1"]
+
         for i in range(2, worksheet.max_row + 1):
             url = worksheet[f'A{i}'].value
             domain = urlparse(url).netloc
