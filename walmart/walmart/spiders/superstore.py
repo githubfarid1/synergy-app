@@ -32,11 +32,13 @@ class SuperstoreSpider(scrapy.Spider):
         title = response.css("h1[data-automation=product-title] ::text").get()
         # title = response.css("h1::text").get()
         price = response.css("span[data-automation=buybox-price] ::text").get()
+        status = response.css("h1::text").get()
         # title = response.css("h1[itemprop=name] ::text").get()
 
 
         # script_tag = response.xpath('//script[@id="__NEXT_DATA__"]/text()').get()
         yield {
             "product_name":title,
-            'price': price
+            'price': price, 
+            'status': status
         }
