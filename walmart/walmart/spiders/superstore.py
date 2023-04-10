@@ -1,15 +1,37 @@
+from datetime import datetime
+import json
+import time
 import scrapy
-import pandas as pd
+from urllib.parse import urlencode, urlparse
+from openpyxl import Workbook, load_workbook
 
 class SuperstoreSpider(scrapy.Spider):
     name = "superstore"
-    allowed_domains = ["walmart.ca"]
-    start_urls = ["http://walmart.ca/"]
-
     def __init__(self, name=None, **kwargs):
         super().__init__(name, **kwargs)
-        self.start_urls = [self.url]
-        self.downloaded_items = 0
+
+    def start_requests(self):
+        # Creating URL for scrapings
+        workbook = load_workbook(filename=self.xlsinput, read_only=False, keep_vba=True, data_only=True)
+        worksheet = workbook[self.sheetname]
+        for i in range(2, worksheet.max_row + 1):
+            url = worksheet[f'A{i}'].value
+            domain = urlparse(url).netloc
+            if domain == 'www.walmart.com' or domain == 'www.walmart.ca':
+                yield scrapy.Request(
+                    url=url,
+                    callback=self.parse,
+            )
 
     def parse(self, response):
-        pass
+        title = response.css("h1[data-automation=product-title] ::text").get()
+        # title = response.css("h1::text").get()
+        price = response.css("span[data-automation=buybox-price] ::text").get()
+        # title = response.css("h1[itemprop=name] ::text").get()
+
+
+        # script_tag = response.xpath('//script[@id="__NEXT_DATA__"]/text()').get()
+        yield {
+            "product_name":title,
+            'price': price
+        }
