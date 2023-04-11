@@ -40,11 +40,10 @@ def browser_init():
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
     options.add_argument("--disable-blink-features=AutomationControlled") 
-  
     return webdriver.Chrome(service=Service(CM().install()), options=options)
 
 driver = browser_init()
-driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})") 
+# driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})") 
 workbook = load_workbook(filename=r"C:/synergy-data-tester/Lookup Listing.xlsx", read_only=False, keep_vba=True, data_only=True)
 # workbook = load_workbook(filename="/home/farid/dev/python/synergy-github/data/lookup/Lookup Listing.xlsx", read_only=False, keep_vba=True, data_only=True)
 # worksheet = workbook[self.sheetname]
