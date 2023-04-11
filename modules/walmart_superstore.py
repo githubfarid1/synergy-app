@@ -62,6 +62,6 @@ for i in range(2, worksheet.max_row + 1):
         pg.scroll(randint(-100, 100))
         driver.get("https://google.com")
         time.sleep(randint(1, 5))
-        input("wait")
+        # input("wait")
         
          
