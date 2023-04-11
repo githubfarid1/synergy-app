@@ -13,6 +13,7 @@ from urllib.parse import urlencode, urlparse
 import time
 from random import randint
 import pyautogui as pg
+import undetected_chromedriver.v2 as uc 
 
 def getConfig():
 	file = open("setting.json", "r")
@@ -43,8 +44,12 @@ def browser_init():
     options.add_experimental_option( "prefs",{'profile.managed_default_content_settings.javascript': 1})
     return webdriver.Chrome(service=Service(CM().install()), options=options)
 
-driver = browser_init()
-driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})") 
+# driver = browser_init()
+# driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})") 
+
+ 
+# Initializing driver 
+driver = uc.Chrome()
 workbook = load_workbook(filename=r"C:/synergy-data-tester/Lookup Listing.xlsx", read_only=False, keep_vba=True, data_only=True)
 # workbook = load_workbook(filename="/home/farid/dev/python/synergy-github/data/lookup/Lookup Listing.xlsx", read_only=False, keep_vba=True, data_only=True)
 # worksheet = workbook[self.sheetname]
@@ -65,11 +70,11 @@ for i in range(2, worksheet.max_row + 1):
             price = ''
 
         print(title, price) 
-        pg.moveTo(pg.size()[0]/2,pg.size()[1]/2)
-        pg.moveRel(randint(0, 50), randint(-200, 200), duration = 1)
-        time.sleep(randint(1, 5))
-        pg.click(100, randint(100, 200))
-        pg.scroll(randint(-100, 100))
+        # pg.moveTo(pg.size()[0]/2,pg.size()[1]/2)
+        # pg.moveRel(randint(0, 50), randint(-200, 200), duration = 1)
+        # time.sleep(randint(1, 5))
+        # pg.click(100, randint(100, 200))
+        # pg.scroll(randint(-100, 100))
         # input("wait")
         driver.get("https://google.com")
         time.sleep(randint(1, 5))
