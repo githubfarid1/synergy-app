@@ -68,15 +68,13 @@ for i in range(2, worksheet.max_row + 1):
             price = driver.find_element(By.CSS_SELECTOR, "span[data-automation='buybox-price']").text
         except:
             price = ''
+        try:
+            sale = driver.find_element(By.CSS_SELECTOR, "div[data-automation='mix-match-badge']").text
+        except:
+            sale = ''
 
-        print(title, price) 
-        # pg.moveTo(pg.size()[0]/2,pg.size()[1]/2)
-        # pg.moveRel(randint(0, 50), randint(-200, 200), duration = 1)
-        # time.sleep(randint(1, 5))
-        # pg.click(100, randint(100, 200))
-        # pg.scroll(randint(-100, 100))
-        # input("wait")
-        # driver.get("https://google.com")
+
+        print(title, price, sale) 
         time.sleep(randint(1, 10))
         print('sleep ok')
         # input("wait")
