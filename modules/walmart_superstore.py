@@ -61,14 +61,14 @@ for i in range(2, worksheet.max_row + 1):
         driver.get(url)
         print('OK')
         try:
-            isbot = driver.find_element(By.CSS_SELECTOR, "div#topmessage").text
-            input(isbot)
-        except:
+            driver.find_element(By.CSS_SELECTOR, "div#topmessage").text
             driver.quit()
             id += 1
             driver = browser_init(f"Default{id}")
             i -= 1
             continue
+        except:
+            pass
 
         try:
             title = driver.find_element(By.CSS_SELECTOR, "h1[data-automation='product-title']").text
