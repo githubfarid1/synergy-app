@@ -12,7 +12,7 @@ from openpyxl import Workbook, load_workbook
 from urllib.parse import urlencode, urlparse
 import time
 from random import randint
-import pyautogui
+import pyautogui as pg
 
 def getConfig():
 	file = open("setting.json", "r")
@@ -54,10 +54,11 @@ for i in range(2, worksheet.max_row + 1):
     domain = urlparse(url).netloc
     if domain == 'www.walmart.com' or domain == 'www.walmart.ca':
         driver.get(url)
-        pyautogui.moveTo(randint(100, 200), randint(300, 400), duration = 1)
-        pyautogui.moveTo(randint(100, 200), randint(300, 400), duration = 1)
-        pyautogui.moveTo(randint(100, 200), randint(300, 400), duration = 1)
+        pg.moveTo(pg.size()[0]/2,pg.size()[1]/2)
+        pg.moveRel(randint(0, 50), randint(-200, 200), duration = 1)
         time.sleep(randint(3, 10))
+        pg.scroll(randint(-100, 100))
+        
         # input("wait")
         
          
