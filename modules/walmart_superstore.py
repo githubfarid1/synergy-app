@@ -24,8 +24,8 @@ def browser_init():
     options = webdriver.ChromeOptions()
     # options = Options()
     # options.add_argument("--headless")
-    options.add_argument("user-data-dir={}".format("C:\\Users\\User\\AppData\\Local\\Google\\Chrome\\User Data")) 
-    options.add_argument("profile-directory={}".format("Default"))
+    options.add_argument("user-data-dir={}".format(config['chrome_user_data'])) 
+    options.add_argument("profile-directory={}".format(config['chrome_profile']))
     options.add_argument('--no-sandbox')
     options.add_argument("--log-level=3")
     options.add_argument('--disable-blink-features=AutomationControlled')
@@ -47,8 +47,8 @@ for i in range(2, worksheet.max_row + 1):
     url = worksheet[f'A{i}'].value
     domain = urlparse(url).netloc
     if domain == 'www.walmart.com' or domain == 'www.walmart.ca':
-        # driver.get(url)
-        # time.sleep(10)
-        input("wait")
+        driver.get(url)
+        time.sleep(3)
+        # input("wait")
         
          
