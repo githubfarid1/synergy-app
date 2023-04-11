@@ -56,10 +56,11 @@ for i in range(2, worksheet.max_row + 1):
         driver.get(url)
         pg.moveTo(pg.size()[0]/2,pg.size()[1]/2)
         pg.moveRel(randint(0, 50), randint(-200, 200), duration = 1)
-        time.sleep(randint(3, 10))
+        time.sleep(randint(1, 5))
         pg.click(100, randint(100, 200))
         pg.scroll(randint(-100, 100))
         driver.get("https://google.com")
+        time.sleep(1)
         # input("wait")
         
          
