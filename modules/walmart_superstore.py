@@ -62,6 +62,7 @@ for i in range(2, worksheet.max_row + 1):
         print('OK')
         try:
             isbot = driver.find_element(By.CSS_SELECTOR, "div#topmessage").text
+            input(isbot)
         except:
             driver.quit()
             id += 1
