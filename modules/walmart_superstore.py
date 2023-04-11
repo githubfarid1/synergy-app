@@ -12,6 +12,7 @@ from openpyxl import Workbook, load_workbook
 from urllib.parse import urlencode, urlparse
 import time
 from random import randint
+import pyautogui
 
 def getConfig():
 	file = open("setting.json", "r")
@@ -29,7 +30,7 @@ def browser_init():
     # options.add_argument("profile-directory={}".format(config['chrome_profile']))
     
     options.add_argument("user-data-dir={}".format("C:\\Users\\User\\AppData\\Local\\Google\\Chrome\\User Data")) 
-    options.add_argument("profile-directory={}".format("Default2"))
+    options.add_argument("profile-directory={}".format("Default3"))
 
     options.add_argument('--no-sandbox')
     options.add_argument("--log-level=3")
@@ -53,6 +54,9 @@ for i in range(2, worksheet.max_row + 1):
     domain = urlparse(url).netloc
     if domain == 'www.walmart.com' or domain == 'www.walmart.ca':
         driver.get(url)
+        pyautogui.moveTo(randint(100, 200), randint(300, 400), duration = 1)
+        pyautogui.moveTo(randint(100, 200), randint(300, 400), duration = 1)
+        pyautogui.moveTo(randint(100, 200), randint(300, 400), duration = 1)
         time.sleep(randint(3, 10))
         # input("wait")
         
