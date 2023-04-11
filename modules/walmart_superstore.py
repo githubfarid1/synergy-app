@@ -21,7 +21,7 @@ def getConfig():
 	return config
 
 
-def browser_init():
+def browser_init(profile):
     config = getConfig()
     warnings.filterwarnings("ignore", category=UserWarning)
     options = webdriver.ChromeOptions()
@@ -31,7 +31,7 @@ def browser_init():
     # options.add_argument("profile-directory={}".format(config['chrome_profile']))
     
     options.add_argument("user-data-dir={}".format("C:\\Users\\User\\AppData\\Local\\Google\\Chrome\\User Data")) 
-    options.add_argument("profile-directory={}".format("Default"))
+    options.add_argument("profile-directory={}".format(profile))
 
     options.add_argument('--no-sandbox')
     options.add_argument("--log-level=3")
@@ -43,8 +43,8 @@ def browser_init():
     options.add_argument("--disable-blink-features=AutomationControlled")
     # options.add_experimental_option( "prefs",{'profile.managed_default_content_settings.javascript': 1})
     return webdriver.Chrome(service=Service(CM().install()), options=options)
-
-driver = browser_init()
+id = 1
+driver = browser_init(f"Default{id}")
 driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})") 
 
  
@@ -60,6 +60,15 @@ for i in range(2, worksheet.max_row + 1):
         print(url, '..', end="", flush=True)
         driver.get(url)
         print('OK')
+        try:
+            isbot = driver.find_element(By.CSS_SELECTOR, "div#topmessage").text
+        except:
+            driver.quit()
+            id += 1
+            driver = browser_init(f"Default{id}")
+            i -= 1
+            continue
+
         try:
             title = driver.find_element(By.CSS_SELECTOR, "h1[data-automation='product-title']").text
         except:
