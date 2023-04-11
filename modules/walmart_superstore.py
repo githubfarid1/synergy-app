@@ -18,7 +18,7 @@ def getConfig():
 	return config
 
 
-def browser_init(self):
+def browser_init():
     config = getConfig()
     warnings.filterwarnings("ignore", category=UserWarning)
     options = webdriver.ChromeOptions()
