@@ -87,6 +87,6 @@ for i in range(2, worksheet.max_row + 1):
         print(title, price, sale) 
         time.sleep(randint(1, 10))
         print('sleep ok')
-        input("wait")
+        # input("wait")
         
          
