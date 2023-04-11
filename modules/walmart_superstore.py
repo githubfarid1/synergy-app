@@ -43,7 +43,7 @@ def browser_init():
     return webdriver.Chrome(service=Service(CM().install()), options=options)
 
 driver = browser_init()
-# driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})") 
+driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})") 
 workbook = load_workbook(filename=r"C:/synergy-data-tester/Lookup Listing.xlsx", read_only=False, keep_vba=True, data_only=True)
 # workbook = load_workbook(filename="/home/farid/dev/python/synergy-github/data/lookup/Lookup Listing.xlsx", read_only=False, keep_vba=True, data_only=True)
 # worksheet = workbook[self.sheetname]
@@ -59,6 +59,8 @@ for i in range(2, worksheet.max_row + 1):
         time.sleep(randint(1, 5))
         pg.click(100, randint(100, 200))
         pg.scroll(randint(-100, 100))
+        input("wait")
+
         driver.get("https://google.com")
         time.sleep(randint(1, 5))
         # input("wait")
