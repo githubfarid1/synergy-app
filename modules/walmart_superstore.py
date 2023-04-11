@@ -24,7 +24,7 @@ def browser_init():
     options = webdriver.ChromeOptions()
     # options = Options()
     # options.add_argument("--headless")
-    options.add_argument("user-data-dir={}".format("C:\\Users\\User\\AppData\\Local\\Google\\Chrome\\User Data3")) 
+    options.add_argument("user-data-dir={}".format("C:\\Users\\User\\AppData\\Local\\Google\\Chrome\\User Data4")) 
     options.add_argument("profile-directory={}".format("Default"))
     options.add_argument('--no-sandbox')
     options.add_argument("--log-level=3")
