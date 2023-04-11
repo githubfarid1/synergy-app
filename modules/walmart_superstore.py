@@ -30,7 +30,7 @@ def browser_init():
     # options.add_argument("profile-directory={}".format(config['chrome_profile']))
     
     options.add_argument("user-data-dir={}".format("C:\\Users\\User\\AppData\\Local\\Google\\Chrome\\User Data")) 
-    options.add_argument("profile-directory={}".format("Default3"))
+    options.add_argument("profile-directory={}".format("Default4"))
 
     options.add_argument('--no-sandbox')
     options.add_argument("--log-level=3")
@@ -58,7 +58,7 @@ for i in range(2, worksheet.max_row + 1):
         pg.moveRel(randint(0, 50), randint(-200, 200), duration = 1)
         time.sleep(randint(3, 10))
         pg.scroll(randint(-100, 100))
-        
+
         # input("wait")
         
          
