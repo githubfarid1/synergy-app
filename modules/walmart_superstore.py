@@ -41,7 +41,7 @@ def browser_init():
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
     options.add_argument("--disable-blink-features=AutomationControlled")
-    options.add_experimental_option( "prefs",{'profile.managed_default_content_settings.javascript': 1})
+    # options.add_experimental_option( "prefs",{'profile.managed_default_content_settings.javascript': 1})
     return webdriver.Chrome(service=Service(CM().install()), options=options)
 
 # driver = browser_init()
@@ -51,6 +51,18 @@ def browser_init():
 # Initializing driver 
 options = uc.ChromeOptions()
 options.add_argument('--blink-settings=imagesEnabled=false')
+options.add_argument("user-data-dir={}".format("C:\\Users\\User\\AppData\\Local\\Google\\Chrome\\User Data")) 
+options.add_argument("profile-directory={}".format("Default"))
+
+options.add_argument('--no-sandbox')
+options.add_argument("--log-level=3")
+# options.add_argument("--window-size=1200, 900")
+options.add_argument('--start-maximized')
+options.add_argument("--disable-notifications")
+options.add_experimental_option("excludeSwitches", ["enable-automation"])
+options.add_experimental_option('useAutomationExtension', False)
+options.add_argument("--disable-blink-features=AutomationControlled")
+
 driver = uc.Chrome(options=options)
 
 workbook = load_workbook(filename=r"C:/synergy-data-tester/Lookup Listing.xlsx", read_only=False, keep_vba=True, data_only=True)
