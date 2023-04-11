@@ -34,17 +34,17 @@ def browser_init():
 
     options.add_argument('--no-sandbox')
     options.add_argument("--log-level=3")
-    options.add_argument('--disable-blink-features=AutomationControlled')
-
     # options.add_argument("--window-size=1200, 900")
     options.add_argument('--start-maximized')
     options.add_argument("--disable-notifications")
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
-    options.add_experimental_option( "prefs",{'profile.managed_default_content_settings.javascript': 2})
+    options.add_argument("--disable-blink-features=AutomationControlled") 
+  
     return webdriver.Chrome(service=Service(CM().install()), options=options)
 
 driver = browser_init()
+driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})") 
 workbook = load_workbook(filename=r"C:/synergy-data-tester/Lookup Listing.xlsx", read_only=False, keep_vba=True, data_only=True)
 # workbook = load_workbook(filename="/home/farid/dev/python/synergy-github/data/lookup/Lookup Listing.xlsx", read_only=False, keep_vba=True, data_only=True)
 # worksheet = workbook[self.sheetname]
