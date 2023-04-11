@@ -49,7 +49,10 @@ def browser_init():
 
  
 # Initializing driver 
-driver = uc.Chrome()
+options = uc.ChromeOptions()
+options.add_argument('--blink-settings=imagesEnabled=false')
+driver = uc.Chrome(options=options)
+
 workbook = load_workbook(filename=r"C:/synergy-data-tester/Lookup Listing.xlsx", read_only=False, keep_vba=True, data_only=True)
 # workbook = load_workbook(filename="/home/farid/dev/python/synergy-github/data/lookup/Lookup Listing.xlsx", read_only=False, keep_vba=True, data_only=True)
 # worksheet = workbook[self.sheetname]
