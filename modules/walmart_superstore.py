@@ -59,7 +59,7 @@ options.add_argument("--log-level=3")
 # options.add_argument("--window-size=1200, 900")
 options.add_argument('--start-maximized')
 options.add_argument("--disable-notifications")
-options.add_experimental_option("excludeSwitches", ["enable-automation"])
+# options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option('useAutomationExtension', False)
 options.add_argument("--disable-blink-features=AutomationControlled")
 
