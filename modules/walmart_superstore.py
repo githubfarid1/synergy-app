@@ -46,6 +46,6 @@ for i in range(2, worksheet.max_row + 1):
     domain = urlparse(url).netloc
     if domain == 'www.walmart.com' or domain == 'www.walmart.ca':
         driver.get(url)
-        time.sleep(3)
+        time.sleep(10)
         
          
