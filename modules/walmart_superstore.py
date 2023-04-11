@@ -60,14 +60,14 @@ for i in range(2, worksheet.max_row + 1):
     domain = urlparse(url).netloc
     if domain == 'www.walmart.com' or domain == 'www.walmart.ca':
         driver.get(url)
-        # try:
-        #     title = driver.find_element(By.CSS_SELECTOR, "h1[data-automation='product-title']").text
-        # except:
-        #      title = ''
-        # try:
-        #     price = driver.find_element(By.CSS_SELECTOR, "span[data-automation='buybox-price']").text
-        # except:
-        #     price = ''
+        try:
+            title = driver.find_element(By.CSS_SELECTOR, "h1[data-automation='product-title']").text
+        except:
+             title = ''
+        try:
+            price = driver.find_element(By.CSS_SELECTOR, "span[data-automation='buybox-price']").text
+        except:
+            price = ''
 
         print(title, price) 
         # pg.moveTo(pg.size()[0]/2,pg.size()[1]/2)
