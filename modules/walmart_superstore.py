@@ -28,6 +28,8 @@ def browser_init():
     options.add_argument("profile-directory={}".format("Default"))
     options.add_argument('--no-sandbox')
     options.add_argument("--log-level=3")
+    options.add_argument('--disable-blink-features=AutomationControlled')
+
     # options.add_argument("--window-size=1200, 900")
     options.add_argument('--start-maximized')
     options.add_argument("--disable-notifications")
