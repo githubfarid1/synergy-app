@@ -65,16 +65,16 @@ for i in range(2, worksheet.max_row + 1):
         print(url, '..', end="", flush=True)
         driver.get(url)
         print('OK')
-        # try:
-        #     title = driver.find_element(By.CSS_SELECTOR, "h1[data-automation='product-title']").text
-        # except:
-        #      title = ''
-        # try:
-        #     price = driver.find_element(By.CSS_SELECTOR, "span[data-automation='buybox-price']").text
-        # except:
-        #     price = ''
+        try:
+            title = driver.find_element(By.CSS_SELECTOR, "h1[data-automation='product-title']").text
+        except:
+             title = ''
+        try:
+            price = driver.find_element(By.CSS_SELECTOR, "span[data-automation='buybox-price']").text
+        except:
+            price = ''
 
-        # print(title, price) 
+        print(title, price) 
         # pg.moveTo(pg.size()[0]/2,pg.size()[1]/2)
         # pg.moveRel(randint(0, 50), randint(-200, 200), duration = 1)
         # time.sleep(randint(1, 5))
