@@ -59,7 +59,9 @@ for i in range(2, worksheet.max_row + 1):
     url = worksheet[f'A{i}'].value
     domain = urlparse(url).netloc
     if domain == 'www.walmart.com' or domain == 'www.walmart.ca':
+        print(url, '..', end="", flush=True)
         driver.get(url)
+        print('OK')
         # try:
         #     title = driver.find_element(By.CSS_SELECTOR, "h1[data-automation='product-title']").text
         # except:
@@ -78,6 +80,7 @@ for i in range(2, worksheet.max_row + 1):
         # input("wait")
         # driver.get("https://google.com")
         time.sleep(randint(1, 10))
+        print('sleep ok')
         # input("wait")
         
          
