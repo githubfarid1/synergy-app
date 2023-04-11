@@ -13,7 +13,7 @@ from urllib.parse import urlencode, urlparse
 import time
 from random import randint
 import pyautogui as pg
-import undetected_chromedriver.v2 as uc 
+import undetected_chromedriver as uc 
 
 def getConfig():
 	file = open("setting.json", "r")
