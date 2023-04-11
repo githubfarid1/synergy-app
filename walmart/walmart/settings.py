@@ -103,6 +103,7 @@ CONCURRENT_REQUESTS = 1
 DOWNLOADER_MIDDLEWARES = {
     ## Proxy Middleware
     "scrapeops_scrapy_proxy_sdk.scrapeops_scrapy_proxy_sdk.ScrapeOpsScrapyProxySdk": 725,
-}
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'scrapy_user_agents.middlewares.RandomUserAgentMiddleware': 400,
 
-DOWNLOAD_DELAY = 3
+}

@@ -14,8 +14,9 @@ class SuperstoreSpider(scrapy.Spider):
         # Creating URL for scrapings
         # scrapy crawl superstore -a xlsinput=C:/synergy-data-tester/Lookup Listing.xlsx" -a sheetname="Sheet1"
         # workbook = load_workbook(filename=self.xlsinput, read_only=False, keep_vba=True, data_only=True)
-        workbook = load_workbook(filename=r"C:/synergy-data-tester/Lookup Listing.xlsx", read_only=False, keep_vba=True, data_only=True)
-       
+        # workbook = load_workbook(filename=r"C:/synergy-data-tester/Lookup Listing.xlsx", read_only=False, keep_vba=True, data_only=True)
+        workbook = load_workbook(filename="/home/farid/dev/python/synergy-github/data/lookup/Lookup Listing.xlsx", read_only=False, keep_vba=True, data_only=True)
+        
         # worksheet = workbook[self.sheetname]
         worksheet = workbook["Sheet1"]
 
