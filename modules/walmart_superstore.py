@@ -31,7 +31,7 @@ def browser_init():
     # options.add_argument("profile-directory={}".format(config['chrome_profile']))
     
     options.add_argument("user-data-dir={}".format("C:\\Users\\User\\AppData\\Local\\Google\\Chrome\\User Data")) 
-    options.add_argument("profile-directory={}".format("Default"))
+    options.add_argument("profile-directory={}".format("Default2"))
 
     options.add_argument('--no-sandbox')
     options.add_argument("--log-level=3")
