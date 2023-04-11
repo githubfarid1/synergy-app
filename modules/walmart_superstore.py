@@ -24,8 +24,12 @@ def browser_init():
     options = webdriver.ChromeOptions()
     # options = Options()
     # options.add_argument("--headless")
-    options.add_argument("user-data-dir={}".format(config['chrome_user_data'])) 
-    options.add_argument("profile-directory={}".format(config['chrome_profile']))
+    # options.add_argument("user-data-dir={}".format(config['chrome_user_data'])) 
+    # options.add_argument("profile-directory={}".format(config['chrome_profile']))
+    
+    options.add_argument("user-data-dir={}".format("C:\\Users\\User\\AppData\\Local\\Google\\Chrome\\User Data")) 
+    options.add_argument("profile-directory={}".format("Default2"))
+
     options.add_argument('--no-sandbox')
     options.add_argument("--log-level=3")
     options.add_argument('--disable-blink-features=AutomationControlled')
