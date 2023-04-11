@@ -60,8 +60,7 @@ for i in range(2, worksheet.max_row + 1):
         time.sleep(randint(1, 5))
         pg.click(100, randint(100, 200))
         pg.scroll(randint(-100, 100))
-        input("wait")
-
+        # input("wait")
         driver.get("https://google.com")
         time.sleep(randint(1, 5))
         # input("wait")
