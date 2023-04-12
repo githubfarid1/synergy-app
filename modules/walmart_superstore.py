@@ -56,48 +56,53 @@ workbook = load_workbook(filename=r"C:/synergy-data-tester/Lookup Listing.xlsx",
 # worksheet = workbook[self.sheetname]
 worksheet = workbook["Sheet1"]
 user_data = r"C:/Users/User/AppData/Local/Google/Chrome/User Data2"
+urlList = []
 for i in range(2, worksheet.max_row + 1):
     url = worksheet[f'A{i}'].value
     domain = urlparse(url).netloc
+
     if domain == 'www.walmart.com' or domain == 'www.walmart.ca':
-        print(url, '..', end="", flush=True)
-        driver.get(url)
+        urlList.append(url)
+
+i = 0
+maxrec = len(urlList)
+while True:
+    if i == maxrec:
+        break
+    url = urlList[i]
+    domain = urlparse(url).netloc
+    driver.get(url)
+    try:
+        driver.find_element(By.CSS_SELECTOR, "div#topmessage").text
+        print("Failed")
+        del driver
+        waiting = 60
+        print(url, f'Waiting for bot detection for {waiting} second', end="", flush=True)
+        time.sleep(waiting)
+        isExist = os.path.exists(user_data)
+        print(isExist)
+        if isExist:
+            shutil.rmtree(user_data)
         print('OK')
-        try:
-            
-            driver.find_element(By.CSS_SELECTOR, "div#topmessage").text
-            del driver
-            print(url, 'Waiting for bot detection for 15 second', end="", flush=True)
-            time.sleep(15)
-            isExist = os.path.exists(user_data)
-            print(isExist)
-            if isExist:
-                shutil.rmtree(user_data)
-            print('OK')
-            driver = browser_init()
-            i -= 1
-            continue
-        except:
-            pass
+        driver = browser_init()
+        continue
+    except:
+        i += 1
+        print('OK')
+        pass
 
-        try:
-            title = driver.find_element(By.CSS_SELECTOR, "h1[data-automation='product-title']").text
-        except:
-             title = ''
-        try:
-            price = driver.find_element(By.CSS_SELECTOR, "span[data-automation='buybox-price']").text
-        except:
-            price = ''
-        try:
-            sale = driver.find_element(By.CSS_SELECTOR, "div[data-automation='mix-match-badge']").text
-        except:
-            sale = ''
-
-
-        print(title, price, sale) 
-        # time.sleep(randint(1, 10))
-        print('sleep ok')
-        # exit()
-        # input("wait")
+    try:
+        title = driver.find_element(By.CSS_SELECTOR, "h1[data-automation='product-title']").text
+    except:
+            title = ''
+    try:
+        price = driver.find_element(By.CSS_SELECTOR, "span[data-automation='buybox-price']").text
+    except:
+        price = ''
+    try:
+        sale = driver.find_element(By.CSS_SELECTOR, "div[data-automation='mix-match-badge']").text
+    except:
+        sale = ''
+    print(title, price, sale) 
         
          
