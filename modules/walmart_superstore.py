@@ -100,7 +100,7 @@ while True:
     except:
         price = ''
     try:
-        sale = driver.find_element(By.CSS_SELECTOR, "div[data-automation='mix-match-badge']").text
+        sale = driver.find_element(By.CSS_SELECTOR, "div[data-automation='mix-match-badge'] span").text
     except:
         sale = ''
     print(title, price, sale) 
