@@ -1121,6 +1121,7 @@ class AmazonShipment:
 #     input("End Process..")    
 
 def main():
+    clear_screan()
     parser = argparse.ArgumentParser(description="Amazon Shipment")
     parser.add_argument('-xls', '--xlsinput', type=str,help="XLSX File Input")
     parser.add_argument('-sname', '--sheetname', type=str,help="Sheet Name of XLSX file")
@@ -1147,6 +1148,7 @@ def main():
     isExist = os.path.exists(folderamazonship)
     if not isExist:
         os.makedirs(folderamazonship)
+    
     print('Creating Excel Backup File...', end="", flush=True)
     fnameinput = os.path.basename(args.xlsinput)
     pathinput = args.xlsinput[0:-len(fnameinput)]
