@@ -66,8 +66,8 @@ for i in range(2, worksheet.max_row + 1):
         try:
             driver.find_element(By.CSS_SELECTOR, "div#topmessage").text
             driver.quit()
-            id += 1
             isExist = os.path.exists(user_data)
+            print(isExist)
             if isExist:
                 print('remove')
                 shutil.rmtree(user_data)
