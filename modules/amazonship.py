@@ -1147,13 +1147,15 @@ def main():
     isExist = os.path.exists(folderamazonship)
     if not isExist:
         os.makedirs(folderamazonship)
-
+    print('Creating Excel Backup File...', end="", flush=True)
     fnameinput = os.path.basename(args.xlsinput)
     pathinput = args.xlsinput[0:-len(fnameinput)]
     backfile = "{}{}_backup{}".format(pathinput, os.path.splitext(fnameinput)[0], os.path.splitext(fnameinput)[1])
     shutil.copy(args.xlsinput, backfile)
+    print('OK')
+    print('Opening the Source Excel File...', end="", flush=True)
     xlbook = xw.Book(args.xlsinput)
-
+    print('OK')
     # the second handler is a file handler
     file_handler = logging.FileHandler('logs/amazonship-err.log')
     file_handler.setLevel(logging.ERROR)
@@ -1169,13 +1171,13 @@ def main():
     logger2.addHandler(file_handler2)
 
     logger2.info("###### Start ######")
-    logger2.info("Filename: {}\nSheet Name:{}\nPDF Output Folder:{}".format(args.xlsinput, args.sheetname, args.pdfoutput))
+    logger2.info("Filename: {}\nSheet Name:{}\nPDF Output Folder:{}".format(args.xlsinput, args.sheetname, folderamazonship))
     maxrun = 10
     for i in range(1, maxrun+1):
         if i > 1:
             print("Process will be reapeated")
         try:    
-            shipment = AmazonShipment(xlsfile=args.xlsinput, sname=args.sheetname, chrome_data=args.chromedata, download_folder=args.pdfoutput)
+            shipment = AmazonShipment(xlsfile=args.xlsinput, sname=args.sheetname, chrome_data=args.chromedata, download_folder=folderamazonship)
             shipment.data_sanitizer()
             if len(shipment.datalist) == 0:
                 break
@@ -1183,17 +1185,21 @@ def main():
         except Exception as e:
             logger.error(e)
             print("There is an error, check logs/amazonship-err.log")
-            shipment.workbook.save(shipment.xlsfile)
+            # shipment.workbook.save(shipment.xlsfile)
+            shipment.xlworkbook.save(shipment.xlsfile)
             shipment.workbook.close()
             if i == maxrun:
                 logger.error("Execution Limit reached, Please check the script")
             continue
         break
     addressfile = Path("address.csv")
-    resultfile = lib.join_pdfs(source_folder=args.pdfoutput + lib.file_delimeter() + "combined" , output_folder = args.pdfoutput, tag='Labels')
+    resultfile = lib.join_pdfs(source_folder=folderamazonship + lib.file_delimeter() + "combined" , output_folder = folderamazonship, tag='Labels')
     if resultfile != "":
         lib.add_page_numbers(resultfile)
         lib.generate_xls_from_pdf(resultfile, addressfile)
+    lib.copysheet(destination=args.xlsinput, source=resultfile[:-4] + ".xlsx", cols=('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'), sheetsource="Sheet", sheetdestination="Shipment labels summary", tracksheet=args.tracksheet, xlbook=xlbook)
+    xlbook.save(args.xlsinput)
+
     input("End Process..")    
 
 
