@@ -1055,6 +1055,71 @@ class AmazonShipment:
     def xlworksheet(self):
         return self.__xlworksheet
 
+# def main():
+#     parser = argparse.ArgumentParser(description="Amazon Shipment")
+#     parser.add_argument('-xls', '--xlsinput', type=str,help="XLSX File Input")
+#     parser.add_argument('-sname', '--sheetname', type=str,help="Sheet Name of XLSX file")
+#     parser.add_argument('-output', '--pdfoutput', type=str,help="PDF output folder")
+#     parser.add_argument('-cdata', '--chromedata', type=str,help="Chrome User Data Directory")
+#     args = parser.parse_args()
+#     if not (args.xlsinput[-5:] == '.xlsx' or args.xlsinput[-5:] == '.xlsm'):
+#         input('2nd File input have to XLSX or XLSM file')
+#         sys.exit()
+#     isExist = os.path.exists(args.xlsinput)
+#     if not isExist:
+#         input(args.xlsinput + " does not exist")
+#         sys.exit()
+#     isExist = os.path.exists(args.chromedata)
+#     if isExist == False :
+#         input('Please check Chrome User Data Directory')
+#         sys.exit()
+#     isExist = os.path.exists(args.pdfoutput)
+#     if not isExist:
+#         input(args.pdfoutput + " folder does not exist")
+#         sys.exit()
+
+#     # the second handler is a file handler
+#     file_handler = logging.FileHandler('logs/amazonship-err.log')
+#     file_handler.setLevel(logging.ERROR)
+#     file_handler_format = '%(asctime)s | %(levelname)s | %(lineno)d: %(message)s'
+#     file_handler.setFormatter(logging.Formatter(file_handler_format))
+#     logger.addHandler(file_handler)
+
+#     file_handler2 = logging.FileHandler('logs/amazonship-info.log')
+#     file_handler2.setLevel(logging.INFO)
+#     # file_handler2_format = '%(asctime)s | %(levelname)s: %(message)s'
+#     file_handler2_format = '%(asctime)s | %(levelname)s | %(lineno)d: %(message)s'
+#     file_handler2.setFormatter(logging.Formatter(file_handler2_format))
+#     logger2.addHandler(file_handler2)
+
+#     logger2.info("###### Start ######")
+#     logger2.info("Filename: {}\nSheet Name:{}\nPDF Output Folder:{}".format(args.xlsinput, args.sheetname, args.pdfoutput))
+#     maxrun = 10
+#     for i in range(1, maxrun+1):
+#         if i > 1:
+#             print("Process will be reapeated")
+#         try:    
+#             shipment = AmazonShipment(xlsfile=args.xlsinput, sname=args.sheetname, chrome_data=args.chromedata, download_folder=args.pdfoutput)
+#             shipment.data_sanitizer()
+#             if len(shipment.datalist) == 0:
+#                 break
+#             shipment.parse()
+#         except Exception as e:
+#             logger.error(e)
+#             print("There is an error, check logs/amazonship-err.log")
+#             shipment.workbook.save(shipment.xlsfile)
+#             shipment.workbook.close()
+#             if i == maxrun:
+#                 logger.error("Execution Limit reached, Please check the script")
+#             continue
+#         break
+#     addressfile = Path("address.csv")
+#     resultfile = lib.join_pdfs(source_folder=args.pdfoutput + lib.file_delimeter() + "combined" , output_folder = args.pdfoutput, tag='Labels')
+#     if resultfile != "":
+#         lib.add_page_numbers(resultfile)
+#         lib.generate_xls_from_pdf(resultfile, addressfile)
+#     input("End Process..")    
+
 def main():
     parser = argparse.ArgumentParser(description="Amazon Shipment")
     parser.add_argument('-xls', '--xlsinput', type=str,help="XLSX File Input")
@@ -1077,6 +1142,17 @@ def main():
     if not isExist:
         input(args.pdfoutput + " folder does not exist")
         sys.exit()
+    strdate = str(date.today())
+    folderamazonship = "{}{}_{}".format(args.pdfoutput + lib.file_delimeter(), 'shipment_creation', strdate) 
+    isExist = os.path.exists(folderamazonship)
+    if not isExist:
+        os.makedirs(folderamazonship)
+
+    fnameinput = os.path.basename(args.xlsinput)
+    pathinput = args.xlsinput[0:-len(fnameinput)]
+    backfile = "{}{}_backup{}".format(pathinput, os.path.splitext(fnameinput)[0], os.path.splitext(fnameinput)[1])
+    shutil.copy(args.xlsinput, backfile)
+    xlbook = xw.Book(args.xlsinput)
 
     # the second handler is a file handler
     file_handler = logging.FileHandler('logs/amazonship-err.log')
@@ -1119,6 +1195,7 @@ def main():
         lib.add_page_numbers(resultfile)
         lib.generate_xls_from_pdf(resultfile, addressfile)
     input("End Process..")    
+
 
 if __name__ == '__main__':
     main()
