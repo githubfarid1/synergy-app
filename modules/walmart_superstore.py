@@ -70,14 +70,14 @@ while True:
     if i == maxrec:
         break
     url = urlList[i]
-    domain = urlparse(url).netloc
+    print(url, end="", flush=True)
     driver.get(url)
     try:
         driver.find_element(By.CSS_SELECTOR, "div#topmessage").text
         print("Failed")
         del driver
         waiting = 60
-        print(url, f'Waiting for bot detection for {waiting} second', end="", flush=True)
+        print(f'Waiting for bot detection for {waiting} second', end="", flush=True)
         time.sleep(waiting)
         isExist = os.path.exists(user_data)
         print(isExist)
