@@ -77,6 +77,7 @@ for i in range(2, worksheet.max_row + 1):
             i -= 1
             continue
         except:
+            print('here')
             pass
 
         try:
@@ -94,7 +95,7 @@ for i in range(2, worksheet.max_row + 1):
 
 
         print(title, price, sale) 
-        time.sleep(randint(1, 10))
+        # time.sleep(randint(1, 10))
         print('sleep ok')
         # exit()
         # input("wait")
