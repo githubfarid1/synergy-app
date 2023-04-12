@@ -43,13 +43,13 @@ def browser_init(count):
     options.add_argument("--disable-blink-features=AutomationControlled")
     # options.add_experimental_option( "prefs",{'profile.managed_default_content_settings.javascript': 1})
     driver = webdriver.Chrome(service=Service(CM().install()), options=options)
-    driver.execute_cdp_cmd("Network.setCacheDisabled", {"cacheDisabled":True})
+    
     return driver
 
 id = 2
 driver = browser_init(str(id))
 driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})") 
-
+driver.execute_cdp_cmd("Network.setCacheDisabled", {"cacheDisabled":True})
  
 workbook = load_workbook(filename=r"C:/synergy-data-tester/Lookup Listing.xlsx", read_only=False, keep_vba=True, data_only=True)
 # workbook = load_workbook(filename="/home/farid/dev/python/synergy-github/data/lookup/Lookup Listing.xlsx", read_only=False, keep_vba=True, data_only=True)
@@ -90,6 +90,7 @@ for i in range(2, worksheet.max_row + 1):
         print(title, price, sale) 
         time.sleep(randint(1, 10))
         print('sleep ok')
+        exit()
         # input("wait")
         
          
