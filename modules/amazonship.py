@@ -1177,11 +1177,14 @@ def main():
         if i > 1:
             print("Process will be reapeated")
         try:    
-            shipment = AmazonShipment(xlsfile=args.xlsinput, sname=args.sheetname, chrome_data=args.chromedata, download_folder=folderamazonship)
+            shipment = AmazonShipment(xlsfile=args.xlsinput, sname=args.shipsheet, chrome_data=args.chromedata, download_folder=folderamazonship, xlworkbook=xlbook)
+
             shipment.data_sanitizer()
             if len(shipment.datalist) == 0:
                 break
             shipment.parse()
+            shipment.xlworkbook.save(shipment.xlsfile)
+            shipment.workbook.close()
         except Exception as e:
             logger.error(e)
             print("There is an error, check logs/amazonship-err.log")
