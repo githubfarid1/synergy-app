@@ -62,16 +62,16 @@ for i in range(2, worksheet.max_row + 1):
     if domain == 'www.walmart.com' or domain == 'www.walmart.ca':
         print(url, '..', end="", flush=True)
         driver.get(url)
-        print('OK')
-        try:
-            driver.find_element(By.CSS_SELECTOR, "div#topmessage").text
-            driver.quit()
-            id += 1
-            driver = browser_init(str(id))
-            i -= 1
-            continue
-        except:
-            pass
+        # print('OK')
+        # try:
+        #     driver.find_element(By.CSS_SELECTOR, "div#topmessage").text
+        #     driver.quit()
+        #     id += 1
+        #     driver = browser_init(str(id))
+        #     i -= 1
+        #     continue
+        # except:
+        #     pass
 
         try:
             title = driver.find_element(By.CSS_SELECTOR, "h1[data-automation='product-title']").text
