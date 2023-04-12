@@ -462,14 +462,13 @@ def main():
                 xlsdictwcode[idx] = xls
                 break
 
-
+    strdate = str(date.today())
     foldernamepn = "{}{}_{}".format(args.output + lib.file_delimeter(), 'prior_notice', strdate) 
     isExist = os.path.exists(foldernamepn)
     if not isExist:
         os.makedirs(foldernamepn)
 
     xlsfilename = os.path.basename(args.input)
-    strdate = str(date.today())
     foldername = format_filename("{}_{}_{}".format(xlsfilename.replace(".xlsx", ""), args.sheet, strdate) )
     
     complete_output_folder = foldernamepn + file_delimeter() + foldername
