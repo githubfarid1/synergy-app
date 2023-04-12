@@ -1177,7 +1177,7 @@ def main():
         if i > 1:
             print("Process will be reapeated")
         try:    
-            shipment = AmazonShipment(xlsfile=args.xlsinput, sname=args.shipsheet, chrome_data=args.chromedata, download_folder=folderamazonship, xlworkbook=xlbook)
+            shipment = AmazonShipment(xlsfile=args.xlsinput, sname=args.sheetname, chrome_data=args.chromedata, download_folder=folderamazonship, xlworkbook=xlbook)
 
             shipment.data_sanitizer()
             if len(shipment.datalist) == 0:
