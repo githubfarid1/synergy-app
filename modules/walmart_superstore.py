@@ -64,22 +64,20 @@ for i in range(2, worksheet.max_row + 1):
         driver.get(url)
         print('OK')
         try:
+            
             driver.find_element(By.CSS_SELECTOR, "div#topmessage").text
-            # driver.close()
-            # driver.quit()
-            # print('xxxx')
             del driver
+            print(url, 'Waiting for bot detection for 15 second', end="", flush=True)
+            time.sleep(15)
             isExist = os.path.exists(user_data)
             print(isExist)
             if isExist:
-                print('remove')
                 shutil.rmtree(user_data)
-            time.sleep(3)
+            print('OK')
             driver = browser_init()
             i -= 1
             continue
         except:
-            print('here')
             pass
 
         try:
