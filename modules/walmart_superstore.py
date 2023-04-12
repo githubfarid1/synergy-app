@@ -14,14 +14,15 @@ import time
 from random import randint
 import pyautogui as pg
 import undetected_chromedriver as uc 
-
+import os
+import shutil
 def getConfig():
 	file = open("setting.json", "r")
 	config = json.load(file)
 	return config
 
 
-def browser_init(count):
+def browser_init():
     config = getConfig()
     warnings.filterwarnings("ignore", category=UserWarning)
     options = webdriver.ChromeOptions()
@@ -30,7 +31,7 @@ def browser_init(count):
     # options.add_argument("user-data-dir={}".format(config['chrome_user_data'])) 
     # options.add_argument("profile-directory={}".format(config['chrome_profile']))
     
-    options.add_argument("user-data-dir={}".format("C:\\Users\\User\\AppData\\Local\\Google\\Chrome\\User Data{}".format(id) )) 
+    options.add_argument("user-data-dir={}".format("C:\\Users\\User\\AppData\\Local\\Google\\Chrome\\User Data2")) 
     options.add_argument("profile-directory={}".format("Default"))
 
     options.add_argument('--no-sandbox')
@@ -46,8 +47,7 @@ def browser_init(count):
     
     return driver
 
-id = 2
-driver = browser_init(str(id))
+driver = browser_init()
 driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})") 
 driver.execute_cdp_cmd("Network.setCacheDisabled", {"cacheDisabled":True})
  
@@ -55,23 +55,27 @@ workbook = load_workbook(filename=r"C:/synergy-data-tester/Lookup Listing.xlsx",
 # workbook = load_workbook(filename="/home/farid/dev/python/synergy-github/data/lookup/Lookup Listing.xlsx", read_only=False, keep_vba=True, data_only=True)
 # worksheet = workbook[self.sheetname]
 worksheet = workbook["Sheet1"]
-
+user_data = r"C:/Users/User/AppData/Local/Google/Chrome/User Data2"
 for i in range(2, worksheet.max_row + 1):
     url = worksheet[f'A{i}'].value
     domain = urlparse(url).netloc
     if domain == 'www.walmart.com' or domain == 'www.walmart.ca':
         print(url, '..', end="", flush=True)
         driver.get(url)
-        # print('OK')
-        # try:
-        #     driver.find_element(By.CSS_SELECTOR, "div#topmessage").text
-        #     driver.quit()
-        #     id += 1
-        #     driver = browser_init(str(id))
-        #     i -= 1
-        #     continue
-        # except:
-        #     pass
+        print('OK')
+        try:
+            driver.find_element(By.CSS_SELECTOR, "div#topmessage").text
+            driver.quit()
+            id += 1
+            isExist = os.path.exists(user_data)
+            if isExist:
+                shutil.rmtree(user_data)
+            time.sleep(3)
+            driver = browser_init()
+            i -= 1
+            continue
+        except:
+            pass
 
         try:
             title = driver.find_element(By.CSS_SELECTOR, "h1[data-automation='product-title']").text
@@ -90,7 +94,7 @@ for i in range(2, worksheet.max_row + 1):
         print(title, price, sale) 
         time.sleep(randint(1, 10))
         print('sleep ok')
-        exit()
+        # exit()
         # input("wait")
         
          
