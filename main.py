@@ -256,7 +256,7 @@ class MainFrame(ttk.Frame):
 		amazonLabelXlsButton = FrameButton(self, window, text="Amazon Join PDF", class_frame=AmazonJoinPdfFrame)
 		amazonReviewButton = FrameButton(self, window, text="Amazon Review Request", class_frame=AmazonReviewFrame)
 		canadaPostPdfButton = FrameButton(self, window, text="Canada Post PDF Convert", class_frame=CanadaPostPdfFrame)
-		amazonAllButton = FrameButton(self, window, text="Amazon Shipment + FDA", class_frame=AmazonAllFrame)
+		# amazonAllButton = FrameButton(self, window, text="Amazon Shipment + FDA", class_frame=AmazonAllFrame)
 		canadaPostButton = FrameButton(self, window, text="Canada Post Tracker", class_frame=CanadaPostFrame)
 		walmartstButton = FrameButton(self, window, text="Walmart Superstore Scraper", class_frame=WalmartstFrame)
 
@@ -277,11 +277,11 @@ class MainFrame(ttk.Frame):
 		amazonLabelXlsButton.grid(column = 0, row = 5, sticky=(W, E, N, S), padx=15, pady=5)
 		amazonReviewButton.grid(column = 1, row = 5, sticky=(W, E, N, S), padx=15, pady=5)
 		canadaPostPdfButton.grid(column = 2, row = 5, sticky=(W, E, N, S), padx=15, pady=5)
-		amazonAllButton.grid(column = 0, row = 6, sticky=(W, E, N, S), padx=15, pady=5)
-		canadaPostButton.grid(column = 1, row = 6, sticky=(W, E, N, S), padx=15, pady=5)
+		# amazonAllButton.grid(column = 0, row = 6, sticky=(W, E, N, S), padx=15, pady=5)
+		canadaPostButton.grid(column = 0, row = 6, sticky=(W, E, N, S), padx=15, pady=5)
 		# amazonShipmentButton['state'] = DISABLED
 		# fdaEntryPdfButton['state'] = DISABLED
-		walmartstButton.grid(column = 2, row = 6, sticky=(W, E, N, S), padx=15, pady=5)
+		walmartstButton.grid(column = 1, row = 6, sticky=(W, E, N, S), padx=15, pady=5)
 
 class PdfConvertFrame(ttk.Frame):
 	def __init__(self, window) -> None:
