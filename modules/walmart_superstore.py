@@ -111,3 +111,5 @@ while True:
     xlsheet[f'C{i}'].value = sale
 
     i += 1     
+
+xlbook.save(filename)
