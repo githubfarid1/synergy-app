@@ -64,14 +64,16 @@ for i in range(2, maxrow + 2):
     url = xlsheet[f'A{i}'].value
     domain = urlparse(url).netloc
     if domain == 'www.walmart.com' or domain == 'www.walmart.ca':
-        urlList.append(url)
+        tpl = (url, i)
+        urlList.append(tpl)
 
 i = 0
 maxrec = len(urlList)
 while True:
     if i == maxrec:
         break
-    url = urlList[i]
+    url = urlList[i][0]
+    rownum = urlList[i][1]
     print(url, end=" ", flush=True)
     driver.get(url)
     try:
@@ -106,9 +108,10 @@ while True:
     except:
         sale = ''
     
-    print(title, price, sale) 
-    xlsheet[f'B{i}'].value = price
-    xlsheet[f'C{i}'].value = sale
+    print(title, price, sale)
+    
+    xlsheet[f'B{rownum}'].value = price
+    xlsheet[f'C{rownum}'].value = sale
 
     i += 1     
 
