@@ -42,7 +42,10 @@ def browser_init(count):
     options.add_experimental_option('useAutomationExtension', False)
     options.add_argument("--disable-blink-features=AutomationControlled")
     # options.add_experimental_option( "prefs",{'profile.managed_default_content_settings.javascript': 1})
-    return webdriver.Chrome(service=Service(CM().install()), options=options)
+    driver = webdriver.Chrome(service=Service(CM().install()), options=options)
+    driver.execute_cdp_cmd("Network.setCacheDisabled", {"cacheDisabled":True})
+    return driver
+
 id = 2
 driver = browser_init(str(id))
 driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})") 
