@@ -452,7 +452,7 @@ def main():
     print('OK')
 
 
-    xlsheet = xlbook.sheets[args.pnsheet]
+    xlsheet = xlbook.sheets[args.sheet]
     maxrow = xlsheet.range('B' + str(xlsheet.cells.last_cell.row)).end('up').row
     xlsdictall = xls_data_generator(xlws=xlsheet, maxrow=maxrow)
     xlsdictwcode = {}
