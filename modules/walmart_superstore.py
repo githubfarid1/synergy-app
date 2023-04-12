@@ -65,9 +65,10 @@ for i in range(2, worksheet.max_row + 1):
         print('OK')
         try:
             driver.find_element(By.CSS_SELECTOR, "div#topmessage").text
-            driver.close()
-            driver.quit()
-            print('xxxx')
+            # driver.close()
+            # driver.quit()
+            # print('xxxx')
+            del driver
             isExist = os.path.exists(user_data)
             print(isExist)
             if isExist:
