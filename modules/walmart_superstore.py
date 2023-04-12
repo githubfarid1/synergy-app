@@ -69,6 +69,7 @@ for i in range(2, worksheet.max_row + 1):
             id += 1
             isExist = os.path.exists(user_data)
             if isExist:
+                print('remove')
                 shutil.rmtree(user_data)
             time.sleep(3)
             driver = browser_init()
