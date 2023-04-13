@@ -18,6 +18,16 @@ import shutil
 import xlwings as xw
 import argparse
 import sys
+from sys import platform
+
+def clear_screen():
+    try:
+        if platform == "win32":
+            os.system("cls")
+        else:    
+            os.system("clear")
+    except Exception as er:
+        print(er, "Command is not supported")
 
 def getConfig():
 	file = open("setting.json", "r")
@@ -73,6 +83,7 @@ def walmart_scraper(xlsheet):
     i = 0
     maxrec = len(urlList)
     driver = browser_init(userdata=user_data)
+    clear_screen()
     while True:
         if i == maxrec:
             break
@@ -118,8 +129,6 @@ def walmart_scraper(xlsheet):
         xlsheet[f'C{rownum}'].value = sale
         i += 1     
 
-
-
 def superstore_scraper(xlsheet):
     config = getConfig()
     user_data = config['chrome_user_data']+"2"
@@ -127,6 +136,8 @@ def superstore_scraper(xlsheet):
     i = 0
     maxrec = len(urlList)
     driver = browser_init(userdata=user_data)
+    clear_screen()
+
     while True:
         if i == maxrec:
             break
