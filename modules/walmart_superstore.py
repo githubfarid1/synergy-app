@@ -16,6 +16,8 @@ import undetected_chromedriver as uc
 import os
 import shutil
 import xlwings as xw
+import argparse
+import sys
 
 def getConfig():
 	file = open("setting.json", "r")
@@ -23,14 +25,13 @@ def getConfig():
 	return config
 
 
-def browser_init():
-    config = getConfig()
+def browser_init(userdata):
     warnings.filterwarnings("ignore", category=UserWarning)
     options = webdriver.ChromeOptions()
-    
-    options.add_argument("user-data-dir={}".format("C:\\Users\\User\\AppData\\Local\\Google\\Chrome\\User Data2")) 
-    options.add_argument("profile-directory={}".format("Default"))
-
+    options.add_argument("user-data-dir={}".format(userdata))
+    options.add_argument("profile-directory=Default")
+    # options.add_argument("user-data-dir={}".format("C:\\Users\\User\\AppData\\Local\\Google\\Chrome\\User Data2")) 
+    # options.add_argument("profile-directory={}".format("Default"))
     options.add_argument('--no-sandbox')
     options.add_argument("--log-level=3")
     # options.add_argument("--window-size=1200, 900")
@@ -46,14 +47,14 @@ def browser_init():
     return driver
 
 
-filename = r"C:/synergy-data-tester/Lookup Listing.xlsx"
-sheetname = "Sheet1"
-xlbook = xw.Book(filename)
-xlsheet = xlbook.sheets[sheetname]
+# filename = r"C:/synergy-data-tester/Lookup Listing.xlsx"
+# sheetname = "Sheet1"
+# xlbook = xw.Book(filename)
+# xlsheet = xlbook.sheets[sheetname]
 
-user_data = r"C:/Users/User/AppData/Local/Google/Chrome/User Data2"
+# user_data = r"C:/Users/User/AppData/Local/Google/Chrome/User Data2"
 
-def get_urls(domainwl=[]):
+def get_urls(xlsheet, domainwl=[]):
     urlList = []
     maxrow = xlsheet.range('A' + str(xlsheet.cells.last_cell.row)).end('up').row
     for i in range(2, maxrow + 2):
@@ -65,11 +66,13 @@ def get_urls(domainwl=[]):
             urlList.append(tpl)
     return urlList
 
-def walmart_scraper():
-    urlList = get_urls(domainwl=['www.walmart.com','www.walmart.ca'])
+def walmart_scraper(xlsheet):
+    config = getConfig()
+    user_data = config['chrome_user_data']+"2"
+    urlList = get_urls(xlsheet, domainwl=['www.walmart.com','www.walmart.ca'])
     i = 0
     maxrec = len(urlList)
-    driver = browser_init()
+    driver = browser_init(userdata=user_data)
     while True:
         if i == maxrec:
             break
@@ -113,17 +116,17 @@ def walmart_scraper():
         
         xlsheet[f'B{rownum}'].value = price
         xlsheet[f'C{rownum}'].value = sale
-
         i += 1     
 
-    xlbook.save(filename)
 
 
-def superstore_scraper():
-    urlList = get_urls(domainwl=['www.realcanadiansuperstore.ca'])
+def superstore_scraper(xlsheet):
+    config = getConfig()
+    user_data = config['chrome_user_data']+"2"
+    urlList = get_urls(xlsheet, domainwl=['www.realcanadiansuperstore.ca'])
     i = 0
     maxrec = len(urlList)
-    driver = browser_init()
+    driver = browser_init(userdata=user_data)
     while True:
         if i == maxrec:
             break
@@ -132,7 +135,7 @@ def superstore_scraper():
         print(url, end=" ", flush=True)
         driver.get(url)
         try:
-            WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "button[data-track='productAddToCartLocalize']")))                
+            WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "button[data-track='productAddToCartLocalize'], h1[class='error-page__title']")))
             print('OK')
         except:
             try:
@@ -141,24 +144,6 @@ def superstore_scraper():
             except:
                 print('Timeout')
 
-        # try:
-        #     driver.find_element(By.CSS_SELECTOR, "div#topmessage").text
-        #     print("Failed")
-        #     del driver
-        #     waiting = 120
-        #     print(f'The script was detected as bot, please wait for {waiting} seconds', end=" ", flush=True)
-        #     time.sleep(waiting)
-        #     isExist = os.path.exists(user_data)
-        #     print(isExist)
-        #     if isExist:
-        #         shutil.rmtree(user_data)
-        #     print('OK')
-        #     driver = browser_init()
-        #     continue
-        #     raise
-        # except:
-        #     print('OK')
-        #     pass
         
         try:
             title = driver.find_element(By.CSS_SELECTOR, "h1[class='product-name__item product-name__item--name']").text
@@ -181,12 +166,39 @@ def superstore_scraper():
         xlsheet[f'C{rownum}'].value = sale
         
         i += 1
-        time.sleep(3)
-    xlbook.save(filename)
+        time.sleep(1)
+    
+def main():
+    parser = argparse.ArgumentParser(description="Amazon Shipment Check")
+    parser.add_argument('-xls', '--xlsinput', type=str,help="XLSX File Input")
+    parser.add_argument('-sname', '--sheetname', type=str,help="Sheet Name of XLSX file")
+    parser.add_argument('-module', '--module', type=str,help="Module Run")
+    args = parser.parse_args()
+    if not (args.xlsinput[-5:] == '.xlsx' or args.xlsinput[-5:] == '.xlsm'):
+        input('input the right XLSX or XLSM file')
+        sys.exit()
+    isExist = os.path.exists(args.xlsinput)
+    if not isExist:
+        input(args.xlsinput + " does not exist")
+        sys.exit()
+
+    if args.module == '':
+        input("Module parameter was empty")
+        sys.exit()
+
+    xlbook = xw.Book(args.xlsinput)
+    xlsheet = xlbook.sheets[args.sheetname]
+    if args.module == 'superstore':
+        superstore_scraper(xlsheet=xlsheet)
+    else:
+        walmart_scraper(xlsheet=xlsheet)
+
+    print("Saving to", args.xlsinput, end=".. ", flush=True)
+    xlbook.save(args.xlsinput)
+    time.sleep(1)    
+    print("OK")
+    input("End Process..")    
+
 
 if __name__ == '__main__':
-    superstore_scraper()
-
-
-# span price__value selling-price-list__item__price selling-price-list__item__price--now-price__value
-# h1 product-name__item product-name__item--name
+    main()

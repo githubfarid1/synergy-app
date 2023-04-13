@@ -258,7 +258,9 @@ class MainFrame(ttk.Frame):
 		canadaPostPdfButton = FrameButton(self, window, text="Canada Post PDF Convert", class_frame=CanadaPostPdfFrame)
 		# amazonAllButton = FrameButton(self, window, text="Amazon Shipment + FDA", class_frame=AmazonAllFrame)
 		canadaPostButton = FrameButton(self, window, text="Canada Post Tracker", class_frame=CanadaPostFrame)
-		walmartstButton = FrameButton(self, window, text="Walmart Superstore Scraper", class_frame=WalmartstFrame)
+		walmartstButton = FrameButton(self, window, text="Walmart Scraper", class_frame=WalmartstFrame)
+		superstoreButton = FrameButton(self, window, text="Superstore Scraper", class_frame=SuperstoreFrame)
+
 
 		# layout
 		titleLabel.grid(column = 0, row = 0, sticky=(W, E, N, S), padx=15, pady=5, columnspan=3)
@@ -282,6 +284,7 @@ class MainFrame(ttk.Frame):
 		# amazonShipmentButton['state'] = DISABLED
 		# fdaEntryPdfButton['state'] = DISABLED
 		walmartstButton.grid(column = 1, row = 6, sticky=(W, E, N, S), padx=15, pady=5)
+		superstoreButton.grid(column = 2, row = 6, sticky=(W, E, N, S), padx=15, pady=5)
 
 class PdfConvertFrame(ttk.Frame):
 	def __init__(self, window) -> None:
@@ -1042,7 +1045,45 @@ class WalmartstFrame(ttk.Frame):
 			messagebox.showwarning(title='Warning', message='Please make sure you have choosed the files')
 		else:
 			messagebox.showwarning(title='Warning', message='This process will update the excel file. make sure you have closed the file.')
-			run_module(comlist=[PYLOC, "modules/amazonshipcheck.py", "-xls", kwargs['xlsinput'], "-sname", kwargs['sname'].get()])
+			run_module(comlist=[PYLOC, "modules/walmart_superstore.py", "-xls", kwargs['xlsinput'], "-sname", kwargs['sname'].get(), "-module", "walmart"])
+
+class SuperstoreFrame(ttk.Frame):
+	def __init__(self, window) -> None:
+		super().__init__(window)
+		# configure
+		self.grid(column=0, row=0, sticky=(N, E, W, S))
+		self.config(padding="20 20 20 20", borderwidth=1, relief='groove')
+
+		self.columnconfigure(0, weight=1)
+		self.rowconfigure(0, weight=1)
+		self.rowconfigure(1, weight=1)
+		self.rowconfigure(2, weight=1)
+		self.rowconfigure(3, weight=1)
+		self.rowconfigure(4, weight=1)
+		self.rowconfigure(5, weight=1)
+		sheetlist = ttk.Combobox(self, textvariable=StringVar(), state="readonly")
+		
+		# populate
+		titleLabel = TitleLabel(self, text="Superstore Price Monitor")
+		closeButton = CloseButton(self)
+		xlsInputFile = FileChooserFrame(self, btype="file", label="Select Input Excel File:", filetypes=(("Excel files", "*.xlsx *.xlsm"),("all files", "*.*")), sheetlist=sheetlist)
+
+		labelsname = Label(self, text="Sheet Name:")
+		runButton = ttk.Button(self, text='Run Process', command = lambda:self.run_process(xlsinput=xlsInputFile.filename, sname=sheetlist))
+		
+		# layout
+		titleLabel.grid(column = 0, row = 0, sticky = (W, E, N, S))
+		xlsInputFile.grid(column = 0, row = 2, sticky = (W,E))
+		labelsname.grid(column = 0, row = 3, sticky=(W))
+		runButton.grid(column = 0, row = 5, sticky = (E))
+		closeButton.grid(column = 0, row = 6, sticky = "n")
+		sheetlist.grid(column=0, row = 3, pady=10)
+	def run_process(self, **kwargs):
+		if kwargs['xlsinput'] == "": 
+			messagebox.showwarning(title='Warning', message='Please make sure you have choosed the files')
+		else:
+			messagebox.showwarning(title='Warning', message='This process will update the excel file. make sure you have closed the file.')
+			run_module(comlist=[PYLOC, "modules/walmart_superstore.py", "-xls", kwargs['xlsinput'], "-sname", kwargs['sname'].get(), "-module", "superstore"])
 
 class CloseButton(ttk.Button):
 	def __init__(self, parent):
