@@ -150,31 +150,31 @@ def superstore_scraper():
         # except:
         #     print('OK')
         #     pass
-        print('OK')
-        try:
-            title = driver.find_element(By.CSS_SELECTOR, "h1[class='product-name__item product-name__item--name']").text
-        except:
-            title = 'xx'
+        # print('OK')
+        # try:
+        #     title = driver.find_element(By.CSS_SELECTOR, "h1[class='product-name__item product-name__item--name']").text
+        # except:
+        #     title = 'xx'
 
-        try:
-            price = driver.find_element(By.CSS_SELECTOR, "span[class='price__value selling-price-list__item__price selling-price-list__item__price--now-price__value']").text
-        except:
-            price = ''
-        try:
-            # sale = driver.find_element(By.CSS_SELECTOR, "div[data-automation='mix-match-badge'] span").text
-            raise
-        except:
-            sale = ''
+        # try:
+        #     price = driver.find_element(By.CSS_SELECTOR, "span[class='price__value selling-price-list__item__price selling-price-list__item__price--now-price__value']").text
+        # except:
+        #     price = ''
+        # try:
+        #     # sale = driver.find_element(By.CSS_SELECTOR, "div[data-automation='mix-match-badge'] span").text
+        #     raise
+        # except:
+        #     sale = ''
         
-        print(title, price, sale)
+        # print(title, price, sale)
         
-        xlsheet[f'B{rownum}'].value = price
-        xlsheet[f'C{rownum}'].value = sale
+        # xlsheet[f'B{rownum}'].value = price
+        # xlsheet[f'C{rownum}'].value = sale
 
         i += 1
-        time.sleep(2)
+        time.sleep(5)
 
-    xlbook.save(filename)
+    # xlbook.save(filename)
 
 if __name__ == '__main__':
     superstore_scraper()
