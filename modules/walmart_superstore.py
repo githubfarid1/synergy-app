@@ -136,15 +136,14 @@ def superstore_scraper(xlsheet):
         driver.get(url)
         try:
             WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "button[data-track='productAddToCartLocalize'], h1[class='error-page__title']")))
-            print('OK')
-        except:
             try:
                 mess = driver.find_element(By.CSS_SELECTOR, "h1[class='error-page__title']").text
                 print(mess)
             except:
-                print('Timeout')
-
-        
+                print('OK')
+        except:
+            print('Timeout')
+  
         try:
             title = driver.find_element(By.CSS_SELECTOR, "h1[class='product-name__item product-name__item--name']").text
         except:
