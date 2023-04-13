@@ -53,7 +53,7 @@ xlsheet = xlbook.sheets[sheetname]
 
 user_data = r"C:/Users/User/AppData/Local/Google/Chrome/User Data2"
 
-def get_urls(domainwl=()):
+def get_urls(domainwl):
     urlList = []
     maxrow = xlsheet.range('A' + str(xlsheet.cells.last_cell.row)).end('up').row
     for i in range(2, maxrow + 2):
