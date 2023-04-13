@@ -161,7 +161,7 @@ def superstore_scraper(xlsheet):
         
         print(title, price, sale)
         
-        xlsheet[f'B{rownum}'].value = price
+        xlsheet[f'B{rownum}'].value = price.replace("$", "")
         xlsheet[f'C{rownum}'].value = sale
         
         i += 1
