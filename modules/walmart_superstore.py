@@ -118,5 +118,66 @@ def walmart_scraper():
 
     xlbook.save(filename)
 
+
+def superstore_scraper():
+    urlList = get_urls(domainwl=('www.realcanadiansuperstore.ca'))
+    i = 0
+    maxrec = len(urlList)
+    driver = browser_init()
+    while True:
+        if i == maxrec:
+            break
+        url = urlList[i][0]
+        rownum = urlList[i][1]
+        print(url, end=" ", flush=True)
+        driver.get(url)
+        try:
+            # driver.find_element(By.CSS_SELECTOR, "div#topmessage").text
+            # print("Failed")
+            # del driver
+            # waiting = 120
+            # print(f'The script was detected as bot, please wait for {waiting} seconds', end=" ", flush=True)
+            # time.sleep(waiting)
+            # isExist = os.path.exists(user_data)
+            # print(isExist)
+            # if isExist:
+            #     shutil.rmtree(user_data)
+            # print('OK')
+            # driver = browser_init()
+            # continue
+            raise
+        except:
+            
+            print('OK')
+            pass
+
+        try:
+            title = driver.find_element(By.CSS_SELECTOR, "h1[class='product-name__item product-name__item--name']").text
+        except:
+                title = ''
+        try:
+            price = driver.find_element(By.CSS_SELECTOR, "span[class='price__value selling-price-list__item__price selling-price-list__item__price--now-price__value']").text
+        except:
+            price = ''
+        try:
+            # sale = driver.find_element(By.CSS_SELECTOR, "div[data-automation='mix-match-badge'] span").text
+            raise
+        except:
+            sale = ''
+        
+        print(title, price, sale)
+        
+        xlsheet[f'B{rownum}'].value = price
+        xlsheet[f'C{rownum}'].value = sale
+
+        i += 1
+        time.sleep(2)
+
+    xlbook.save(filename)
+
 if __name__ == '__main__':
-    walmart_scraper()
+    superstore_scraper()
+
+
+# span price__value selling-price-list__item__price selling-price-list__item__price--now-price__value
+# h1 product-name__item product-name__item--name
