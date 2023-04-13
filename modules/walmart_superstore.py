@@ -121,7 +121,7 @@ def walmart_scraper():
 
 
 def superstore_scraper():
-    urlList = get_urls(domainwl=('www.realcanadiansuperstore.ca', 'www.realcanadiansuperstore.ca'))
+    urlList = get_urls(domainwl=tuple('www.realcanadiansuperstore.ca'))
     i = 0
     maxrec = len(urlList)
     driver = browser_init()
