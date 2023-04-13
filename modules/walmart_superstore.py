@@ -132,29 +132,30 @@ def superstore_scraper():
         rownum = urlList[i][1]
         print(url, end=" ", flush=True)
         driver.get(url)
-        try:
-            # driver.find_element(By.CSS_SELECTOR, "div#topmessage").text
-            # print("Failed")
-            # del driver
-            # waiting = 120
-            # print(f'The script was detected as bot, please wait for {waiting} seconds', end=" ", flush=True)
-            # time.sleep(waiting)
-            # isExist = os.path.exists(user_data)
-            # print(isExist)
-            # if isExist:
-            #     shutil.rmtree(user_data)
-            # print('OK')
-            # driver = browser_init()
-            # continue
-            raise
-        except:
-            print('OK')
-            pass
-
+        # try:
+        #     driver.find_element(By.CSS_SELECTOR, "div#topmessage").text
+        #     print("Failed")
+        #     del driver
+        #     waiting = 120
+        #     print(f'The script was detected as bot, please wait for {waiting} seconds', end=" ", flush=True)
+        #     time.sleep(waiting)
+        #     isExist = os.path.exists(user_data)
+        #     print(isExist)
+        #     if isExist:
+        #         shutil.rmtree(user_data)
+        #     print('OK')
+        #     driver = browser_init()
+        #     continue
+        #     raise
+        # except:
+        #     print('OK')
+        #     pass
+        print('OK')
         try:
             title = driver.find_element(By.CSS_SELECTOR, "h1[class='product-name__item product-name__item--name']").text
         except:
-                title = 'xx'
+            title = 'xx'
+
         try:
             price = driver.find_element(By.CSS_SELECTOR, "span[class='price__value selling-price-list__item__price selling-price-list__item__price--now-price__value']").text
         except:
