@@ -188,11 +188,11 @@ def main():
     config = getConfig()
     user_data = config['chrome_user_data']+"2"
 
-    isExist = os.path.exists(user_data)
-    print(isExist)
-    if isExist:
-        shutil.rmtree(user_data)
-    input("wait")
+    # isExist = os.path.exists(user_data)
+    # print(isExist)
+    # if isExist:
+    #     shutil.rmtree(user_data)
+    # input("wait")
     xlbook = xw.Book(args.xlsinput)
     xlsheet = xlbook.sheets[args.sheetname]
     if args.module == 'superstore':
