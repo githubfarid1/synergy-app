@@ -148,14 +148,13 @@ def superstore_scraper():
             # continue
             raise
         except:
-            
             print('OK')
             pass
 
         try:
             title = driver.find_element(By.CSS_SELECTOR, "h1[class='product-name__item product-name__item--name']").text
         except:
-                title = ''
+                title = 'xx'
         try:
             price = driver.find_element(By.CSS_SELECTOR, "span[class='price__value selling-price-list__item__price selling-price-list__item__price--now-price__value']").text
         except:
