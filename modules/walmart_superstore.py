@@ -55,7 +55,6 @@ user_data = r"C:/Users/User/AppData/Local/Google/Chrome/User Data2"
 
 def get_urls(domainwl=[]):
     urlList = []
-    print(domainwl)
     maxrow = xlsheet.range('A' + str(xlsheet.cells.last_cell.row)).end('up').row
     for i in range(2, maxrow + 2):
         url = xlsheet[f'A{i}'].value
@@ -132,7 +131,15 @@ def superstore_scraper():
         rownum = urlList[i][1]
         print(url, end=" ", flush=True)
         driver.get(url)
-        WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "button[data-track='productAddToCartLocalize']")))                
+        try:
+            WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "button[data-track='productAddToCartLocalize']")))                
+            print('OK')
+        except:
+            try:
+                mess = driver.find_element(By.CSS_SELECTOR, "h1[class='error-page__title']").text
+                print(mess)
+            except:
+                print('Timeout')
 
         # try:
         #     driver.find_element(By.CSS_SELECTOR, "div#topmessage").text
@@ -152,7 +159,7 @@ def superstore_scraper():
         # except:
         #     print('OK')
         #     pass
-        print('OK')
+        
         try:
             title = driver.find_element(By.CSS_SELECTOR, "h1[class='product-name__item product-name__item--name']").text
         except:
