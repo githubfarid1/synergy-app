@@ -170,7 +170,7 @@ def superstore_scraper():
         
         # xlsheet[f'B{rownum}'].value = price
         # xlsheet[f'C{rownum}'].value = sale
-
+        input('wa')
         i += 1
         time.sleep(5)
 
