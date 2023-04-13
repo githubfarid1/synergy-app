@@ -165,15 +165,17 @@ def superstore_scraper(xlsheet):
         except:
             price = ''
         try:
-            # sale = driver.find_element(By.CSS_SELECTOR, "div[data-automation='mix-match-badge'] span").text
-            raise
+            sale = driver.find_element(By.CSS_SELECTOR, "del[class='price__value selling-price-list__item__price selling-price-list__item__price--was-price__value']").text
+            
         except:
             sale = ''
         
         print(title, price, sale)
-        
-        xlsheet[f'B{rownum}'].value = price.replace("$", "")
-        xlsheet[f'C{rownum}'].value = sale
+        price = price.replace("$", '')
+        xlsheet[f'B{rownum}'].value = price
+        if sale != '':
+            strsale = "{} (was {})".format(price, sale)
+            xlsheet[f'C{rownum}'].value = strsale
         
         i += 1
         time.sleep(1)
