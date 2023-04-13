@@ -53,7 +53,7 @@ xlsheet = xlbook.sheets[sheetname]
 
 user_data = r"C:/Users/User/AppData/Local/Google/Chrome/User Data2"
 
-def get_urls(domainwl=()):
+def get_urls(domainwl=[]):
     urlList = []
     print(domainwl)
     maxrow = xlsheet.range('A' + str(xlsheet.cells.last_cell.row)).end('up').row
@@ -67,7 +67,7 @@ def get_urls(domainwl=()):
     return urlList
 
 def walmart_scraper():
-    urlList = get_urls(domainwl=('www.walmart.com','www.walmart.ca'))
+    urlList = get_urls(domainwl=['www.walmart.com','www.walmart.ca'])
     i = 0
     maxrec = len(urlList)
     driver = browser_init()
@@ -121,7 +121,7 @@ def walmart_scraper():
 
 
 def superstore_scraper():
-    urlList = get_urls(domainwl=tuple('www.realcanadiansuperstore.ca'))
+    urlList = get_urls(domainwl=['www.realcanadiansuperstore.ca'])
     i = 0
     maxrec = len(urlList)
     driver = browser_init()
