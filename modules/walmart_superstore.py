@@ -117,3 +117,6 @@ def walmart_scraper():
         i += 1     
 
     xlbook.save(filename)
+
+if __name__ == '__main__':
+    walmart_scraper()
