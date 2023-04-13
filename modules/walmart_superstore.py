@@ -170,9 +170,14 @@ def superstore_scraper():
         
         # xlsheet[f'B{rownum}'].value = price
         # xlsheet[f'C{rownum}'].value = sale
-        input('wa')
+        
         i += 1
-        time.sleep(5)
+        time.sleep(3)
+        try:
+            title = driver.find_element(By.CSS_SELECTOR, "h1[class='product-name__item product-name__item--name']").text
+        except:
+            title = 'xx'
+        print(title)
 
     # xlbook.save(filename)
 
