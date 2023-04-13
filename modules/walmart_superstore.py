@@ -132,6 +132,8 @@ def superstore_scraper():
         rownum = urlList[i][1]
         print(url, end=" ", flush=True)
         driver.get(url)
+        WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "button[data-track='productAddToCartLocalize']")))                
+
         # try:
         #     driver.find_element(By.CSS_SELECTOR, "div#topmessage").text
         #     print("Failed")
@@ -172,13 +174,13 @@ def superstore_scraper():
         # xlsheet[f'C{rownum}'].value = sale
         
         i += 1
-        time.sleep(3)
+        
         try:
             title = driver.find_element(By.CSS_SELECTOR, "h1[class='product-name__item product-name__item--name']").text
         except:
             title = 'xx'
         print(title)
-
+        time.sleep(3)
     # xlbook.save(filename)
 
 if __name__ == '__main__':
