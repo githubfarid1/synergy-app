@@ -170,13 +170,14 @@ def superstore_scraper(xlsheet):
         except:
             sale = ''
         
-        print(title, price, sale)
+        
         price = price.replace("$", '')
         xlsheet[f'B{rownum}'].value = price
+        strsale = ''
         if sale != '':
             strsale = "{} (was {})".format(price, sale)
             xlsheet[f'C{rownum}'].value = strsale
-        
+        print(title, price, strsale)
         i += 1
         time.sleep(1)
     
