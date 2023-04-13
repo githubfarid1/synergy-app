@@ -8,7 +8,6 @@ from webdriver_manager.chrome import ChromeDriverManager as CM
 from selenium.webdriver.common.action_chains import ActionChains
 import json
 import warnings
-# from openpyxl import Workbook, load_workbook
 from urllib.parse import urlencode, urlparse
 import time
 from random import randint
@@ -42,77 +41,79 @@ def browser_init():
     options.add_argument("--disable-blink-features=AutomationControlled")
     # options.add_experimental_option( "prefs",{'profile.managed_default_content_settings.javascript': 1})
     driver = webdriver.Chrome(service=Service(CM().install()), options=options)
+    driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})") 
+    driver.execute_cdp_cmd("Network.setCacheDisabled", {"cacheDisabled":True})
     return driver
 
-driver = browser_init()
-driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})") 
-driver.execute_cdp_cmd("Network.setCacheDisabled", {"cacheDisabled":True})
+
 filename = r"C:/synergy-data-tester/Lookup Listing.xlsx"
 sheetname = "Sheet1"
 xlbook = xw.Book(filename)
 xlsheet = xlbook.sheets[sheetname]
 
-# workbook = load_workbook(filename=filename, read_only=False, keep_vba=True, data_only=True)
-# workbook = load_workbook(filename="/home/farid/dev/python/synergy-github/data/lookup/Lookup Listing.xlsx", read_only=False, keep_vba=True, data_only=True)
-# worksheet = workbook[self.sheetname]
-# worksheet = workbook[sheetname]
 user_data = r"C:/Users/User/AppData/Local/Google/Chrome/User Data2"
-urlList = []
-maxrow = xlsheet.range('A' + str(xlsheet.cells.last_cell.row)).end('up').row
 
-for i in range(2, maxrow + 2):
-    url = xlsheet[f'A{i}'].value
-    domain = urlparse(url).netloc
-    if domain == 'www.walmart.com' or domain == 'www.walmart.ca':
-        tpl = (url, i)
-        urlList.append(tpl)
+def get_urls(domainwl=()):
+    urlList = []
+    maxrow = xlsheet.range('A' + str(xlsheet.cells.last_cell.row)).end('up').row
+    for i in range(2, maxrow + 2):
+        url = xlsheet[f'A{i}'].value
+        domain = urlparse(url).netloc
+        # if domain in 'www.walmart.com' or domain == 'www.walmart.ca':
+        if domain in domainwl:
+            tpl = (url, i)
+            urlList.append(tpl)
+    return urlList
 
-i = 0
-maxrec = len(urlList)
-while True:
-    if i == maxrec:
-        break
-    url = urlList[i][0]
-    rownum = urlList[i][1]
-    print(url, end=" ", flush=True)
-    driver.get(url)
-    try:
-        driver.find_element(By.CSS_SELECTOR, "div#topmessage").text
-        print("Failed")
-        del driver
-        waiting = 120
-        print(f'Waiting for bot detection for {waiting} seconds', end=" ", flush=True)
-        time.sleep(waiting)
-        isExist = os.path.exists(user_data)
-        print(isExist)
-        if isExist:
-            shutil.rmtree(user_data)
-        print('OK')
-        driver = browser_init()
-        continue
-    except:
+def walmart_scraper():
+    urlList = get_urls(domainwl=('www.walmart.com','www.walmart.ca'))
+    i = 0
+    maxrec = len(urlList)
+    driver = browser_init()
+    while True:
+        if i == maxrec:
+            break
+        url = urlList[i][0]
+        rownum = urlList[i][1]
+        print(url, end=" ", flush=True)
+        driver.get(url)
+        try:
+            driver.find_element(By.CSS_SELECTOR, "div#topmessage").text
+            print("Failed")
+            del driver
+            waiting = 120
+            print(f'The script was detected as bot, please wait for {waiting} seconds', end=" ", flush=True)
+            time.sleep(waiting)
+            isExist = os.path.exists(user_data)
+            print(isExist)
+            if isExist:
+                shutil.rmtree(user_data)
+            print('OK')
+            driver = browser_init()
+            continue
+        except:
+            
+            print('OK')
+            pass
+
+        try:
+            title = driver.find_element(By.CSS_SELECTOR, "h1[data-automation='product-title']").text
+        except:
+                title = ''
+        try:
+            price = driver.find_element(By.CSS_SELECTOR, "span[data-automation='buybox-price']").text
+        except:
+            price = ''
+        try:
+            sale = driver.find_element(By.CSS_SELECTOR, "div[data-automation='mix-match-badge'] span").text
+        except:
+            sale = ''
         
-        print('OK')
-        pass
+        print(title, price, sale)
+        
+        xlsheet[f'B{rownum}'].value = price
+        xlsheet[f'C{rownum}'].value = sale
 
-    try:
-        title = driver.find_element(By.CSS_SELECTOR, "h1[data-automation='product-title']").text
-    except:
-            title = ''
-    try:
-        price = driver.find_element(By.CSS_SELECTOR, "span[data-automation='buybox-price']").text
-    except:
-        price = ''
-    try:
-        sale = driver.find_element(By.CSS_SELECTOR, "div[data-automation='mix-match-badge'] span").text
-    except:
-        sale = ''
-    
-    print(title, price, sale)
-    
-    xlsheet[f'B{rownum}'].value = price
-    xlsheet[f'C{rownum}'].value = sale
+        i += 1     
 
-    i += 1     
-
-xlbook.save(filename)
+    xlbook.save(filename)
