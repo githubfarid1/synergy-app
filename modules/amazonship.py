@@ -68,16 +68,16 @@ def killAllChrome():
 
 class AmazonShipment:
     def __init__(self, xlsfile, sname, chrome_data, download_folder, xlworkbook) -> None:
-        # try:
-        self.__workbook = load_workbook(filename=xlsfile, read_only=False, keep_vba=True, data_only=True)
-        self.__worksheet = self.__workbook[sname]
-        self.__xlworkbook = xlworkbook
-        self.__xlworksheet = xlworkbook.sheets[sname]
-
-        # except Exception as e:
-        #     logger.error(e)
-        #     input("XLSX file or Sheet name not found")
-        #     sys.exit()
+        try:
+            xltmp = 'xlstmp' + xlsfile[-5:]
+            self.__workbook = load_workbook(filename=xltmp, read_only=False, keep_vba=True, data_only=True)
+            self.__worksheet = self.__workbook[sname]
+            self.__xlworkbook = xlworkbook
+            self.__xlworksheet = xlworkbook.sheets[sname]
+        except Exception as e:
+            logger.error(e)
+            input("XLSX file or Sheet name not found")
+            sys.exit()
         self.__datajson = json.loads("{}")
         self.__datalist = []
         self.__chrome_data = chrome_data
@@ -1152,6 +1152,9 @@ def main():
     pathinput = args.xlsinput[0:-len(fnameinput)]
     backfile = "{}{}_backup{}".format(pathinput, os.path.splitext(fnameinput)[0], os.path.splitext(fnameinput)[1])
     shutil.copy(args.xlsinput, backfile)
+    xltmp = 'xlstmp' + args.xlsinput[-5:]
+    shutil.copy(args.xlsinput, xltmp)            
+
     print('OK')
     print('Opening the Source Excel File...', end="", flush=True)
     xlbook = xw.Book(args.xlsinput)
