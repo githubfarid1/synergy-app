@@ -103,7 +103,7 @@ def walmart_scraper(xlsheet):
             if isExist:
                 shutil.rmtree(user_data)
             print('OK')
-            driver = browser_init()
+            driver = browser_init(userdata=user_data)
             continue
         except:
             
