@@ -1181,28 +1181,28 @@ def main():
     logger2.info("###### Start ######")
     logger2.info("Filename: {}\nSheet Name:{}\nPDF Output Folder:{}".format(args.xlsinput, args.sheetname, folderamazonship))
     maxrun = 10
-    for i in range(1, maxrun+1):
-        if i > 1:
-            print("Process will be reapeated")
-        try:    
-            shipment = AmazonShipment(xlsfile=args.xlsinput, sname=args.sheetname, chrome_data=args.chromedata, download_folder=folderamazonship, xlworkbook=xlbook)
+    # for i in range(1, maxrun+1):
+    #     if i > 1:
+    #         print("Process will be reapeated")
+    #     try:    
+    #         shipment = AmazonShipment(xlsfile=args.xlsinput, sname=args.sheetname, chrome_data=args.chromedata, download_folder=folderamazonship, xlworkbook=xlbook)
 
-            shipment.data_sanitizer()
-            if len(shipment.datalist) == 0:
-                break
-            shipment.parse()
-            shipment.xlworkbook.save(shipment.xlsfile)
-            shipment.workbook.close()
-        except Exception as e:
-            logger.error(e)
-            print("There is an error, check logs/amazonship-err.log")
-            # shipment.workbook.save(shipment.xlsfile)
-            shipment.xlworkbook.save(shipment.xlsfile)
-            shipment.workbook.close()
-            if i == maxrun:
-                logger.error("Execution Limit reached, Please check the script")
-            continue
-        break
+    #         shipment.data_sanitizer()
+    #         if len(shipment.datalist) == 0:
+    #             break
+    #         shipment.parse()
+    #         shipment.xlworkbook.save(shipment.xlsfile)
+    #         shipment.workbook.close()
+    #     except Exception as e:
+    #         logger.error(e)
+    #         print("There is an error, check logs/amazonship-err.log")
+    #         # shipment.workbook.save(shipment.xlsfile)
+    #         shipment.xlworkbook.save(shipment.xlsfile)
+    #         shipment.workbook.close()
+    #         if i == maxrun:
+    #             logger.error("Execution Limit reached, Please check the script")
+    #         continue
+    #     break
     addressfile = Path("address.csv")
     resultfile = lib.join_pdfs(source_folder=folderamazonship + lib.file_delimeter() + "combined" , output_folder = folderamazonship, tag='Labels')
     if resultfile != "":
