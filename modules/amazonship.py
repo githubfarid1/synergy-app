@@ -471,7 +471,7 @@ class AmazonShipment:
             print(dlist['name'], 'Saving the Shipping data')
             WebDriverWait(self.driver, 600).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "kat-button[data-testid='confirm-spd-shipping']")))
             explicit_wait()
-            self.driver.find_elements(By.CSS_SELECTOR, "kat-button[data-testid='confirm-spd-shipping']").click()
+            self.driver.find_elements(By.CSS_SELECTOR, "kat-button[data-testid='confirm-spd-shipping']")[0].click()
             print("Downloading PDF File to", self.download_folder)
             WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div[data-testid='send-to-tile-list-row']")))
             self.driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
@@ -1186,7 +1186,7 @@ def main():
         try:    
             shipment = AmazonShipment(xlsfile=args.xlsinput, sname=args.sheetname, chrome_data=args.chromedata, download_folder=folderamazonship, xlworkbook=xlbook)
 
-            shipment.data_sanitizer()
+            # shipment.data_sanitizer()
             if len(shipment.datalist) == 0:
                 break
             shipment.parse()
