@@ -1153,6 +1153,10 @@ def main():
     backfile = "{}{}_backup{}".format(pathinput, os.path.splitext(fnameinput)[0], os.path.splitext(fnameinput)[1])
     shutil.copy(args.xlsinput, backfile)
     xltmp = 'xlstmp' + args.xlsinput[-5:]
+    try:
+        os.remove(xltmp)
+    except:
+        pass
     shutil.copy(args.xlsinput, xltmp)            
 
     print('OK')
