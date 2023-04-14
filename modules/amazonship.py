@@ -475,7 +475,7 @@ class AmazonShipment:
             print("Downloading PDF File to", self.download_folder)
             WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div[data-testid='send-to-tile-list-row']")))
             self.driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
-            WebDriverWait(self.driver, 120).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div[data-testid='print-section']")))            
+            WebDriverWait(self.driver, 600).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div[data-testid='print-section']")))            
             time.sleep(1)
             pdfs = self.driver.find_elements(By.CSS_SELECTOR, "div[data-testid='print-section']")
             original_window = self.driver.current_window_handle
