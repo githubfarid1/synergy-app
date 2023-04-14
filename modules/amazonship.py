@@ -471,7 +471,6 @@ class AmazonShipment:
             print(dlist['name'], 'Saving the Shipping data')
             WebDriverWait(self.driver, 120).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "kat-button[data-testid='confirm-spd-shipping']")))
             explicit_wait()
-            input("wait")
             element = self.driver.find_element(By.CSS_SELECTOR, "kat-button[data-testid='confirm-spd-shipping']")
             while True:
                 if element.is_enabled() == True:
