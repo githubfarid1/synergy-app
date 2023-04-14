@@ -469,16 +469,17 @@ class AmazonShipment:
             explicit_wait()
             self.driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
             print(dlist['name'], 'Saving the Shipping data')
-            WebDriverWait(self.driver, 120).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "kat-button[data-testid='confirm-spd-shipping']")))
+            element = WebDriverWait(self.driver, 120).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "kat-button[data-testid='confirm-spd-shipping'] button.primary")))
             explicit_wait()
-            element = self.driver.find_element(By.CSS_SELECTOR, "kat-button[data-testid='confirm-spd-shipping']")
-            while True:
-                print(element.is_enabled())
-                if element.is_enabled() == True:
-                    break
-                time.sleep(1)
+            # element = self.driver.find_element(By.CSS_SELECTOR, "kat-button[data-testid='confirm-spd-shipping'] button.primary")
+            # while True:
+            #     print(element.is_enabled())
+            #     if element.is_enabled() == True:
+            #         break
+            #     time.sleep(1)
             
-            self.driver.find_element(By.CSS_SELECTOR, "kat-button[data-testid='confirm-spd-shipping']").click()
+            # self.driver.find_element(By.CSS_SELECTOR, "kat-button[data-testid='confirm-spd-shipping']").click()
+            element.click()
             print("Downloading PDF File to", self.download_folder)
             WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div[data-testid='send-to-tile-list-row']")))
             self.driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
