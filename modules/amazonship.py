@@ -68,18 +68,18 @@ def killAllChrome():
 
 class AmazonShipment:
     def __init__(self, xlsfile, sname, chrome_data, download_folder, xlworkbook) -> None:
-        try:
-            xltmp = 'xlstmp' + xlsfile[-5:]
-            shutil.copy(xlsfile, xltmp)            
-            self.__workbook = load_workbook(filename=xltmp, read_only=False, keep_vba=True, data_only=True)
-            self.__worksheet = self.__workbook[sname]
-            self.__xlworkbook = xlworkbook
-            self.__xlworksheet = xlworkbook.sheets[sname]
+        # try:
+        xltmp = 'xlstmp' + xlsfile[-5:]
+        shutil.copy(xlsfile, xltmp)            
+        self.__workbook = load_workbook(filename=xltmp, read_only=False, keep_vba=True, data_only=True)
+        self.__worksheet = self.__workbook[sname]
+        self.__xlworkbook = xlworkbook
+        self.__xlworksheet = xlworkbook.sheets[sname]
 
-        except Exception as e:
-            logger.error(e)
-            input("XLSX file or Sheet name not found")
-            sys.exit()
+        # except Exception as e:
+        #     logger.error(e)
+        #     input("XLSX file or Sheet name not found")
+        #     sys.exit()
         self.__datajson = json.loads("{}")
         self.__datalist = []
         self.__chrome_data = chrome_data
