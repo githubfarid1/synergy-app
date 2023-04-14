@@ -473,10 +473,11 @@ class AmazonShipment:
             explicit_wait()
             element = self.driver.find_element(By.CSS_SELECTOR, "kat-button[data-testid='confirm-spd-shipping']")
             while True:
+                print(element.is_enabled())
                 if element.is_enabled() == True:
                     break
                 time.sleep(1)
-
+            
             self.driver.find_element(By.CSS_SELECTOR, "kat-button[data-testid='confirm-spd-shipping']").click()
             print("Downloading PDF File to", self.download_folder)
             WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div[data-testid='send-to-tile-list-row']")))
