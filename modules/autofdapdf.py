@@ -461,7 +461,7 @@ def main():
             if data[20] == 'None':
                 xlsdictwcode[idx] = xls
                 break
-    input(json.loads(xlsdictwcode))
+    input(json.dumps(xlsdictwcode))
     exit()
     strdate = str(date.today())
     foldernamepn = "{}{}_{}".format(args.output + lib.file_delimeter(), 'prior_notice', strdate) 
