@@ -67,13 +67,15 @@ def killAllChrome():
         os.system("taskkill /f /im chrome.exe")
 
 class AmazonShipment:
-    def __init__(self, xlsfile, sname, chrome_data, download_folder, xlworkbook) -> None:
+    def __init__(self, xlsfile, sname, chrome_data, download_folder, xlworksheet) -> None:
         try:
             xltmp = 'xlstmp' + xlsfile[-5:]
             self.__workbook = load_workbook(filename=xltmp, read_only=False, keep_vba=True, data_only=True)
             self.__worksheet = self.__workbook[sname]
-            self.__xlworkbook = xlworkbook
-            self.__xlworksheet = xlworkbook.sheets[sname]
+            # self.__xlworkbook = xlworkbook
+            # self.__xlworksheet = xlworkbook.sheets[sname]
+            self.__xlworksheet = xlworksheet
+
         except Exception as e:
             logger.error(e)
             input("XLSX file or Sheet name not found")
@@ -1046,78 +1048,13 @@ class AmazonShipment:
     def driver(self):
         return self.__driver
 
-    @property
-    def xlworkbook(self):
-        return self.__xlworkbook
+    # @property
+    # def xlworkbook(self):
+    #     return self.__xlworkbook
    
     @property
     def xlworksheet(self):
         return self.__xlworksheet
-
-# def main():
-#     parser = argparse.ArgumentParser(description="Amazon Shipment")
-#     parser.add_argument('-xls', '--xlsinput', type=str,help="XLSX File Input")
-#     parser.add_argument('-sname', '--sheetname', type=str,help="Sheet Name of XLSX file")
-#     parser.add_argument('-output', '--pdfoutput', type=str,help="PDF output folder")
-#     parser.add_argument('-cdata', '--chromedata', type=str,help="Chrome User Data Directory")
-#     args = parser.parse_args()
-#     if not (args.xlsinput[-5:] == '.xlsx' or args.xlsinput[-5:] == '.xlsm'):
-#         input('2nd File input have to XLSX or XLSM file')
-#         sys.exit()
-#     isExist = os.path.exists(args.xlsinput)
-#     if not isExist:
-#         input(args.xlsinput + " does not exist")
-#         sys.exit()
-#     isExist = os.path.exists(args.chromedata)
-#     if isExist == False :
-#         input('Please check Chrome User Data Directory')
-#         sys.exit()
-#     isExist = os.path.exists(args.pdfoutput)
-#     if not isExist:
-#         input(args.pdfoutput + " folder does not exist")
-#         sys.exit()
-
-#     # the second handler is a file handler
-#     file_handler = logging.FileHandler('logs/amazonship-err.log')
-#     file_handler.setLevel(logging.ERROR)
-#     file_handler_format = '%(asctime)s | %(levelname)s | %(lineno)d: %(message)s'
-#     file_handler.setFormatter(logging.Formatter(file_handler_format))
-#     logger.addHandler(file_handler)
-
-#     file_handler2 = logging.FileHandler('logs/amazonship-info.log')
-#     file_handler2.setLevel(logging.INFO)
-#     # file_handler2_format = '%(asctime)s | %(levelname)s: %(message)s'
-#     file_handler2_format = '%(asctime)s | %(levelname)s | %(lineno)d: %(message)s'
-#     file_handler2.setFormatter(logging.Formatter(file_handler2_format))
-#     logger2.addHandler(file_handler2)
-
-#     logger2.info("###### Start ######")
-#     logger2.info("Filename: {}\nSheet Name:{}\nPDF Output Folder:{}".format(args.xlsinput, args.sheetname, args.pdfoutput))
-#     maxrun = 10
-#     for i in range(1, maxrun+1):
-#         if i > 1:
-#             print("Process will be reapeated")
-#         try:    
-#             shipment = AmazonShipment(xlsfile=args.xlsinput, sname=args.sheetname, chrome_data=args.chromedata, download_folder=args.pdfoutput)
-#             shipment.data_sanitizer()
-#             if len(shipment.datalist) == 0:
-#                 break
-#             shipment.parse()
-#         except Exception as e:
-#             logger.error(e)
-#             print("There is an error, check logs/amazonship-err.log")
-#             shipment.workbook.save(shipment.xlsfile)
-#             shipment.workbook.close()
-#             if i == maxrun:
-#                 logger.error("Execution Limit reached, Please check the script")
-#             continue
-#         break
-#     addressfile = Path("address.csv")
-#     resultfile = lib.join_pdfs(source_folder=args.pdfoutput + lib.file_delimeter() + "combined" , output_folder = args.pdfoutput, tag='Labels')
-#     if resultfile != "":
-#         lib.add_page_numbers(resultfile)
-#         lib.generate_xls_from_pdf(resultfile, addressfile)
-#     input("End Process..")    
 
 def main():
     clear_screan()
@@ -1163,6 +1100,7 @@ def main():
     print('OK')
     print('Opening the Source Excel File...', end="", flush=True)
     xlbook = xw.Book(args.xlsinput)
+    xlsheet = xlbook.sheets[args.sheetname]
     print('OK')
     # the second handler is a file handler
     file_handler = logging.FileHandler('logs/amazonship-err.log')
@@ -1180,36 +1118,36 @@ def main():
 
     logger2.info("###### Start ######")
     logger2.info("Filename: {}\nSheet Name:{}\nPDF Output Folder:{}".format(args.xlsinput, args.sheetname, folderamazonship))
-    # maxrun = 10
-    # for i in range(1, maxrun+1):
-    #     if i > 1:
-    #         print("Process will be reapeated")
-    #     try:    
-    #         shipment = AmazonShipment(xlsfile=args.xlsinput, sname=args.sheetname, chrome_data=args.chromedata, download_folder=folderamazonship, xlworkbook=xlbook)
-    #         shipment.data_sanitizer()
-    #         if len(shipment.datalist) == 0:
-    #             break
-    #         shipment.parse()
-    #         try:
-    #             # shipment.xlworkbook.save(shipment.xlsfile)
-    #             xlbook.save(args.xlsinput)
-    #         except:
-    #             pass    
-    #         shipment.workbook.close()
-    #     except Exception as e:
-    #         logger.error(e)
-    #         print("There is an error, check logs/amazonship-err.log")
-    #         # shipment.workbook.save(shipment.xlsfile)
-    #         try:
-    #             # shipment.xlworkbook.save(shipment.xlsfile)
-    #             xlbook.save(args.xlsinput)
-    #         except:
-    #             pass
-    #         shipment.workbook.close()
-    #         if i == maxrun:
-    #             logger.error("Execution Limit reached, Please check the script")
-    #         continue
-    #     break
+    maxrun = 10
+    for i in range(1, maxrun+1):
+        if i > 1:
+            print("Process will be reapeated")
+        try:    
+            shipment = AmazonShipment(xlsfile=args.xlsinput, sname=args.sheetname, chrome_data=args.chromedata, download_folder=folderamazonship, xlworksheet=xlsheet)
+            shipment.data_sanitizer()
+            if len(shipment.datalist) == 0:
+                break
+            shipment.parse()
+            try:
+                # shipment.xlworkbook.save(shipment.xlsfile)
+                xlbook.save(args.xlsinput)
+            except:
+                pass    
+            shipment.workbook.close()
+        except Exception as e:
+            logger.error(e)
+            print("There is an error, check logs/amazonship-err.log")
+            # shipment.workbook.save(shipment.xlsfile)
+            try:
+                # shipment.xlworkbook.save(shipment.xlsfile)
+                xlbook.save(args.xlsinput)
+            except:
+                pass
+            shipment.workbook.close()
+            if i == maxrun:
+                logger.error("Execution Limit reached, Please check the script")
+            continue
+        break
     addressfile = Path("address.csv")
     resultfile = lib.join_pdfs(source_folder=folderamazonship + lib.file_delimeter() + "combined" , output_folder = folderamazonship, tag='Labels')
     if resultfile != "":
