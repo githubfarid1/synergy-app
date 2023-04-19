@@ -54,7 +54,7 @@ def parse(fileinput, chrome_data, country):
     ws = wb['Sheet1']
     # Use the active cell when the file was loaded
     ws = wb.active
-    for i in range(2, ws.max_row + 1):
+    for i in range(1, ws.max_row + 1):
         if ws['A{}'.format(i)].value == None:
             break
         print(ws['A{}'.format(i)].value)
@@ -252,7 +252,7 @@ def parse(fileinput, chrome_data, country):
         # if i == 10:
         #     break
 
-        time.sleep(5)
+        time.sleep(2)
 
         # exit()
     wb.save(statistic_source)
