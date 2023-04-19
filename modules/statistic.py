@@ -31,8 +31,8 @@ def parse(fileinput, chrome_data, country):
     # options.add_argument("--headless")
     # options.add_experimental_option('debuggerAddress', 'localhost:9251')
     options.add_argument("user-data-dir={}".format(chrome_data)) #Path to your chrome profile
-    options.add_argument("user-data-dir={}".format(config['chrome_user_data'])) 
-    options.add_argument("profile-directory={}".format(config['chrome_profile']))
+    # options.add_argument("user-data-dir={}".format(config['chrome_user_data'])) 
+    # options.add_argument("profile-directory={}".format(config['chrome_profile']))
     options.add_argument('--no-sandbox')
     options.add_argument("--log-level=3")
     options.add_argument("--window-size=800,600")
