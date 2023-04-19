@@ -31,6 +31,7 @@ warnings.filterwarnings("ignore", category=Warning)
 
 def explicit_wait():
     time.sleep(randint(1, 3))
+
 def getConfig():
 	file = open("setting.json", "r")
 	config = json.load(file)

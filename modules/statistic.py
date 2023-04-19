@@ -17,13 +17,22 @@ import os
 import psutil
 import warnings
 import argparse
+import json
 
-def parse(fileinput, chrome_data):
+def getConfig():
+	file = open("setting.json", "r")
+	config = json.load(file)
+	return config
+
+def parse(fileinput, country):
     warnings.filterwarnings("ignore", category=UserWarning) 
+    config = getConfig()
     options = webdriver.ChromeOptions()
     # options.add_argument("--headless")
     # options.add_experimental_option('debuggerAddress', 'localhost:9251')
-    options.add_argument("user-data-dir={}".format(chrome_data)) #Path to your chrome profile
+    # options.add_argument("user-data-dir={}".format(chrome_data)) #Path to your chrome profile
+    options.add_argument("user-data-dir={}".format(config['chrome_user_data'])) 
+    options.add_argument("profile-directory={}".format(config['chrome_profile']))
     options.add_argument('--no-sandbox')
     options.add_argument("--log-level=3")
     options.add_argument("--window-size=800,600")
@@ -68,7 +77,7 @@ def parse(fileinput, chrome_data):
 
         params = {
             'searchKey': '{}'.format(ws['A{}'.format(i)].value),
-            'countryCode': 'US',
+            'countryCode': '{}'.format(country),
             'locale': 'en-US',
         }
         session = requests.Session()
@@ -254,7 +263,10 @@ def main():
     parser = argparse.ArgumentParser(description="Statistics")
     parser.add_argument('-i', '--input', type=str,help="File Input")
     parser.add_argument('-d', '--data', type=str,help="Chrome User Data Directory")
+    parser.add_argument('-c', '--country', type=str,help="Country")
+
     args = parser.parse_args()
+
     if args.input[-5:] != '.xlsx':
         print('File input have to XLSX file')
         exit()
@@ -267,7 +279,7 @@ def main():
         print('Please check XLSX file')
         exit()
     
-    parse(args.input, args.data)
+    parse(args.input, args.country)
     
 if __name__ == '__main__':
     main()

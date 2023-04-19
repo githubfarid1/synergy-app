@@ -22,7 +22,7 @@ elif platform == "win32":
 	from subprocess import CREATE_NEW_CONSOLE
 import json
 
-VERSION = "1.11"
+VERSION = "1.12"
 def getConfig():
 	file = open("setting.json", "r")
 	config = json.load(file)
@@ -408,27 +408,33 @@ class StatisticsFrame(ttk.Frame):
 		self.rowconfigure(3, weight=1)
 		self.rowconfigure(4, weight=1)
 		self.rowconfigure(5, weight=1)
-
+		labelclist = Label(self, text="Amazon Store:")
+		countries = ["US", "CA"]
+		vl = StringVar()
 		titleLabel = TitleLabel(self, text="Statistics")
 		closeButton = CloseButton(self)
-
+		clist = ttk.Combobox(self, textvariable=StringVar(), state="readonly")
+		# for country in countries:
+		clist['values'] = [country for country in countries]
+		clist.current(0)
 		xlsInputFile = FileChooserFrame(self, btype="file", label="Select XLSX Input File:", filetypes=(("xlsx files", "*.xlsx"),("all files", "*.*")))
-		runButton = ttk.Button(self, text='Run Process', command = lambda:self.run_process(input=xlsInputFile.filename))
+		runButton = ttk.Button(self, text='Run Process', command = lambda:self.run_process(input=xlsInputFile.filename, country=clist.get() ))
 		
 
 		# layout
 		titleLabel.grid(column = 0, row = 0, sticky = (W, E, N, S))
 		xlsInputFile.grid(column = 0, row = 1, sticky = (W,E))
+		labelclist.grid(column = 0, row = 2, sticky=(W))
+		clist.grid(column = 0, row = 2, pady=10)
 		runButton.grid(column = 0, row = 3, sticky = (E))
 		closeButton.grid(column = 0, row = 5, sticky = (N))
 
 	def run_process(self, **kwargs):
+		print(kwargs)
 		if kwargs['input'] == "": 
 			messagebox.showwarning(title='Warning', message='Please make sure you have choosed the files')
 		else:
-			# print(PYLOC, "statistic.py", "-i", kwargs['input'], "-d", getConfig()['chrome_user_data'])	
-			# Popen([PYLOC, "statistic.py", "-i", kwargs['input'], "-d", getConfig()['chrome_user_data']], creationflags=CREATE_NEW_CONSOLE)
-			run_module(comlist=[PYLOC, "modules/statistic.py", "-i", kwargs['input'], "-d", getConfig()['chrome_user_data']])
+			run_module(comlist=[PYLOC, "modules/statistic.py", "-i", kwargs['input'], "-c", kwargs['country'], "-d", getConfig()['chrome_user_data']])
 
 class CanadaPostFrame(ttk.Frame):
 	def __init__(self, window) -> None:
@@ -673,7 +679,6 @@ class FdaPdfFrame(ttk.Frame):
 			messagebox.showwarning(title='Warning', message='This process will update the excel file. make sure you have closed the file.')
 			run_module(comlist=[PYLOC, "modules/fdapdf.py", "-pdf", kwargs['pdfinput'], "-xls", kwargs['xlsinput'], "-sname", kwargs['sname'].get(), "-output", kwargs['pdfoutput'] ])
 
-
 class AmazonShippingFrame(ttk.Frame):
 	def __init__(self, window) -> None:
 		super().__init__(window)
@@ -725,7 +730,6 @@ class AmazonShippingFrame(ttk.Frame):
 
 			messagebox.showwarning(title='Warning', message='This process will update the excel file. make sure you have closed the file.')
 			run_module(comlist=[PYLOC, "modules/amazonship.py", "-xls", kwargs['xlsinput'], "-sname", kwargs['sname'].get(), "-output", pdffolder, "-cdata",  getConfig()['chrome_user_data']])
-
 
 class FdaEntryPdfFrame(ttk.Frame):
 	def __init__(self, window) -> None:
