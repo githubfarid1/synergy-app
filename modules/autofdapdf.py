@@ -461,8 +461,8 @@ def main():
             if data[20] == 'None':
                 xlsdictwcode[idx] = xls
                 break
-    input(json.dumps(xlsdictwcode))
-    exit()
+    # input(json.dumps(xlsdictwcode))
+    # exit()
     strdate = str(date.today())
     foldernamepn = "{}{}_{}".format(args.output + lib.file_delimeter(), 'prior_notice', strdate) 
     isExist = os.path.exists(foldernamepn)
@@ -519,7 +519,7 @@ def main():
     else:
         del_non_annot_page(allsavedfiles, complete_output_folder)
         join_folderpdf(allsavedfiles, complete_output_folder)
-        lib.join_pdfs(source_folder=complete_output_folder + file_delimeter() + "combined", output_folder=complete_output_folder, tag="FDA_All")
+        # lib.join_pdfs(source_folder=complete_output_folder + file_delimeter() + "combined", output_folder=complete_output_folder, tag="FDA_All")
         # Delete all file folder
         for filename in list_of_files:
             folder = filename[:-4]

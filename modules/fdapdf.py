@@ -433,6 +433,35 @@ class PriorPdf:
     @property
     def file_delimeter(self):
         return self.__delimeter
+def file_delimeter():
+    delimeter = "/"    
+    if platform == "win32":
+        delimeter = "\\"
+    return delimeter
+    
+def del_non_annot_page(pdffiles, pdffolder):
+    print("Removing Non Highlight Pages..")
+    tmpfile = pdffolder + file_delimeter() + "tmp.pdf"
+    for pdffile in pdffiles:
+        shutil.copy(pdffile, tmpfile)
+        doc = fitz.open(pdffolder + file_delimeter() + "tmp.pdf")
+        selected = []
+        for idx, page in enumerate(doc):
+            for annot in page.annots():
+                selected.append(idx)
+                break
+        selected.append(0)
+        selected = list(dict.fromkeys(selected))
+        selected.sort()
+        doc.select(selected)
+        doc.save(pdffile)
+        print(os.path.basename(pdffile), "passed.")
+        time.sleep(1)
+    isExist = os.path.exists(tmpfile)
+    doc.close()
+    if isExist:    
+        os.remove(tmpfile)    
+    print("")
 
 def main():
     parser = argparse.ArgumentParser(description="FDA PDF Extractor")
@@ -442,12 +471,16 @@ def main():
     parser.add_argument('-output', '--pdfoutput', type=str,help="PDF output folder")
     args = parser.parse_args()
     # if args.pdfinput[-4:] != '.pdf':
-    #     print('1st file input have to PDF file')
+    #     input('1st file input have to PDF file')
     #     sys.exit()
-    if args.xlsinput[-5:] != '.xlsx':
-        input('2nd File input have to XLSX file')
-        sys.exit()
+    # if args.xlsinput[-5:] != '.xlsx':
+    #     input('2nd File input have to XLSX file')
+    #     sys.exit()
         
+    if not (args.xlsinput[-5:] == '.xlsx' or args.xlsinput[-5:] == '.xlsm'):
+        input('input the right XLSX or XLSM file')
+        sys.exit()
+
     filelist = args.pdfinput.replace("('", '').replace("')","").replace("',)","").split("', '")
     for idx, filename in enumerate(filelist):
         isExist = os.path.exists(filename.strip())
@@ -477,6 +510,7 @@ def main():
     if len(setall) != len(allsavedfiles):
         input("Combining all pdf files Failed because there are one or more files is has the same name.")
     else:
+        del_non_annot_page(allsavedfiles, args.pdfoutput)
         combine_allpdf(allsavedfiles, args.pdfoutput)
     input("data generating completed...")
 

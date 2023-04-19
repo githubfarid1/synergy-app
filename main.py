@@ -632,28 +632,33 @@ class FdaPdfFrame(ttk.Frame):
 		self.rowconfigure(3, weight=1)
 		self.rowconfigure(4, weight=1)
 		self.rowconfigure(5, weight=1)
+		sheetlist = ttk.Combobox(self, textvariable=StringVar(), state="readonly")
 		
 		# populate
 		titleLabel = TitleLabel(self, text="FDA PDF Extractor")
 		closeButton = CloseButton(self)
-		
+
 		pdfInputFiles = FileChooserMultipleFrame(self, label="Select Input PDF File:", filetypes=(("pdf files", "*.pdf"),("all files", "*.*")))
 
-		xlsInputFile = FileChooserFrame(self, btype="file", label="Select Input XLSX File:", filetypes=(("xlsx files", "*.xlsx"),("all files", "*.*")))
+		# xlsInputFile = FileChooserFrame(self, btype="file", label="Select Input XLSX File:", filetypes=(("xlsx files", "*.xlsx"),("all files", "*.*")))
+		xlsInputFile = FileChooserFrame(self, btype="file", label="Select Input Excel File:", filetypes=(("Excel files", "*.xlsx *.xlsm"),("all files", "*.*")), sheetlist=sheetlist)
+
 		outputfolder = FileChooserFrame(self, btype="folder", label="Output PDF Folder:", filetypes=())
 
 		labelsname = Label(self, text="Sheet Name:")
 		
-		sheetName = Entry(self, width=45)
-		runButton = ttk.Button(self, text='Run Process', command = lambda:self.run_process(pdfinput=pdfInputFiles.filenames, xlsinput=xlsInputFile.filename, sname=sheetName, pdfoutput=outputfolder.filename))
+		# sheetName = Entry(self, width=45)
+		# runButton = ttk.Button(self, text='Run Process', command = lambda:self.run_process(pdfinput=pdfInputFiles.filenames, xlsinput=xlsInputFile.filename, sname=sheetName, pdfoutput=outputfolder.filename))
+		runButton = ttk.Button(self, text='Run Process', command = lambda:self.run_process(pdfinput=pdfInputFiles.filenames, xlsinput=xlsInputFile.filename, sname=sheetlist, pdfoutput=outputfolder.filename))
 		
 		# layout
 		titleLabel.grid(column = 0, row = 0, sticky = (W, E, N, S))
 		pdfInputFiles.grid(column = 0, row = 1, sticky = (W,E))
 		xlsInputFile.grid(column = 0, row = 2, sticky = (W,E))
 		labelsname.grid(column = 0, row = 3, sticky=(W))
-		sheetName.grid(column = 0, row = 3, pady=10)
+		# sheetName.grid(column = 0, row = 3, pady=10)
 		outputfolder.grid(column = 0, row = 4, sticky = (W,E))
+		sheetlist.grid(column=0, row = 3, pady=10)
 
 		runButton.grid(column = 0, row = 5, sticky = (E))
 		closeButton.grid(column = 0, row = 6, sticky = "n")
@@ -667,6 +672,7 @@ class FdaPdfFrame(ttk.Frame):
 			# Popen([PYLOC, "fdapdf.py", "-i", kwargs['input']], creationflags=CREATE_NEW_CONSOLE)
 			messagebox.showwarning(title='Warning', message='This process will update the excel file. make sure you have closed the file.')
 			run_module(comlist=[PYLOC, "modules/fdapdf.py", "-pdf", kwargs['pdfinput'], "-xls", kwargs['xlsinput'], "-sname", kwargs['sname'].get(), "-output", kwargs['pdfoutput'] ])
+
 
 class AmazonShippingFrame(ttk.Frame):
 	def __init__(self, window) -> None:
@@ -719,6 +725,7 @@ class AmazonShippingFrame(ttk.Frame):
 
 			messagebox.showwarning(title='Warning', message='This process will update the excel file. make sure you have closed the file.')
 			run_module(comlist=[PYLOC, "modules/amazonship.py", "-xls", kwargs['xlsinput'], "-sname", kwargs['sname'].get(), "-output", pdffolder, "-cdata",  getConfig()['chrome_user_data']])
+
 
 class FdaEntryPdfFrame(ttk.Frame):
 	def __init__(self, window) -> None:
