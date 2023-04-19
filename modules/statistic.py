@@ -24,13 +24,13 @@ def getConfig():
 	config = json.load(file)
 	return config
 
-def parse(fileinput, country):
+def parse(fileinput, chrome_data, country):
     warnings.filterwarnings("ignore", category=UserWarning) 
     config = getConfig()
     options = webdriver.ChromeOptions()
     # options.add_argument("--headless")
     # options.add_experimental_option('debuggerAddress', 'localhost:9251')
-    # options.add_argument("user-data-dir={}".format(chrome_data)) #Path to your chrome profile
+    options.add_argument("user-data-dir={}".format(chrome_data)) #Path to your chrome profile
     options.add_argument("user-data-dir={}".format(config['chrome_user_data'])) 
     options.add_argument("profile-directory={}".format(config['chrome_profile']))
     options.add_argument('--no-sandbox')
@@ -279,7 +279,7 @@ def main():
         print('Please check XLSX file')
         exit()
     
-    parse(args.input, args.country)
+    parse(args.input, args.data, args.country)
     
 if __name__ == '__main__':
     main()
