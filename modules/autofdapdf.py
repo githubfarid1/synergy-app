@@ -142,6 +142,7 @@ def browser_login(driver):
     return driver
 
 def clear_screan():
+    return
     if platform == "win32":
         os.system("cls")
     else:
@@ -457,7 +458,7 @@ def main():
     backfile = "{}{}_backup{}".format(pathinput, os.path.splitext(fnameinput)[0], os.path.splitext(fnameinput)[1])
     shutil.copy(args.input, backfile)
     print('OK')
-
+    print(args.input)
 
     print('Opening the Source Excel File...', end="", flush=True)
     xlbook = xw.Book(args.input)
