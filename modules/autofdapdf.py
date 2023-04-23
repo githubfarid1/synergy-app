@@ -76,6 +76,7 @@ def pdf_rename(pdfoutput_folder):
     isExist = os.path.exists(pdffolder + delimeter + pdfsubmitter)
     if isExist:
         os.remove(pdffolder + delimeter + pdfsubmitter)
+
     print("rename", pdffolder + delimeter + filename)
     os.rename(pdffolder + delimeter + filename, pdffolder + delimeter + pdfsubmitter)
     return pdfsubmitter
@@ -216,14 +217,8 @@ def xls_dataframe_generator(filename, sname):
     print(cols)
 
 def xls_data_generator(xlws, maxrow):
-    # global worksheet
-    # global workbook
     global xlworksheet
     global MAXROW
-    # workbook = load_workbook(filename=filename, read_only=False)#, keep_vba=True, data_only=True)
-    # workbook = load_workbook(filename=filename, read_only=False, keep_vba=True, data_only=True)
-
-    # worksheet = workbook[sname]
     xlworksheet = xlws #xlworkbook.sheets[sname]
     MAXROW = maxrow
     allData = {}
@@ -251,8 +246,6 @@ def xls_data_generator(xlws, maxrow):
     wsku = []
     wentryid = xlworksheet['B{}'.format(2)].value
     for i in range(2, MAXROW+2):
-        # if xlworksheet['A{}'.format(i)].value is None:
-        # print(xlworksheet['D{}'.format(i)].value)
         if wentryid != xlworksheet['B{}'.format(i)].value:# and xlworksheet['B{}'.format(i)].value != None:
             rid = uuid.uuid4().hex
             allData[rid] = {'data':list(zip(wshipper, wcode, wdesc, wsize, wtotal, wmanufact, wmanufact_addr, wmanufact_city, wconsignee, wconsignee_addr, wconsignee_city, wconsignee_postal, wconsignee_stact, wconsignee_state, wsubmitter, wsubmitter_add, wsubmitter_cityetc, wsubmitter_country, wpnumber, wbox, wentrycode, wsku)),
@@ -534,10 +527,17 @@ def main():
         # print("sdsds")
         first = False
     
-    list_of_files = glob.glob(complete_output_folder + file_delimeter() + "*.pdf")
-    allsavedfiles = []
     #regenerate data
     xlsdictall = xls_data_generator(xlws=xlsheet, maxrow=maxrow)
+    #get submitter file name
+    submitters = []
+    for xlsdata in xlsdictall.values():
+        submitters.append(xlsdata['data'][0][14])
+    print(submitters)
+    exit()
+
+    list_of_files = glob.glob(complete_output_folder + file_delimeter() + "*.pdf")
+    allsavedfiles = []
     for xlsdata in xlsdictall.values():
         entry_id = xlsdata['data'][0][20]
         pdf_filename = choose_pdf_file(list_of_files, entry_id)
