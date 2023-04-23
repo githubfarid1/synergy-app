@@ -534,8 +534,8 @@ def main():
     submitters = []
     for xlsdata in xlsdictall.values():
         submitters.append(format_filename(xlsdata['data'][0][14].replace(".", "")))
-    all_files = glob.glob(complete_output_folder + file_delimeter() + "*.pdf")
-    for file in all_files:
+    all_pdf_files = glob.glob(complete_output_folder + file_delimeter() + "*.pdf")
+    for file in all_pdf_files:
         found = False
         for submitter in submitters:
             if file.find(submitter) != -1:
@@ -543,7 +543,8 @@ def main():
                 break
         if not found:
             os.remove(file)
-    print(os.path.isdir(complete_output_folder))
+    root, dirs, files = os.walk("/path/to/your/dir").next()
+    print(dirs)
     exit()
     list_of_files = glob.glob(complete_output_folder + file_delimeter() + "*.pdf")
     allsavedfiles = []
