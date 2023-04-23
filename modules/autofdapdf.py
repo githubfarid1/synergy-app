@@ -471,8 +471,13 @@ def main():
     strdate = str(date.today())
     foldernamepn = "{}{}_{}".format(args.output + lib.file_delimeter(), 'prior_notice', strdate) 
     isExist = os.path.exists(foldernamepn)
-    if not isExist:
-        os.makedirs(foldernamepn)
+    if isExist:
+        try:
+            shutil.rmtree(foldernamepn)
+        except:
+            pass
+    
+    os.makedirs(foldernamepn)
 
     xlsfilename = os.path.basename(args.input)
     foldername = format_filename("{}_{}_{}".format(xlsfilename.replace(".xlsx", "").replace(".xlsm", ""), args.sheet, strdate) )
