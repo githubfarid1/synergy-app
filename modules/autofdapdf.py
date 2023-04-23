@@ -495,11 +495,12 @@ def main():
                         xlsdictwcode[idx] = xls
                         break
 
-            driver = browser_init(chrome_data=args.chromedata, pdfoutput_folder=complete_output_folder)
-            driver = browser_login(driver)
             # clear_screan()
             first = True
             for xlsdata in xlsdictwcode.values():
+                driver = browser_init(chrome_data=args.chromedata, pdfoutput_folder=complete_output_folder)
+                driver = browser_login(driver)
+
                 fda_entry = FdaEntry(driver=driver, datalist=xlsdata, datearrival=args.date, pdfoutput=complete_output_folder)
                 if not first:
                     driver.find_element(By.CSS_SELECTOR, "img[alt='Create WebEntry Button']").click()
@@ -549,7 +550,7 @@ def main():
                 print(resultfile, "created")
         except Exception as e:
             logger.error(e)
-            print("There is an error, check logs/amazonship-err.log")
+            print("There is an error, check logs/autofda-err.log")
             try:
                 xlbook.save(args.xlsinput)
             except:
