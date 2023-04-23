@@ -498,6 +498,10 @@ def main():
             # clear_screan()
             first = True
             for xlsdata in xlsdictwcode.values():
+                try:
+                    del driver
+                except:
+                    pass
                 driver = browser_init(chrome_data=args.chromedata, pdfoutput_folder=complete_output_folder)
                 driver = browser_login(driver)
 
@@ -532,7 +536,10 @@ def main():
                 prior.highlightpdf_generator()
                 prior.insert_text()
                 save_to_xls(pnlist=prior.pnlist)
-                xlbook.save(args.input)
+                try:
+                    xlbook.save(args.input)
+                except:
+                    pass
 
                 allsavedfiles.extend(prior.savedfiles)
             
