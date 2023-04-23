@@ -544,7 +544,14 @@ def main():
         if not found:
             os.remove(file)
     dirs = [d for d in os.listdir(complete_output_folder) if os.path.isdir(os.path.join(complete_output_folder, d))]
-    print(dirs)
+    for dir in dirs:
+        try:
+            shutil.rmtree(complete_output_folder + file_delimeter() + dir)
+        except OSError as e:
+            print("Error: %s : %s" % (folder, e.strerror))            
+        
+
+    
     exit()
     list_of_files = glob.glob(complete_output_folder + file_delimeter() + "*.pdf")
     allsavedfiles = []
