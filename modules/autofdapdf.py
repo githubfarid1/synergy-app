@@ -462,8 +462,8 @@ def main():
             if data[20] == 'None':
                 xlsdictwcode[idx] = xls
                 break
-    # input(json.dumps(xlsdictwcode))
-    # exit()
+    input(json.dumps(xlsdictwcode))
+    exit()
     strdate = str(date.today())
     foldernamepn = "{}{}_{}".format(args.output + lib.file_delimeter(), 'prior_notice', strdate) 
     isExist = os.path.exists(foldernamepn)
@@ -471,7 +471,7 @@ def main():
         os.makedirs(foldernamepn)
 
     xlsfilename = os.path.basename(args.input)
-    foldername = format_filename("{}_{}_{}".format(xlsfilename.replace(".xlsx", ""), args.sheet, strdate) )
+    foldername = format_filename("{}_{}_{}".format(xlsfilename.replace(".xlsx", "").replace(".xlsm", ""), args.sheet, strdate) )
     
     complete_output_folder = foldernamepn + file_delimeter() + foldername
     isExist = os.path.exists(complete_output_folder)
