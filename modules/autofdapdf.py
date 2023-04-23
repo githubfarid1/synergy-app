@@ -530,7 +530,7 @@ def main():
     #regenerate data
     xlsdictall = xls_data_generator(xlws=xlsheet, maxrow=maxrow)
     
-    #get submitter file name
+    #Keep only submitter PDF files.
     submitters = []
     for xlsdata in xlsdictall.values():
         submitters.append(format_filename(xlsdata['data'][0][14].replace(".", "")))
@@ -549,10 +549,8 @@ def main():
             shutil.rmtree(complete_output_folder + file_delimeter() + dir)
         except OSError as e:
             print("Error: %s : %s" % (folder, e.strerror))            
-        
 
-    
-    exit()
+
     list_of_files = glob.glob(complete_output_folder + file_delimeter() + "*.pdf")
     allsavedfiles = []
     for xlsdata in xlsdictall.values():
