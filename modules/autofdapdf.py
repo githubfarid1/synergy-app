@@ -570,7 +570,7 @@ def main():
     # logger.error(e)
     # print("There is an error, check logs/autofda-err.log")
     # try:
-    xlbook.save(args.xlsinput)
+    xlbook.save(args.input)
     # except:
     #     pass
     # xlbook.close()
