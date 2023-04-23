@@ -474,13 +474,7 @@ def main():
     strdate = str(date.today())
     foldernamepn = "{}{}_{}".format(args.output + lib.file_delimeter(), 'prior_notice', strdate) 
     isExist = os.path.exists(foldernamepn)
-    if isExist:
-        try:
-            shutil.rmtree(foldernamepn)
-            os.makedirs(foldernamepn)
-        except:
-            pass
-    else:
+    if not isExist:
         os.makedirs(foldernamepn)
     
     xlsfilename = os.path.basename(args.input)
@@ -507,7 +501,6 @@ def main():
 
             # clear_screan()
             # first = True
-            input(xlsdictwcode.values())
             for xlsdata in xlsdictwcode.values():
                 
                 try:
