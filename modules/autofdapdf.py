@@ -471,6 +471,7 @@ def main():
                 join_folderpdf(allsavedfiles, complete_output_folder)
                 resultfile = lib.join_pdfs(source_folder=complete_output_folder + lib.file_delimeter() + "combined", output_folder=complete_output_folder, tag="FDA_All")
                 print(resultfile, "created")
+            break
         except Exception as e:
             logger.error(e)
             print("There is an error, check logs/autofda-err.log")
