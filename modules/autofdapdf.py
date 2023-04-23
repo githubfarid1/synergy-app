@@ -80,7 +80,7 @@ def pdf_rename(pdfoutput_folder):
     os.rename(pdffolder + delimeter + filename, pdffolder + delimeter + pdfsubmitter)
     return pdfsubmitter
 
-def webentry_update(pdffile, xlsfilename, pdffolder):
+def webentry_update(pdffile,  pdffolder):
     print("Update Web Entry Identification Started..")
     time.sleep(1)
     delimeter = file_delimeter()
@@ -508,11 +508,12 @@ def main():
                 fda_entry.parse()
                 pdf_filename = pdf_rename(pdfoutput_folder=complete_output_folder)
                 if pdf_filename != "":
-                    webentry_update(pdffile=pdf_filename, xlsfilename=args.input, pdffolder=complete_output_folder)
+                    webentry_update(pdffile=pdf_filename, pdffolder=complete_output_folder)
                     xlbook.save(args.input)
 
                 else:
                     print("rename the file was failed")
+                print("sdsds")
                 first = False
             
             list_of_files = glob.glob(complete_output_folder + file_delimeter() + "*.pdf")
