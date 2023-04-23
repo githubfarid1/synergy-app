@@ -530,9 +530,10 @@ def main():
     #regenerate data
     xlsdictall = xls_data_generator(xlws=xlsheet, maxrow=maxrow)
     #get submitter file name
+
     submitters = []
     for xlsdata in xlsdictall.values():
-        submitters.append(xlsdata['data'][0][14])
+        submitters.append(format_filename(xlsdata['data'][0][14].replace(".", "")))
     print(submitters)
     exit()
 
