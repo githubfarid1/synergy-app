@@ -529,8 +529,8 @@ def main():
     
     #regenerate data
     xlsdictall = xls_data_generator(xlws=xlsheet, maxrow=maxrow)
+    
     #get submitter file name
-
     submitters = []
     for xlsdata in xlsdictall.values():
         submitters.append(format_filename(xlsdata['data'][0][14].replace(".", "")))
@@ -543,6 +543,7 @@ def main():
                 break
         if not found:
             os.remove(file)
+    print(os.path.isdir(complete_output_folder))
     exit()
     list_of_files = glob.glob(complete_output_folder + file_delimeter() + "*.pdf")
     allsavedfiles = []
