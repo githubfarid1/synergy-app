@@ -526,7 +526,7 @@ def main():
 
         else:
             print("file:", pdf_filename)
-            print("rename the file was failed")
+            input("rename the file was failed")
         # print("sdsds")
         first = False
     
