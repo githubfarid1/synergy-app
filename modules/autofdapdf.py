@@ -517,10 +517,10 @@ def main():
         pdf_filename = pdf_rename(pdfoutput_folder=complete_output_folder)
         if pdf_filename != "":
             webentry_update(pdffile=pdf_filename, pdffolder=complete_output_folder)
-            try:
-                xlbook.save(args.input)
-            except:
-                pass
+            # try:
+            xlbook.save(args.input)
+            # except:
+            #     pass
             
 
         else:
@@ -540,10 +540,10 @@ def main():
         prior.highlightpdf_generator()
         prior.insert_text()
         save_to_xls(pnlist=prior.pnlist)
-        try:
-            xlbook.save(args.input)
-        except:
-            pass
+        # try:
+        xlbook.save(args.input)
+        # except:
+        #     pass
 
         allsavedfiles.extend(prior.savedfiles)
     
@@ -567,10 +567,10 @@ def main():
 # except Exception as e:
     # logger.error(e)
     # print("There is an error, check logs/autofda-err.log")
-    try:
-        xlbook.save(args.xlsinput)
-    except:
-        pass
+    # try:
+    xlbook.save(args.xlsinput)
+    # except:
+    #     pass
     # xlbook.close()
     # if i == maxrun:
     #     logger.error("Execution Limit reached, Please check the script")
