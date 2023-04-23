@@ -499,7 +499,8 @@ def main():
             first = True
             for xlsdata in xlsdictwcode.values():
                 try:
-                    del driver
+                    driver.close()
+                    driver.quit()
                 except:
                     pass
                 driver = browser_init(chrome_data=args.chromedata, pdfoutput_folder=complete_output_folder)
