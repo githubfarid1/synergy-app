@@ -514,6 +514,7 @@ def main():
         except:
             pass
         fda_entry.parse()
+        time.sleep(2)
         pdf_filename = pdf_rename(pdfoutput_folder=complete_output_folder)
         if pdf_filename != "":
             webentry_update(pdffile=pdf_filename, pdffolder=complete_output_folder)
@@ -524,6 +525,7 @@ def main():
             
 
         else:
+            print("file:", pdf_filename)
             print("rename the file was failed")
         # print("sdsds")
         first = False
