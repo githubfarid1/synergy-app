@@ -543,7 +543,7 @@ def main():
                 break
         if not found:
             os.remove(file)
-    root, dirs, files = os.walk(complete_output_folder).next()
+    dirs = [d for d in os.listdir(complete_output_folder) if os.path.isdir(os.path.join(complete_output_folder, d))]
     print(dirs)
     exit()
     list_of_files = glob.glob(complete_output_folder + file_delimeter() + "*.pdf")
