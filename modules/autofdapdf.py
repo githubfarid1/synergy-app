@@ -508,6 +508,7 @@ def main():
             # clear_screan()
             # first = True
             for xlsdata in xlsdictwcode.values():
+                input(xlsdictwcode.values())
                 try:
                     driver.close()
                     driver.quit()
