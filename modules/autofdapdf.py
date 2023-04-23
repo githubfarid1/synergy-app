@@ -509,12 +509,15 @@ def main():
                 pdf_filename = pdf_rename(pdfoutput_folder=complete_output_folder)
                 if pdf_filename != "":
                     webentry_update(pdffile=pdf_filename, pdffolder=complete_output_folder)
-                    xlbook.save(args.input)
-                    print("sdsdscccc")
+                    try:
+                        xlbook.save(args.input)
+                    except:
+                        pass
+                    
 
                 else:
                     print("rename the file was failed")
-                print("sdsds")
+                # print("sdsds")
                 first = False
             
             list_of_files = glob.glob(complete_output_folder + file_delimeter() + "*.pdf")
