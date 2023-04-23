@@ -496,7 +496,7 @@ def main():
                         break
 
             # clear_screan()
-            first = True
+            # first = True
             for xlsdata in xlsdictwcode.values():
                 try:
                     driver.close()
@@ -507,9 +507,11 @@ def main():
                 driver = browser_login(driver)
 
                 fda_entry = FdaEntry(driver=driver, datalist=xlsdata, datearrival=args.date, pdfoutput=complete_output_folder)
-                if not first:
+                # if not first:
+                try:
                     driver.find_element(By.CSS_SELECTOR, "img[alt='Create WebEntry Button']").click()
-                
+                except:
+                    pass
                 fda_entry.parse()
                 pdf_filename = pdf_rename(pdfoutput_folder=complete_output_folder)
                 if pdf_filename != "":
