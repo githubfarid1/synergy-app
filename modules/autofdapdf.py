@@ -175,9 +175,10 @@ def del_non_annot_page(pdffiles, pdffolder):
         doc.select(selected)
         doc.save(pdffile)
         print(os.path.basename(pdffile), "passed.")
+        doc.close()
         time.sleep(1)
     isExist = os.path.exists(tmpfile)
-    doc.close()
+    
     if isExist:    
         os.remove(tmpfile)    
     print("")
