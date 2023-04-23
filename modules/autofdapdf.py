@@ -191,9 +191,11 @@ def join_folderpdf(pdffiles, pdfoutput_folder):
     if isExist:
         try:
             shutil.rmtree(foldername)
+            os.makedirs(foldername)
         except OSError as e:
             print("Error: %s : %s" % (foldername, e.strerror))            
-    os.makedirs(foldername)
+    else:
+        os.makedirs(foldername)
 
     dictfiles = {}
     for pdffile in pdffiles:
@@ -474,11 +476,12 @@ def main():
     if isExist:
         try:
             shutil.rmtree(foldernamepn)
+            os.makedirs(foldernamepn)
         except:
             pass
+    else:
+        os.makedirs(foldernamepn)
     
-    os.makedirs(foldernamepn)
-
     xlsfilename = os.path.basename(args.input)
     foldername = format_filename("{}_{}_{}".format(xlsfilename.replace(".xlsx", "").replace(".xlsm", ""), args.sheet, strdate) )
     
