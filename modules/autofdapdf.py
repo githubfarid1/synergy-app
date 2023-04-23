@@ -561,13 +561,6 @@ def main():
                 del_non_annot_page(allsavedfiles, complete_output_folder)
                 join_folderpdf(allsavedfiles, complete_output_folder)
                 # lib.join_pdfs(source_folder=complete_output_folder + file_delimeter() + "combined", output_folder=complete_output_folder, tag="FDA_All")
-                # Delete all file folder
-                # for filename in list_of_files:
-                #     folder = filename[:-4]
-                #     try:
-                #         shutil.rmtree(folder)
-                #     except OSError as e:
-                #         print("Error: %s : %s" % (folder, e.strerror))            
                 resultfile = lib.join_pdfs(source_folder=complete_output_folder + lib.file_delimeter() + "combined", output_folder=complete_output_folder, tag="FDA_All")
                 print(resultfile, "created")
         except Exception as e:
@@ -581,6 +574,15 @@ def main():
             if i == maxrun:
                 logger.error("Execution Limit reached, Please check the script")
             continue
+    # Delete all file folder
+    
+    for filename in list_of_files:
+        folder = filename[:-4]
+        try:
+            shutil.rmtree(folder)
+        except OSError as e:
+            print("Error: %s : %s" % (folder, e.strerror))            
+
     input("data generating completed...")
 
 
