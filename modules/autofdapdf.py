@@ -26,8 +26,12 @@ from datetime import date
 import json
 import amazon_lib as lib
 import xlwings as xw
-import warnings
+import logging
+
+
 warnings.filterwarnings("ignore", category=Warning)
+logger = logging.getLogger()
+logger.setLevel(logging.NOTSET)
 
 def explicit_wait():
     time.sleep(randint(1, 3))
@@ -441,6 +445,11 @@ def main():
         sys.exit()
 
     clear_screan()
+    file_handler = logging.FileHandler('logs/autofda-err.log')
+    file_handler.setLevel(logging.ERROR)
+    file_handler_format = '%(asctime)s | %(levelname)s | %(lineno)d: %(message)s'
+    file_handler.setFormatter(logging.Formatter(file_handler_format))
+    logger.addHandler(file_handler)
 
     print('Creating Excel Backup File...', end="", flush=True)
     fnameinput = os.path.basename(args.input)
@@ -448,22 +457,16 @@ def main():
     backfile = "{}{}_backup{}".format(pathinput, os.path.splitext(fnameinput)[0], os.path.splitext(fnameinput)[1])
     shutil.copy(args.input, backfile)
     print('OK')
+
+
     print('Opening the Source Excel File...', end="", flush=True)
     xlbook = xw.Book(args.input)
     print('OK')
 
 
-    xlsheet = xlbook.sheets[args.sheet]
-    maxrow = xlsheet.range('B' + str(xlsheet.cells.last_cell.row)).end('up').row
-    xlsdictall = xls_data_generator(xlws=xlsheet, maxrow=maxrow)
-    xlsdictwcode = {}
-    for idx, xls in xlsdictall.items():
-        for data in xls['data']:
-            if data[20] == 'None':
-                xlsdictwcode[idx] = xls
-                break
-    input(json.dumps(xlsdictwcode))
-    exit()
+    
+    # input(json.dumps(xlsdictwcode))
+    # exit()
     strdate = str(date.today())
     foldernamepn = "{}{}_{}".format(args.output + lib.file_delimeter(), 'prior_notice', strdate) 
     isExist = os.path.exists(foldernamepn)
@@ -477,60 +480,84 @@ def main():
     isExist = os.path.exists(complete_output_folder)
     if not isExist:
         os.makedirs(complete_output_folder)
+    maxrun = 10
+    for i in range(1, maxrun+1):
+        if i > 1:
+            print("Process will be reapeated")
+        try:
+            xlsheet = xlbook.sheets[args.sheet]
+            maxrow = xlsheet.range('B' + str(xlsheet.cells.last_cell.row)).end('up').row
+            xlsdictall = xls_data_generator(xlws=xlsheet, maxrow=maxrow)
+            xlsdictwcode = {}
+            for idx, xls in xlsdictall.items():
+                for data in xls['data']:
+                    if data[20] == 'None':
+                        xlsdictwcode[idx] = xls
+                        break
 
-    driver = browser_init(chrome_data=args.chromedata, pdfoutput_folder=complete_output_folder)
-    driver = browser_login(driver)
-    # clear_screan()
-    first = True
-    for xlsdata in xlsdictwcode.values():
-        fda_entry = FdaEntry(driver=driver, datalist=xlsdata, datearrival=args.date, pdfoutput=complete_output_folder)
-        if not first:
-            driver.find_element(By.CSS_SELECTOR, "img[alt='Create WebEntry Button']").click()
-        
-        fda_entry.parse()
-        pdf_filename = pdf_rename(pdfoutput_folder=complete_output_folder)
-        if pdf_filename != "":
-            webentry_update(pdffile=pdf_filename, xlsfilename=args.input, pdffolder=complete_output_folder)
-            xlbook.save(args.input)
+            driver = browser_init(chrome_data=args.chromedata, pdfoutput_folder=complete_output_folder)
+            driver = browser_login(driver)
+            # clear_screan()
+            first = True
+            for xlsdata in xlsdictwcode.values():
+                fda_entry = FdaEntry(driver=driver, datalist=xlsdata, datearrival=args.date, pdfoutput=complete_output_folder)
+                if not first:
+                    driver.find_element(By.CSS_SELECTOR, "img[alt='Create WebEntry Button']").click()
+                
+                fda_entry.parse()
+                pdf_filename = pdf_rename(pdfoutput_folder=complete_output_folder)
+                if pdf_filename != "":
+                    webentry_update(pdffile=pdf_filename, xlsfilename=args.input, pdffolder=complete_output_folder)
+                    xlbook.save(args.input)
 
-        else:
-            print("rename the file was failed")
-        first = False
-    
-    list_of_files = glob.glob(complete_output_folder + file_delimeter() + "*.pdf")
-    allsavedfiles = []
-    #regenerate data
-    xlsdictall = xls_data_generator(xlws=xlsheet, maxrow=maxrow)
-    for xlsdata in xlsdictall.values():
-        entry_id = xlsdata['data'][0][20]
-        pdf_filename = choose_pdf_file(list_of_files, entry_id)
-        print('PDF File processing: ', pdf_filename)
-        prior = FdaPdf(filename=pdf_filename, datalist=xlsdata, pdfoutput=complete_output_folder)
-        prior.highlightpdf_generator()
-        prior.insert_text()
-        save_to_xls(pnlist=prior.pnlist)
-        xlbook.save(args.input)
+                else:
+                    print("rename the file was failed")
+                first = False
+            
+            list_of_files = glob.glob(complete_output_folder + file_delimeter() + "*.pdf")
+            allsavedfiles = []
+            #regenerate data
+            xlsdictall = xls_data_generator(xlws=xlsheet, maxrow=maxrow)
+            for xlsdata in xlsdictall.values():
+                entry_id = xlsdata['data'][0][20]
+                pdf_filename = choose_pdf_file(list_of_files, entry_id)
+                print('PDF File processing: ', pdf_filename)
+                prior = FdaPdf(filename=pdf_filename, datalist=xlsdata, pdfoutput=complete_output_folder)
+                prior.highlightpdf_generator()
+                prior.insert_text()
+                save_to_xls(pnlist=prior.pnlist)
+                xlbook.save(args.input)
 
-        allsavedfiles.extend(prior.savedfiles)
-    
-    setall = set(allsavedfiles)
+                allsavedfiles.extend(prior.savedfiles)
+            
+            setall = set(allsavedfiles)
 
-    if len(setall) != len(allsavedfiles):
-        input("Combining all pdf files Failed because there are one or more files is has the same name.")
-    else:
-        del_non_annot_page(allsavedfiles, complete_output_folder)
-        join_folderpdf(allsavedfiles, complete_output_folder)
-        # lib.join_pdfs(source_folder=complete_output_folder + file_delimeter() + "combined", output_folder=complete_output_folder, tag="FDA_All")
-        # Delete all file folder
-        for filename in list_of_files:
-            folder = filename[:-4]
+            if len(setall) != len(allsavedfiles):
+                input("Combining all pdf files Failed because there are one or more files is has the same name.")
+            else:
+                del_non_annot_page(allsavedfiles, complete_output_folder)
+                join_folderpdf(allsavedfiles, complete_output_folder)
+                # lib.join_pdfs(source_folder=complete_output_folder + file_delimeter() + "combined", output_folder=complete_output_folder, tag="FDA_All")
+                # Delete all file folder
+                for filename in list_of_files:
+                    folder = filename[:-4]
+                    try:
+                        shutil.rmtree(folder)
+                    except OSError as e:
+                        print("Error: %s : %s" % (folder, e.strerror))            
+                resultfile = lib.join_pdfs(source_folder=complete_output_folder + lib.file_delimeter() + "combined", output_folder=complete_output_folder, tag="FDA_All")
+                print(resultfile, "created")
+        except Exception as e:
+            logger.error(e)
+            print("There is an error, check logs/amazonship-err.log")
             try:
-                shutil.rmtree(folder)
-            except OSError as e:
-                print("Error: %s : %s" % (folder, e.strerror))            
-        resultfile = lib.join_pdfs(source_folder=complete_output_folder + lib.file_delimeter() + "combined", output_folder=complete_output_folder, tag="FDA_All")
-        print(resultfile, "created")
-        
+                xlbook.save(args.xlsinput)
+            except:
+                pass
+            xlbook.close()
+            if i == maxrun:
+                logger.error("Execution Limit reached, Please check the script")
+            continue
     input("data generating completed...")
 
 
