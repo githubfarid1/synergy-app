@@ -19,7 +19,7 @@ import numpy as np
 '''
 def explicit_wait():
     # time.sleep(randint(1, 2))
-    time.sleep(np.random.randint(1, 2))
+    time.sleep(np.random.randint(2, 3))
     
     # return
 
