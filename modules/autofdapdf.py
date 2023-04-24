@@ -45,6 +45,14 @@ def format_filename(s):
     filename = filename.replace(' ','_') # I don't like spaces in filenames.
     return filename
 
+def deltree(folder):
+    print("Trying removing", folder, "Folder ...", end=" ", flush=True)
+    try:
+        shutil.rmtree(folder)
+    except OSError as e:
+        result = "Error: %s : %s" % (folder, e.strerror)
+    result =  "Success"
+    print(result)
 def pdf_rename(pdfoutput_folder):
     pdffolder = pdfoutput_folder
     delimeter = file_delimeter()
@@ -189,11 +197,12 @@ def join_folderpdf(pdffiles, pdfoutput_folder):
     foldername = pdfoutput_folder + file_delimeter() + "combined"
     isExist = os.path.exists(foldername)
     if isExist:
-        try:
-            shutil.rmtree(foldername)
-            os.makedirs(foldername)
-        except OSError as e:
-            print("Error: %s : %s" % (foldername, e.strerror))            
+        deltree(foldername)
+        # try:
+        #     shutil.rmtree(foldername)
+        #     os.makedirs(foldername)
+        # except OSError as e:
+        #     print("Error: %s : %s" % (foldername, e.strerror))            
     else:
         os.makedirs(foldername)
 
@@ -439,10 +448,12 @@ def main():
                     os.remove(file)
             dirs = [d for d in os.listdir(complete_output_folder) if os.path.isdir(os.path.join(complete_output_folder, d))]
             for dir in dirs:
-                try:
-                    shutil.rmtree(complete_output_folder + file_delimeter() + dir)
-                except OSError as e:
-                    print("Error: %s : %s" % (folder, e.strerror))            
+                deltree(complete_output_folder + file_delimeter() + dir)
+
+                # try:
+                #     shutil.rmtree(complete_output_folder + file_delimeter() + dir)
+                # except OSError as e:
+                #     print("Error: %s : %s" % (folder, e.strerror))            
 
 
             list_of_files = glob.glob(complete_output_folder + file_delimeter() + "*.pdf")
@@ -486,10 +497,12 @@ def main():
     # Delete all file folder
     for filename in list_of_files:
         folder = filename[:-4]
-        try:
-            shutil.rmtree(folder)
-        except OSError as e:
-            print("Error: %s : %s" % (folder, e.strerror))            
+        deltree(folder)
+
+        # try:
+        #     shutil.rmtree(folder)
+        # except OSError as e:
+        #     print("Error: %s : %s" % (folder, e.strerror))            
 
     input("data generating completed...")
 
