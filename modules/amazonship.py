@@ -1101,6 +1101,8 @@ def main():
     print('Opening the Source Excel File...', end="", flush=True)
     xlbook = xw.Book(args.xlsinput)
     xlsheet = xlbook.sheets[args.sheetname]
+    maxrow = xlsheet.range('B' + str(xlsheet.cells.last_cell.row)).end('up').row
+    input(maxrow)
     print('OK')
     # the second handler is a file handler
     file_handler = logging.FileHandler('logs/amazonship-err.log')
