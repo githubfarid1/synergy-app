@@ -82,6 +82,8 @@ class AmazonShipment:
             sys.exit()
         self.__datajson = json.loads("{}")
         self.__datalist = []
+        self.__datareadylist = []
+
         self.__chrome_data = chrome_data
         # self.__download_folder = repr(download_folder)
         self.__download_folder = download_folder
@@ -620,6 +622,7 @@ class AmazonShipment:
     def __data_generator(self):
         print("Data Mounting...", end=" ", flush=True)
         shipmentlist = []
+        shipreadylist = []
         maxrow = self.xlworksheet.range('B' + str(self.xlworksheet.cells.last_cell.row)).end('up').row
         for i in range(2, maxrow + 2):
             shipment_row = str(self.xlworksheet['A{}'.format(i)].value)
@@ -642,6 +645,7 @@ class AmazonShipment:
                 if shipment_empty == True:
                     shipmentlist.append({'begin':startrow, 'end':endrow})
                 else:
+                    shipreadylist.append({'begin':startrow, 'end':endrow})
                     logger2.info(shipment_row + " Skipped")
 
         # print(json.dumps(shipmentlist))
@@ -722,7 +726,35 @@ class AmazonShipment:
                     else:                           
                         shipmentlist[index]['items'][ti]['boxes'].append(self.xlworksheet['{}{}'.format(box, i)].value)
 
-        
+        for index, shipmentdata in enumerate(shipreadylist):
+            boxes = ('E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P')
+            boxcount = 0
+            for box in boxes:
+                
+                if self.xlworksheet['{}{}'.format(box, shipmentdata['begin'])].value != None:
+                    boxcount += 1
+                else:
+                    break
+            if boxcount == 0:
+                del shipreadylist[index]
+                continue
+
+            rowsearch = 0
+            for i in range(start, shipmentdata['end']):
+                if self.xlworksheet['B{}'.format(i)].value == 'Shipment ID':
+                    rowsearch = i
+                    break
+            shipids = []
+            
+            for ke, box in enumerate(boxes):
+                if ke == boxcount:
+                    break
+                mdict = {
+                    'boxname':self.xlworksheet['{}{}'.format(box, shipmentdata['begin'])].value,
+                    'shipid': str(int(self.xlworksheet['{}{}'.format(box, rowsearch)].value))
+                }
+                shipids.append(mdict)
+
         #cleansing
         idxdel = []
         for index, shipmentdata in enumerate(shipmentlist):
@@ -739,7 +771,7 @@ class AmazonShipment:
                     del shipmentlist[index]
                 
             # pass
-        
+        self.datareadylist = shipids
         self.datalist = shipmentlist
         explicit_wait()
         print("Passed")
@@ -760,6 +792,14 @@ class AmazonShipment:
     @datalist.setter
     def datalist(self, value):
         self.__datalist = value
+
+    @property
+    def datareadylist(self):
+        return self.__datareadylist
+
+    @datareadylist.setter
+    def datareadylist(self, value):
+        self.__datareadylist = value
 
     @property
     def datajson(self):
@@ -908,7 +948,7 @@ def main():
         try:    
             shipment = AmazonShipment(xlsfile=args.xlsinput, sname=args.sheetname, chrome_data=args.chromedata, download_folder=folderamazonship, xlworksheet=xlsheet)
             # shipment.data_sanitizer()
-            input(shipment.datalist)
+            input(shipment.datareadylist)
             if len(shipment.datalist) == 0:
                 break
             shipment.parse()
