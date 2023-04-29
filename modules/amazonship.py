@@ -725,7 +725,7 @@ class AmazonShipment:
                         shipmentlist[index]['items'][ti]['boxes'].append(0)
                     else:                           
                         shipmentlist[index]['items'][ti]['boxes'].append(self.xlworksheet['{}{}'.format(box, i)].value)
-
+        input(shipreadylist)
         for index, shipmentdata in enumerate(shipreadylist):
             boxes = ('E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P')
             boxcount = 0
@@ -750,8 +750,7 @@ class AmazonShipment:
                 if ke == boxcount:
                     break
                 mdict = {
-                    # 'boxname':str(int(self.xlworksheet['{}{}'.format(box, shipmentdata['begin'])].value)),
-                    'boxname':self.xlworksheet['{}{}'.format(box, shipmentdata['begin'])].value,
+                    'boxname':str(int(self.xlworksheet['{}{}'.format(box, shipmentdata['begin'])].value)),
                     'shipid': self.xlworksheet['{}{}'.format(box, rowsearch)].value
                 }
                 shipids.append(mdict)
