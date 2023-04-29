@@ -197,6 +197,7 @@ driver = browser_init(dfolder)
 input("pause")
 tabs = driver.find_elements(By.CSS_SELECTOR, "div[data-testid='shipment-tracking-tab']")
 # tabcount = 0
+print(tabs)
 shiplist = []
 for tab in tabs:
     # tabcount += 1
