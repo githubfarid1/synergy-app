@@ -746,12 +746,23 @@ class AmazonShipment:
                 if self.xlworksheet['B{}'.format(i)].value == 'Shipment ID':
                     rowsearch = i
                     break
+
+            
+
+            rowsearch2 = 0
+            for i in range(start, shipmentdata['end']):
+                if self.xlworksheet['B{}'.format(i)].value == 'Tracking Number':
+                    rowsearch2 = i
+                    break
+
             for ke, box in enumerate(boxes):
                 if ke == boxcount:
                     break
                 mdict = {
                     'boxname':str(int(self.xlworksheet['{}{}'.format(box, shipmentdata['begin'])].value)),
-                    'shipid': self.xlworksheet['{}{}'.format(box, rowsearch)].value
+                    'shipid': self.xlworksheet['{}{}'.format(box, rowsearch)].value,
+                    'label': self.xlworksheet['{}{}'.format(box, rowsearch2)].value
+
                 }
                 shipids.append(mdict)
 
@@ -974,7 +985,7 @@ def main():
         break
 
     for rlist in shipment.datareadylist:
-        extract_pdf(download_folder=folderamazonship, box=rlist['boxname'], shipment_id=rlist['shipid'][0:12], label="Labels" )
+        extract_pdf(download_folder=folderamazonship, box=rlist['boxname'], shipment_id=rlist['shipid'][0:12], label=rlist['label'] )
     addressfile = Path("address.csv")
     resultfile = lib.join_pdfs(source_folder=folderamazonship + lib.file_delimeter() + "combined" , output_folder = folderamazonship, tag='Labels')
     if resultfile != "":
