@@ -726,10 +726,11 @@ class AmazonShipment:
                     else:                           
                         shipmentlist[index]['items'][ti]['boxes'].append(self.xlworksheet['{}{}'.format(box, i)].value)
         # input(shipreadylist)
-        for index, shipmentdata in enumerate(shipreadylist):
+        for shipmentdata in shipreadylist:
             boxes = ('E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P')
             boxcount = 0
             start = shipmentdata['begin'] + 2
+            print(start)
             for box in boxes:
                 
                 if self.xlworksheet['{}{}'.format(box, shipmentdata['begin'])].value != None:
