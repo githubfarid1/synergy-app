@@ -695,7 +695,7 @@ class AmazonShipment:
             for ke, box in enumerate(boxes):
                 if ke == boxcount:
                     break
-                shipmentlist[index]['nameboxes'].append(str(self.xlworksheet['{}{}'.format(box, shipmentdata['begin'])].value))
+                shipmentlist[index]['nameboxes'].append(str(int(self.xlworksheet['{}{}'.format(box, shipmentdata['begin'])].value)))
 
             ti = -1
             for i in range(start, shipmentdata['end']):
@@ -720,7 +720,7 @@ class AmazonShipment:
                     if self.xlworksheet['{}{}'.format(box, i)].value == None or str(self.xlworksheet['{}{}'.format(box, i)].value).strip() == '':
                         shipmentlist[index]['items'][ti]['boxes'].append(0)
                     else:                           
-                        shipmentlist[index]['items'][ti]['boxes'].append(int(self.xlworksheet['{}{}'.format(box, i)].value))
+                        shipmentlist[index]['items'][ti]['boxes'].append(self.xlworksheet['{}{}'.format(box, i)].value)
 
         
         #cleansing
