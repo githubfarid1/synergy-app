@@ -871,7 +871,6 @@ def extract_pdf(download_folder, box, shipment_id, label):
 
     found = False
     pfound = 0
-    print(label)
     for i in range(0, mfile.page_count):
         page = mfile[i]
         plist = page.search_for(label)
@@ -925,12 +924,6 @@ def main():
     pathinput = args.xlsinput[0:-len(fnameinput)]
     backfile = "{}{}_backup{}".format(pathinput, os.path.splitext(fnameinput)[0], os.path.splitext(fnameinput)[1])
     shutil.copy(args.xlsinput, backfile)
-    # xltmp = 'xlstmp' + args.xlsinput[-5:]
-    # try:
-    #     os.remove(xltmp)
-    # except:
-    #     pass
-    # shutil.copy(args.xlsinput, xltmp)            
 
     print('OK')
     print('Opening the Source Excel File...', end="", flush=True)
@@ -987,7 +980,6 @@ def main():
         break
 
     for rlist in shipment.datareadylist:
-        print(folderamazonship, rlist['boxname'], rlist['shipid'][0:12], rlist['label'])
         extract_pdf(download_folder=folderamazonship, box=rlist['boxname'], shipment_id=rlist['shipid'][0:12], label=rlist['shipid'] )
     addressfile = Path("address.csv")
     resultfile = lib.join_pdfs(source_folder=folderamazonship + lib.file_delimeter() + "combined" , output_folder = folderamazonship, tag='Labels')
