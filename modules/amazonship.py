@@ -632,7 +632,6 @@ class AmazonShipment:
                     y += 1
                     # skip if shipment_id was filled
                     if ''.join(str(self.xlworksheet['B{}'.format(y)].value)).strip() == 'Shipment ID':
-                        input(''.join(str(self.xlworksheet['E{}'.format(y)].value)).strip())
                         if ''.join(str(self.xlworksheet['E{}'.format(y)].value)).strip() != 'None':
                             shipment_empty = False
 
