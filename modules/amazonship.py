@@ -573,10 +573,6 @@ class AmazonShipment:
                     self.driver.switch_to.window(handle)
                     self.driver.close()
             self.driver.switch_to.window(original_window)
-        # self.workbook.save(self.xlsfile)
-        # self.xlworkbook.save(self.xlsfile)
-        # self.xlworkbook.close()
-        # self.workbook.close()
         print('Saved All Shipment to', self.xlsfile)
         self.driver.quit()
         print('All Shipment has Created...')
@@ -942,27 +938,20 @@ def main():
             print("Process will be reapeated")
         try:    
             shipment = AmazonShipment(xlsfile=args.xlsinput, sname=args.sheetname, chrome_data=args.chromedata, download_folder=folderamazonship, xlworksheet=xlsheet)
-            # shipment.data_sanitizer()
-            # input(shipment.datareadylist)
             if len(shipment.datalist) == 0:
                 break
             shipment.parse()
             try:
-                # shipment.xlworkbook.save(shipment.xlsfile)
                 xlbook.save(args.xlsinput)
             except:
                 pass    
-            # shipment.workbook.close()
         except Exception as e:
             logger.error(e)
             print("There is an error, check logs/amazonship-err.log")
-            # shipment.workbook.save(shipment.xlsfile)
             try:
-                # shipment.xlworkbook.save(shipment.xlsfile)
                 xlbook.save(args.xlsinput)
             except:
                 pass
-            # shipment.workbook.close()
             if i == maxrun:
                 logger.error("Execution Limit reached, Please check the script")
             continue
