@@ -194,14 +194,15 @@ def data_generator():
     # print("Passed")
 
 datalist = data_generator()
-
+url = "https://sellercentral.amazon.ca/fba/sendtoamazon/enter_tracking_details_step?wf=wf7a0b0552-5b73-4916-8dd9-6d444822a00c"
 dlist = datalist[0]
 print(dlist)
 driver = browser_init(dfolder)
+driver.get(url)
 input("pause")
 tabs = driver.find_elements(By.CSS_SELECTOR, "div[data-testid='shipment-tracking-tab']")
 # tabcount = 0
-print(tabs)
+# print(tabs)
 shiplist = []
 for tab in tabs:
     # tabcount += 1
