@@ -186,8 +186,8 @@ def data_generator():
             
         # pass
     
-    datalist = shipmentlist
-    print("Passed")
+    return shipmentlist
+    # print("Passed")
 
 datalist = data_generator()
 input(datalist)
