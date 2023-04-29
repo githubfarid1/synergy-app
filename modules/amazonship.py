@@ -986,6 +986,7 @@ def main():
         break
 
     for rlist in shipment.datareadylist:
+        print(folderamazonship, rlist['boxname'], rlist['shipid'][0:12], rlist['label'])
         extract_pdf(download_folder=folderamazonship, box=rlist['boxname'], shipment_id=rlist['shipid'][0:12], label=rlist['label'] )
     addressfile = Path("address.csv")
     resultfile = lib.join_pdfs(source_folder=folderamazonship + lib.file_delimeter() + "combined" , output_folder = folderamazonship, tag='Labels')
