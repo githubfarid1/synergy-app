@@ -232,22 +232,22 @@ for ship in shiplist:
             print(boxcol)
             dimension = ""
             weight = ""
-            box = str(worksheet['{}{}'.format(boxcol, dlist['begin'])].value)
+            box = str(xlsheet['{}{}'.format(boxcol, dlist['begin'])].value)
             # print(box)
             if box != 'None':
                 dimrow = 0
                 for i in range(dlist['begin'], dlist['end']):
-                    if worksheet['B{}'.format(i)].value == 'Weight':
-                        weight = worksheet['{}{}'.format(boxcol, i)].value
+                    if xlsheet['B{}'.format(i)].value == 'Weight':
+                        weight = xlsheet['{}{}'.format(boxcol, i)].value
                     
-                    if worksheet['B{}'.format(i)].value == 'Dimensions':
-                        dimension = worksheet['{}{}'.format(boxcol, i)].value
+                    if xlsheet['B{}'.format(i)].value == 'Dimensions':
+                        dimension = xlsheet['{}{}'.format(boxcol, i)].value
                         dimrow = i
                     dimension = dimension.replace(" ","")
                     dimship = s['dimension'].replace(" ","")
 
                 if int(s['weight']) == int(weight) and dimension == dimship:
-                    if not s['trackid'] in stmp and str(worksheet['{}{}'.format(boxcol, dimrow+2)].value) == 'None':
+                    if not s['trackid'] in stmp and str(xlsheet['{}{}'.format(boxcol, dimrow+2)].value) == 'None':
                         stmp.append(s['trackid'])
                         # __extract_pdf(box=box, shipment_id=s['shipmentid'], label=s['label'])
                         # worksheet['{}{}'.format(boxcol, dimrow+1)].value = s['label']
