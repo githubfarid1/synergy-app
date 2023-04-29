@@ -551,15 +551,8 @@ class AmazonShipment:
                             if int(s['weight']) == int(weight) and dimension == dimship:
                                 if not s['trackid'] in stmp and str(self.xlworksheet['{}{}'.format(boxcol, dimrow+2)].value) == 'None':
                                     stmp.append(s['trackid'])
-                                    # self.__extract_pdf(box=box, shipment_id=s['shipmentid'], label=s['label'])
-                                    # self.xlworksheet['{}{}'.format(boxcol, dimrow+1)].value = s['label']
-                                    # self.xlworksheet['{}{}'.format(boxcol, dimrow+2)].value = s['trackid']
-                                    # restup = (f"{boxcol}{dimrow+1}", s['label'], f"{boxcol}{dimrow+2}", s['trackid'])
-                                    # reslist.append(restup)
                                     self.xlworksheet[f"{boxcol}{dimrow+1}"].value = s['label']
                                     self.xlworksheet[f"{boxcol}{dimrow+2}"].value = s['trackid']
-            # self.workbook.save(self.xlsfile)
-            # print(dlist['name'], 'Saved to', self.xlsfile)
             print(dlist['name'], 'Extract PDF..')
 
             print('#' * 5, dlist['name'], "End Process", '#' * 5)
@@ -847,10 +840,6 @@ class AmazonShipment:
     @property
     def driver(self):
         return self.__driver
-
-    # @property
-    # def xlworkbook(self):
-    #     return self.__xlworkbook
    
     @property
     def xlworksheet(self):
@@ -993,7 +982,6 @@ def main():
         pass
 
     input("End Process..")    
-
 
 if __name__ == '__main__':
     main()
