@@ -871,6 +871,7 @@ def extract_pdf(download_folder, box, shipment_id, label):
 
     found = False
     pfound = 0
+    print(label)
     for i in range(0, mfile.page_count):
         page = mfile[i]
         plist = page.search_for(label)
