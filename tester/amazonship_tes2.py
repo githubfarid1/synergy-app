@@ -190,8 +190,9 @@ def data_generator():
     # print("Passed")
 
 datalist = data_generator()
-input(datalist)
+
 dlist = datalist[0]
+print(dlist)
 driver = browser_init(dfolder)
 input("pause")
 tabs = driver.find_elements(By.CSS_SELECTOR, "div[data-testid='shipment-tracking-tab']")
