@@ -750,8 +750,9 @@ class AmazonShipment:
                 if ke == boxcount:
                     break
                 mdict = {
+                    # 'boxname':str(int(self.xlworksheet['{}{}'.format(box, shipmentdata['begin'])].value)),
                     'boxname':self.xlworksheet['{}{}'.format(box, shipmentdata['begin'])].value,
-                    'shipid': str(int(self.xlworksheet['{}{}'.format(box, rowsearch)].value))
+                    'shipid': self.xlworksheet['{}{}'.format(box, rowsearch)].value
                 }
                 shipids.append(mdict)
 
