@@ -189,7 +189,9 @@ def data_generator():
     datalist = shipmentlist
     print("Passed")
 
-input("pause1")
+datalist = data_generator()
+input(datalist)
+dlist = datalist[0]
 driver = browser_init(dfolder)
 
 tabs = driver.find_elements(By.CSS_SELECTOR, "div[data-testid='shipment-tracking-tab']")
@@ -215,9 +217,6 @@ for tab in tabs:
         dtmp.append(dict)
     shiplist.append(dtmp)
 
-datalist = data_generator()
-input(datalist)
-dlist = datalist[0]
 boxcols = ('E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P')
 stmp = []
 for ship in shiplist:
