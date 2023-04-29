@@ -23,9 +23,9 @@ import logging
 from pathlib import Path
 import xlwings as xw
 import shutil
-dfolder = ""
-xltmp = ""
-sname = ""
+dfolder = f"C:/Users/User/OneDrive/01 - Shipment Creation/April 27th Shipment Labels/res"
+xltmp = f"C:/Users/User/OneDrive/01 - Shipment Creation/April 27th Shipment Labels/xlstmp.xlsm"
+sname = "Shipment summary"
 workbook = load_workbook(filename=xltmp, read_only=False, keep_vba=True, data_only=True)
 worksheet = workbook[sname]
 
@@ -216,6 +216,7 @@ for tab in tabs:
     shiplist.append(dtmp)
 
 datalist = data_generator()
+input(datalist)
 dlist = datalist[0]
 boxcols = ('E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P')
 stmp = []
