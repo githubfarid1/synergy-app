@@ -726,11 +726,11 @@ class AmazonShipment:
                     else:                           
                         shipmentlist[index]['items'][ti]['boxes'].append(self.xlworksheet['{}{}'.format(box, i)].value)
         # input(shipreadylist)
+        shipids = []
         for shipmentdata in shipreadylist:
             boxes = ('E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P')
             boxcount = 0
             start = shipmentdata['begin'] + 2
-            print(start)
             for box in boxes:
                 
                 if self.xlworksheet['{}{}'.format(box, shipmentdata['begin'])].value != None:
@@ -746,8 +746,6 @@ class AmazonShipment:
                 if self.xlworksheet['B{}'.format(i)].value == 'Shipment ID':
                     rowsearch = i
                     break
-            shipids = []
-            
             for ke, box in enumerate(boxes):
                 if ke == boxcount:
                     break
