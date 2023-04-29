@@ -879,6 +879,7 @@ def extract_pdf(download_folder, box, shipment_id, label):
             pfound = i
             break
     if found:
+        print(fname)
         single = fitz.open()
         single.insert_pdf(mfile, from_page=pfound, to_page=pfound)
         mfile.close()
