@@ -23,8 +23,8 @@ import logging
 from pathlib import Path
 import xlwings as xw
 import shutil
-dfolder = f"C:/Users/User/OneDrive/01 - Shipment Creation/April 27th Shipment Labels/res"
-xltmp = f"C:/Users/User/OneDrive/01 - Shipment Creation/April 27th Shipment Labels/xlstmp.xlsm"
+dfolder = r"C:/Users/User/OneDrive/01 - Shipment Creation/April 27th Shipment Labels/res"
+xltmp = r"C:/Users/User/OneDrive/01 - Shipment Creation/April 27th Shipment Labels/xlstmp.xlsm"
 sname = "Shipment summary"
 workbook = load_workbook(filename=xltmp, read_only=False, keep_vba=True, data_only=True)
 worksheet = workbook[sname]
@@ -250,3 +250,4 @@ for ship in shiplist:
                         # reslist.append(restup)
                         # xlworksheet[f"{boxcol}{dimrow+1}"].value = s['label']
                         # xlworksheet[f"{boxcol}{dimrow+2}"].value = s['trackid']
+                        print(s['label'], s['trackid'])
