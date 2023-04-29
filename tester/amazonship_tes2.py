@@ -25,9 +25,13 @@ import xlwings as xw
 import shutil
 dfolder = r"C:/Users/User/OneDrive/01 - Shipment Creation/April 27th Shipment Labels/res"
 xltmp = r"C:/Users/User/OneDrive/01 - Shipment Creation/April 27th Shipment Labels/xlstmp.xlsm"
+xltmp2 = r"C:/Users/User/OneDrive/01 - Shipment Creation/April 27th Shipment Labels/xlstmp2.xlsm"
+
 sname = "Shipment summary"
 workbook = load_workbook(filename=xltmp, read_only=False, keep_vba=True, data_only=True)
 worksheet = workbook[sname]
+xlbook = xw.Book(xltmp2)
+xlsheet = xlbook.sheets[sname]
 
 
 def getConfig():
@@ -248,6 +252,6 @@ for ship in shiplist:
                         # worksheet['{}{}'.format(boxcol, dimrow+2)].value = s['trackid']
                         # restup = (f"{boxcol}{dimrow+1}", s['label'], f"{boxcol}{dimrow+2}", s['trackid'])
                         # reslist.append(restup)
-                        # xlworksheet[f"{boxcol}{dimrow+1}"].value = s['label']
-                        # xlworksheet[f"{boxcol}{dimrow+2}"].value = s['trackid']
-                        print(s['label'], s['trackid'])
+                        xlsheet[f"{boxcol}{dimrow+1}"].value = s['label']
+                        xlsheet[f"{boxcol}{dimrow+2}"].value = s['trackid']
+                        # print(s['label'], s['trackid'])
