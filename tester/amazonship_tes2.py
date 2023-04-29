@@ -229,6 +229,7 @@ stmp = []
 for ship in shiplist:
     for s in ship:
         for boxcol in boxcols:
+            print(boxcol)
             dimension = ""
             weight = ""
             box = str(worksheet['{}{}'.format(boxcol, dlist['begin'])].value)
