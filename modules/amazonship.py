@@ -724,6 +724,8 @@ class AmazonShipment:
 
         
         #cleansing
+        print(shipmentlist)
+        input("xx")
         idxdel = []
         for index, shipmentdata in enumerate(shipmentlist):
             try:
