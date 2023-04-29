@@ -728,6 +728,17 @@ class AmazonShipment:
         # input(shipreadylist)
         for index, shipmentdata in enumerate(shipreadylist):
             boxes = ('E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P')
+            boxcount = 0
+            start = shipmentdata['begin'] + 2
+            for box in boxes:
+                
+                if self.xlworksheet['{}{}'.format(box, shipmentdata['begin'])].value != None:
+                    boxcount += 1
+                else:
+                    break
+            if boxcount == 0:
+                del shipreadylist[index]
+                continue
 
             rowsearch = 0
             for i in range(start, shipmentdata['end']):
