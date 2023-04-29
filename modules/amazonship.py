@@ -549,7 +549,7 @@ class AmazonShipment:
                             if int(s['weight']) == int(weight) and dimension == dimship:
                                 if not s['trackid'] in stmp and str(self.xlworksheet['{}{}'.format(boxcol, dimrow+2)].value) == 'None':
                                     stmp.append(s['trackid'])
-                                    self.__extract_pdf(box=box, shipment_id=s['shipmentid'], label=s['label'])
+                                    # self.__extract_pdf(box=box, shipment_id=s['shipmentid'], label=s['label'])
                                     # self.xlworksheet['{}{}'.format(boxcol, dimrow+1)].value = s['label']
                                     # self.xlworksheet['{}{}'.format(boxcol, dimrow+2)].value = s['trackid']
                                     # restup = (f"{boxcol}{dimrow+1}", s['label'], f"{boxcol}{dimrow+2}", s['trackid'])
@@ -744,257 +744,6 @@ class AmazonShipment:
         explicit_wait()
         print("Passed")
 
-    # def data_sanitizer(self):
-    #     print("Try to login... ", end="")
-    #     url = "https://sellercentral.amazon.ca/fba/sendtoamazon?ref=fbacentral_nav_fba"
-    #     self.driver.get(url)
-    #     print("Check SKU page ready... ", end="")
-    #     try:
-    #         WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div[data-testid='sku-list']")))
-    #         checksku = self.driver.find_element(By.CSS_SELECTOR,"kat-tabs[id='skuTabs']").find_element(By.CSS_SELECTOR, "kat-tab-header[tab-id='3']").find_element(By.CSS_SELECTOR, "span[slot='label']").text
-    #         if checksku != 'SKUs ready to send (0)':
-    #             raise Exception('SKUs ready to send is not 0')
-    #     except Exception as er:
-    #         logger.error(er)
-    #         logger.info("Trying to click start new link..")
-    #         print("Trying to click start new link..", end="")
-    #         try:
-    #             self.driver.find_element(By.CSS_SELECTOR, "kat-link[data-testid='start-new-link']").click()
-    #             print("Passed")
-    #         except Exception as e:
-    #             logger.error(e)
-    #             print("Failed")
-    #             sys.exit()
-
-    #     explicit_wait()
-    #     print('Checking Excel Data..')
-    #     self.driver.find_element(By.CSS_SELECTOR, "kat-dropdown[data-testid='search-dropdown']").click()
-    #     explicit_wait()
-    #     self.driver.find_element(By.CSS_SELECTOR, "kat-dropdown[data-testid='search-dropdown']").find_element(By.CSS_SELECTOR, "div[class='select-options']").find_element(By.CSS_SELECTOR, "div[class='option-inner-container']").find_element(By.CSS_SELECTOR, "div[data-value='MSKU']").click()
-    #     explicit_wait()
-    #     idxdel = []
-
-    #     for idx, dlist in enumerate(self.datalist):
-    #         print(dlist['name'], "... ", end="")
-    #         shipping_name = dlist['name']
-    #         error = False
-    #         errorlist = []
-    #         notelist = []
-    #         defsubmitter = self.driver.find_element(By.CSS_SELECTOR, "div[class='textBlock-60ch break-words']").text
-
-    #         submitter = dlist['submitter'].split("(")[0].strip()
-    #         addresstmp = dlist['address']
-    #         addresslist = addresstmp[addresstmp.find("(")+1:addresstmp.find(")")].strip().split(" ")
-    #         address = addresslist[0] + " " + addresslist[1]# + " " + addresslist[2]
-    #         address_found = False
-    #         if defsubmitter.find(submitter) != -1 and defsubmitter.find(address) != -1:
-    #             address_found = True
-    #         else:
-    #             addresslink = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "a[data-testid='ship-from-another-address-link']")))
-    #             addresslink.click()
-    #             try:
-    #                 WebDriverWait(self.driver, 30).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div[class='selected-address-tile']")))
-    #             except:
-    #                 input("Address list failed to open")
-    #                 sys.exit()
-
-    #             selects = self.driver.find_elements(By.CSS_SELECTOR, "div[class='address-tile']")
-    #             explicit_wait()
-    #             address_found = False
-
-    #             for sel  in selects:
-    #                 txt = sel.find_element(By.CSS_SELECTOR, "div[class='tile-address']").text
-    #                 if txt.find(submitter) != -1 and txt.find(address) != -1:
-    #                     sel.find_element(By.CSS_SELECTOR, "button[class='secondary']").click()
-    #                     address_found = True
-    #                     break
-
-    #         if not address_found:
-    #             errorlist.append("Address or Submitter not Found")
-    #             error = True
-    #             self.driver.find_element(By.CSS_SELECTOR, "div[class='selected-address-tile']").find_element(By.CSS_SELECTOR, "button[class='secondary']").send_keys(Keys.ESCAPE)
-            
-    #         if len(dlist['dimensionboxes']) == 0:
-    #             error = True
-    #             errmsg = "dimension value is Empty"
-    #             errorlist.append(errmsg)
-
-    #         for dim in dlist['dimensionboxes']:
-    #             if lib.checkdimension(dim) == False:
-    #                 error = True
-    #                 errmsg = "{} dimension box value is wrong".format(dim)
-    #                 errorlist.append(errmsg)
- 
-    #         wbox = "".join(str(x) for x in dlist['weightboxes'])
-    #         if wbox.isnumeric() == False:
-    #             error = True
-    #             errmsg = "Weight box value is wrong"
-    #             errorlist.append(errmsg)
-
-    #         for idx2, item in enumerate(dlist['items']):
-    #             self.driver.find_element(By.CSS_SELECTOR,"kat-input[data-testid='search-input']").find_element(By.CSS_SELECTOR, "input").clear()
-    #             xlssku = item['id'].upper()
-    #             self.driver.find_element(By.CSS_SELECTOR,"kat-input[data-testid='search-input']").find_element(By.CSS_SELECTOR, "input").send_keys(xlssku)
-    #             # explicit_wait()
-    #             searchinput = WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "a[data-testid='search-input-link']")))
-    #             searchinput.click()
-    #             explicit_wait()
-    #             cols = self.driver.find_elements(By.CSS_SELECTOR, "div[data-testid='sku-row-information-details']")
-    #             sku = ''
-    #             try:
-    #                 sku = cols[0].find_element(By.CSS_SELECTOR, "div[data-testid='msku']").find_element(By.CSS_SELECTOR, "span").text
-    #             except:
-    #                 error = True
-    #                 errorlist.append(xlssku + ' Not Found')
-
-    #             if xlssku != sku:
-    #                 errorlist.append(sku + ' Not Match')
-    #                 error = True
-    #             errormsg = ''
-    #             try:
-    #                 errormsg = cols[0].find_element(By.CSS_SELECTOR, "div[data-testid='sku-action-info']").find_element(By.CSS_SELECTOR, "span[data-testid='sku-action-error-text']").text
-    #             except:
-    #                 pass
-    #             if errormsg != '':
-    #                 errorlist.append(errormsg)
-    #                 error = True
-
-    #             try:
-    #                 individual = WebDriverWait(cols[0], 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "kat-dropdown[data-testid='packing-template-dropdown']")))
-    #             except Exception as e:
-    #                 logger.error(e)
-    #                 error = True
-    #                 # print(xlssku, " Not Found")
-    #                 idxdel.append(dlist['name'])
-    #                 continue
-    #                 # sys.exit()
-
-    #             if individual.text.find('Individual units') == -1:
-    #                 individual.click()
-    #                 explicit_wait()
-    #                 individual.find_element(By.CSS_SELECTOR, "div[class='select-options']").find_element(By.CSS_SELECTOR, "div[class='option-inner-container']").find_element(By.CSS_SELECTOR, "div[data-name='Individual units']").click()
-
-    #             if cols[0].find_element(By.CSS_SELECTOR, "div[data-testid='sku-action-info'").text.find('Prep not required') == -1:
-    #                 try:
-    #                     try:
-    #                         infoprep = cols[0].find_element(By.CSS_SELECTOR, "kat-link[data-testid='sku-action-info-prep-missing-link']")
-    #                     except:
-    #                         infoprep = cols[0].find_element(By.CSS_SELECTOR, "kat-link[data-testid='prep-modal-link']")
-    #                     explicit_wait()
-    #                     infoprep.click()
-    #                     catprep = self.driver.find_element(By.CSS_SELECTOR, "kat-dropdown[data-testid='prep-guidance-prep-category-dropdown']")
-    #                     explicit_wait()
-    #                     catprep.click()
-    #                     catprep.find_element(By.CSS_SELECTOR, "div[class='select-options']").find_element(By.CSS_SELECTOR, "div[class='option-inner-container']").find_element(By.CSS_SELECTOR, "div[data-value='NONE']").click()
-    #                     explicit_wait()
-    #                     self.driver.find_element(By.CSS_SELECTOR, "kat-modal-footer[data-testid='modal-footer']").find_element(By.CSS_SELECTOR, "kat-button[variant='primary']").find_element(By.CSS_SELECTOR, "button[class='primary']").click()
-    #                     explicit_wait()
-    #                     self.driver.find_element(By.CSS_SELECTOR, "kat-modal-footer[data-testid='modal-footer']").find_element(By.CSS_SELECTOR, "kat-button[data-testid='packing-template-save-button']").find_element(By.CSS_SELECTOR, "button[class='primary']").click()
-    #                 except:
-    #                     try:
-    #                         self.driver.find_element(By.CSS_SELECTOR, "kat-button[data-testid='prep-category-update-btn']").find_element(By.CSS_SELECTOR, "button[class='primary']").click()
-    #                         explicit_wait()
-    #                         self.driver.find_element(By.CSS_SELECTOR, "kat-button[data-testid='packing-template-save-button']").find_element(By.CSS_SELECTOR, "button[class='primary']").click()
-    #                     except:                        
-    #                         pass
-    #             try:
-    #                 WebDriverWait(cols[0], 10).until(EC.text_to_be_present_in_element((By.CSS_SELECTOR , "span[data-testid='prep-fee-text']"), "Prep not required"))
-    #             except:    
-    #                 try:
-    #                     WebDriverWait(cols[0], 10).until(EC.text_to_be_present_in_element((By.CSS_SELECTOR , "span[data-testid='prep-fee-text']"), "Unit prep: By seller"))
-    #                 except:
-    #                     try:
-    #                         self.driver.find_element(By.CSS_SELECTOR, "kat-button[data-testid='packing-template-cancel-button']").find_element(By.CSS_SELECTOR, "button[class='secondary']").click()
-    #                         error = True
-    #                         idxdel.append(dlist['name'])
-    #                     except:
-    #                         error = True
-    #                         idxdel.append(dlist['name'])
-    #                         pass
-
-
-    #             # except:
-    #             #     try:
-    #             #         WebDriverWait(cols[0], 10).until(EC.text_to_be_present_in_element((By.CSS_SELECTOR , "span[data-testid='prep-fee-text']"), "Unit prep: By seller"))
-    #             #     except:
-    #             #         pass
-
-    #             try:
-    #                 numunit = cols[0].find_element(By.CSS_SELECTOR, "kat-input[data-testid='sku-readiness-number-of-units-input']").find_element(By.CSS_SELECTOR, "input[name='numOfUnits']")
-    #                 if not numunit.is_enabled():
-    #                     errorlist.append(sku + " unit number disabled")
-    #                     error = True                     
-    #             except:
-    #                 errorlist.append(sku + " unit number disabled")
-    #                 error = True
-
-    #             now = datetime.now()
-    #             maxdate = now + timedelta(days=105)
-    #             strexpiry = item['expiry'].strip()
-    #             dformat = '%Y-%m-%d %H:%M:%S'
-    #             dateinput = True
-    #             if  strexpiry == 'None' or strexpiry == 'N/A':
-    #                 dexpiry = now + timedelta(days=365)
-    #                 notelist.append('{}: date expiry is empty, it will be adjusted to now +1 year'.format(xlssku))
-
-    #             else:
-    #                 try:
-    #                     dexpiry = datetime.strptime(strexpiry, dformat)
-    #                 except ValueError:
-    #                     dateinput = False
-    #                     error = True
-    #                     errorlist.append("{}: wrong date expiry value".format(xlssku))                
-
-    #             if dateinput == True:
-    #                 if dexpiry < maxdate:
-    #                     dexpiry = now + timedelta(days=365)
-    #                     notelist.append("{}: date expiry is less than 105 days, it will be adjusted to now +1 year".format(xlssku))
-
-    #             try:
-    #                 expiry = dexpiry.strftime('%m/%d/%Y')
-    #             except:
-    #                 expiry = strexpiry
-
-    #             try:
-    #                 inputexpiry = cols[0].find_element(By.CSS_SELECTOR, "kat-date-picker[id='expirationDatePicker']").find_element(By.CSS_SELECTOR, "input")
-    #                 if inputexpiry.is_enabled():
-    #                     inputexpiry.send_keys(expiry)
-    #                     inputexpiry.send_keys(Keys.TAB)
-    #             except:
-    #                 pass
-
-    #             errormsg = ''
-    #             try:
-    #                 errormsg = cols[0].find_element(By.CSS_SELECTOR, "kat-label[data-testid='sku-readiness-expiration-date-error']").text
-    #             except:
-    #                 pass
-    #             if errormsg != '':
-    #                 errorlist.append(errormsg)
-    #                 error = True
-                
-    #             boxes = "".join(str(x) for x in item['boxes'])
-    #             if boxes.isnumeric() == False:
-    #                 error = True
-    #                 errmsg = "{}: Boxes value is wrong".format(xlssku)
-    #                 errorlist.append(errmsg)
-                
-    #             if str(item['total']).isnumeric() == False:
-    #                 error = True
-    #                 errmsg = "{}: Total value is wrong".format(xlssku)
-    #                 errorlist.append(errmsg)
-    #         if error:
-    #             print("Failed")
-    #             idxdel.append(dlist['name'])
-    #         else:
-    #             print("Passed")
-        
-    #     #   DELETE BY idxdel
-    #     for idx in idxdel:
-    #         for index, shipmentdata in enumerate(self.datalist):
-    #             if idx == shipmentdata['name']:
-    #                 del self.datalist[index]
-    #                 break
-
 
     @property
     def workbook(self):
@@ -1056,6 +805,39 @@ class AmazonShipment:
     def xlworksheet(self):
         return self.__xlworksheet
 
+
+
+def extract_pdf(download_folder, box, shipment_id, label):
+    pdffile = "{}{}package-{}.pdf".format(download_folder, lib.file_delimeter() , shipment_id)
+    foldername = "{}{}combined".format(download_folder, lib.file_delimeter() ) 
+    isExist = os.path.exists(foldername)
+    if not isExist:
+        os.makedirs(foldername)
+    white = fitz.utils.getColor("white")
+    mfile = fitz.open(pdffile)
+    fname = "{}{}{}.pdf".format(foldername, lib.file_delimeter() ,  box.strip())
+    tmpname = "{}{}{}.pdf".format(foldername, lib.file_delimeter() , "tmp")
+
+    found = False
+    pfound = 0
+    for i in range(0, mfile.page_count):
+        page = mfile[i]
+        plist = page.search_for(label)
+        if len(plist) != 0:
+            found = True
+            pfound = i
+            break
+    if found:
+        single = fitz.open()
+        single.insert_pdf(mfile, from_page=pfound, to_page=pfound)
+        mfile.close()
+        single.save(tmpname)
+        mfile = fitz.open(tmpname)
+        page = mfile[0]
+        page.insert_text((550.2469787597656, 100.38037109375), "Box:{}".format(str(box)), rotate=90, color=white)
+        page.set_rotation(90)
+        mfile.save(fname)
+
 def main():
     clear_screan()
     parser = argparse.ArgumentParser(description="Amazon Shipment")
@@ -1090,12 +872,12 @@ def main():
     pathinput = args.xlsinput[0:-len(fnameinput)]
     backfile = "{}{}_backup{}".format(pathinput, os.path.splitext(fnameinput)[0], os.path.splitext(fnameinput)[1])
     shutil.copy(args.xlsinput, backfile)
-    xltmp = 'xlstmp' + args.xlsinput[-5:]
-    try:
-        os.remove(xltmp)
-    except:
-        pass
-    shutil.copy(args.xlsinput, xltmp)            
+    # xltmp = 'xlstmp' + args.xlsinput[-5:]
+    # try:
+    #     os.remove(xltmp)
+    # except:
+    #     pass
+    # shutil.copy(args.xlsinput, xltmp)            
 
     print('OK')
     print('Opening the Source Excel File...', end="", flush=True)
@@ -1126,7 +908,7 @@ def main():
         try:    
             shipment = AmazonShipment(xlsfile=args.xlsinput, sname=args.sheetname, chrome_data=args.chromedata, download_folder=folderamazonship, xlworksheet=xlsheet)
             # shipment.data_sanitizer()
-            # input(shipment.datalist)
+            input(shipment.datalist)
             if len(shipment.datalist) == 0:
                 break
             shipment.parse()
@@ -1150,6 +932,8 @@ def main():
                 logger.error("Execution Limit reached, Please check the script")
             continue
         break
+
+
     addressfile = Path("address.csv")
     resultfile = lib.join_pdfs(source_folder=folderamazonship + lib.file_delimeter() + "combined" , output_folder = folderamazonship, tag='Labels')
     if resultfile != "":
