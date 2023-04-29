@@ -254,4 +254,4 @@ for ship in shiplist:
                         # reslist.append(restup)
                         xlsheet[f"{boxcol}{dimrow+1}"].value = s['label']
                         xlsheet[f"{boxcol}{dimrow+2}"].value = s['trackid']
-                        # print(s['label'], s['trackid'])
+                        input(s['label'] + " " + s['trackid'])
