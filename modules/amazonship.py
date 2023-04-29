@@ -1135,7 +1135,7 @@ def main():
                 xlbook.save(args.xlsinput)
             except:
                 pass    
-            shipment.workbook.close()
+            # shipment.workbook.close()
         except Exception as e:
             logger.error(e)
             print("There is an error, check logs/amazonship-err.log")
@@ -1145,7 +1145,7 @@ def main():
                 xlbook.save(args.xlsinput)
             except:
                 pass
-            shipment.workbook.close()
+            # shipment.workbook.close()
             if i == maxrun:
                 logger.error("Execution Limit reached, Please check the script")
             continue
