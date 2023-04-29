@@ -53,6 +53,7 @@ def deltree(folder):
         result = "Error: %s : %s" % (folder, e.strerror)
     result =  "Success"
     print(result)
+
 def pdf_rename(pdfoutput_folder):
     pdffolder = pdfoutput_folder
     delimeter = file_delimeter()
@@ -198,11 +199,6 @@ def join_folderpdf(pdffiles, pdfoutput_folder):
     isExist = os.path.exists(foldername)
     if isExist:
         deltree(foldername)
-        # try:
-        #     shutil.rmtree(foldername)
-        #     os.makedirs(foldername)
-        # except OSError as e:
-        #     print("Error: %s : %s" % (foldername, e.strerror))            
     else:
         os.makedirs(foldername)
 
@@ -450,12 +446,6 @@ def main():
             for dir in dirs:
                 deltree(complete_output_folder + file_delimeter() + dir)
 
-                # try:
-                #     shutil.rmtree(complete_output_folder + file_delimeter() + dir)
-                # except OSError as e:
-                #     print("Error: %s : %s" % (folder, e.strerror))            
-
-
             list_of_files = glob.glob(complete_output_folder + file_delimeter() + "*.pdf")
             allsavedfiles = []
             for xlsdata in xlsdictall.values():
@@ -498,12 +488,6 @@ def main():
     for filename in list_of_files:
         folder = filename[:-4]
         deltree(folder)
-
-        # try:
-        #     shutil.rmtree(folder)
-        # except OSError as e:
-        #     print("Error: %s : %s" % (folder, e.strerror))            
-
     input("data generating completed...")
 
 
