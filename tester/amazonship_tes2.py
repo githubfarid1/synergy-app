@@ -193,7 +193,7 @@ datalist = data_generator()
 input(datalist)
 dlist = datalist[0]
 driver = browser_init(dfolder)
-
+input("pause")
 tabs = driver.find_elements(By.CSS_SELECTOR, "div[data-testid='shipment-tracking-tab']")
 # tabcount = 0
 shiplist = []
