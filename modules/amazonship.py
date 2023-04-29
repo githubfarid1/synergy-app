@@ -618,7 +618,7 @@ class AmazonShipment:
             mfile.save(fname)
 
     def __data_generator(self):
-        print("Data Mounting... ", end=" ", flush=True)
+        print("Data Mounting...", end=" ", flush=True)
         shipmentlist = []
         maxrow = self.xlworksheet.range('B' + str(self.xlworksheet.cells.last_cell.row)).end('up').row
         for i in range(2, maxrow + 2):
@@ -720,12 +720,10 @@ class AmazonShipment:
                     if self.xlworksheet['{}{}'.format(box, i)].value == None or str(self.xlworksheet['{}{}'.format(box, i)].value).strip() == '':
                         shipmentlist[index]['items'][ti]['boxes'].append(0)
                     else:                           
-                        shipmentlist[index]['items'][ti]['boxes'].append(self.xlworksheet['{}{}'.format(box, i)].value)
+                        shipmentlist[index]['items'][ti]['boxes'].append(int(self.xlworksheet['{}{}'.format(box, i)].value))
 
         
         #cleansing
-        print(shipmentlist)
-        input("xx")
         idxdel = []
         for index, shipmentdata in enumerate(shipmentlist):
             try:
