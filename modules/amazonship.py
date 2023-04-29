@@ -12,7 +12,7 @@ import fitz
 import os
 import argparse
 import time
-from openpyxl import Workbook, load_workbook
+# from openpyxl import Workbook, load_workbook
 # import unicodedata as ud
 from sys import platform
 import json
@@ -69,9 +69,9 @@ def killAllChrome():
 class AmazonShipment:
     def __init__(self, xlsfile, sname, chrome_data, download_folder, xlworksheet) -> None:
         try:
-            xltmp = 'xlstmp' + xlsfile[-5:]
-            self.__workbook = load_workbook(filename=xltmp, read_only=False, keep_vba=True, data_only=True)
-            self.__worksheet = self.__workbook[sname]
+            # xltmp = 'xlstmp' + xlsfile[-5:]
+            # self.__workbook = load_workbook(filename=xltmp, read_only=False, keep_vba=True, data_only=True)
+            # self.__worksheet = self.__workbook[sname]
             # self.__xlworkbook = xlworkbook
             # self.__xlworksheet = xlworkbook.sheets[sname]
             self.__xlworksheet = xlworksheet
@@ -532,26 +532,26 @@ class AmazonShipment:
                     for boxcol in boxcols:
                         dimension = ""
                         weight = ""
-                        box = str(self.worksheet['{}{}'.format(boxcol, dlist['begin'])].value)
+                        box = str(self.xlworksheet['{}{}'.format(boxcol, dlist['begin'])].value)
                         # print(box)
                         if box != 'None':
                             dimrow = 0
                             for i in range(dlist['begin'], dlist['end']):
-                                if self.worksheet['B{}'.format(i)].value == 'Weight':
-                                    weight = self.worksheet['{}{}'.format(boxcol, i)].value
+                                if self.xlworksheet['B{}'.format(i)].value == 'Weight':
+                                    weight = self.xlworksheet['{}{}'.format(boxcol, i)].value
                                 
-                                if self.worksheet['B{}'.format(i)].value == 'Dimensions':
-                                    dimension = self.worksheet['{}{}'.format(boxcol, i)].value
+                                if self.xlworksheet['B{}'.format(i)].value == 'Dimensions':
+                                    dimension = self.xlworksheet['{}{}'.format(boxcol, i)].value
                                     dimrow = i
                                 dimension = dimension.replace(" ","")
                                 dimship = s['dimension'].replace(" ","")
 
                             if int(s['weight']) == int(weight) and dimension == dimship:
-                                if not s['trackid'] in stmp and str(self.worksheet['{}{}'.format(boxcol, dimrow+2)].value) == 'None':
+                                if not s['trackid'] in stmp and str(self.xlworksheet['{}{}'.format(boxcol, dimrow+2)].value) == 'None':
                                     stmp.append(s['trackid'])
                                     self.__extract_pdf(box=box, shipment_id=s['shipmentid'], label=s['label'])
-                                    # self.worksheet['{}{}'.format(boxcol, dimrow+1)].value = s['label']
-                                    # self.worksheet['{}{}'.format(boxcol, dimrow+2)].value = s['trackid']
+                                    # self.xlworksheet['{}{}'.format(boxcol, dimrow+1)].value = s['label']
+                                    # self.xlworksheet['{}{}'.format(boxcol, dimrow+2)].value = s['trackid']
                                     # restup = (f"{boxcol}{dimrow+1}", s['label'], f"{boxcol}{dimrow+2}", s['trackid'])
                                     # reslist.append(restup)
                                     self.xlworksheet[f"{boxcol}{dimrow+1}"].value = s['label']
@@ -620,8 +620,9 @@ class AmazonShipment:
     def __data_generator(self):
         print("Data Mounting... ", end="")
         shipmentlist = []
-        for i in range(2, self.worksheet.max_row + 1):
-            shipment_row = str(self.worksheet['A{}'.format(i)].value)
+        maxrow = self.xlworksheet.range('B' + str(self.xlworksheet.cells.last_cell.row)).end('up').row
+        for i in range(2, maxrow + 2):
+            shipment_row = str(self.xlworksheet['A{}'.format(i)].value)
             if shipment_row.find('Shipment') != -1:
                 # print(shipment_row, i)
                 startrow = i
@@ -629,13 +630,12 @@ class AmazonShipment:
                 shipment_empty = True
                 while True:
                     y += 1
-
                     # skip if shipment_id was filled
-                    if ''.join(str(self.worksheet['B{}'.format(y)].value)).strip() == 'Shipment ID':
-                        if ''.join(str(self.worksheet['E{}'.format(y)].value)).strip() != 'None':
+                    if ''.join(str(self.xlworksheet['B{}'.format(y)].value)).strip() == 'Shipment ID':
+                        if ''.join(str(self.xlworksheet['E{}'.format(y)].value)).strip() != 'None':
                             shipment_empty = False
 
-                    if str(self.worksheet['B{}'.format(y)].value) == 'Tracking Number':
+                    if str(self.xlworksheet['B{}'.format(y)].value) == 'Tracking Number':
                         endrow = y + 1
                         i = y + 1
                         break
@@ -646,14 +646,14 @@ class AmazonShipment:
 
         # print(json.dumps(shipmentlist))
         for index, shipmentdata in enumerate(shipmentlist):
-            shipmentlist[index]['submitter'] = self.worksheet['B{}'.format(shipmentdata['begin'])].value
-            shipmentlist[index]['address'] = self.worksheet['B{}'.format(shipmentdata['begin']+1)].value
-            shipmentlist[index]['name'] = self.worksheet['A{}'.format(shipmentdata['begin'])].value
+            shipmentlist[index]['submitter'] = self.xlworksheet['B{}'.format(shipmentdata['begin'])].value
+            shipmentlist[index]['address'] = self.xlworksheet['B{}'.format(shipmentdata['begin']+1)].value
+            shipmentlist[index]['name'] = self.xlworksheet['A{}'.format(shipmentdata['begin'])].value
             boxes = ('E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P')
             boxcount = 0
             for box in boxes:
                 
-                if self.worksheet['{}{}'.format(box, shipmentdata['begin'])].value != None:
+                if self.xlworksheet['{}{}'.format(box, shipmentdata['begin'])].value != None:
                     boxcount += 1
                 else:
                     break
@@ -670,45 +670,45 @@ class AmazonShipment:
             # get weightboxes
             rowsearch = 0
             for i in range(start, shipmentdata['end']):
-                if self.worksheet['B{}'.format(i)].value == 'Weight':
+                if self.xlworksheet['B{}'.format(i)].value == 'Weight':
                     rowsearch = i
                     break
             
             for ke, box in enumerate(boxes):
                 if ke == boxcount:
                     break
-                shipmentlist[index]['weightboxes'].append(self.worksheet['{}{}'.format(box, rowsearch)].value)
+                shipmentlist[index]['weightboxes'].append(self.xlworksheet['{}{}'.format(box, rowsearch)].value)
 
             # get dimensionboxes
             rowsearch = 0
             for i in range(start, shipmentdata['end']):
-                if self.worksheet['B{}'.format(i)].value == 'Dimensions':
+                if self.xlworksheet['B{}'.format(i)].value == 'Dimensions':
                     rowsearch = i
                     break
             
             for ke, box in enumerate(boxes):
                 if ke == boxcount:
                     break
-                shipmentlist[index]['dimensionboxes'].append(self.worksheet['{}{}'.format(box, rowsearch)].value)
+                shipmentlist[index]['dimensionboxes'].append(self.xlworksheet['{}{}'.format(box, rowsearch)].value)
 
             #get nameboxes
             for ke, box in enumerate(boxes):
                 if ke == boxcount:
                     break
-                shipmentlist[index]['nameboxes'].append(str(self.worksheet['{}{}'.format(box, shipmentdata['begin'])].value))
+                shipmentlist[index]['nameboxes'].append(str(self.xlworksheet['{}{}'.format(box, shipmentdata['begin'])].value))
 
             ti = -1
             for i in range(start, shipmentdata['end']):
                 ti += 1
-                if self.worksheet['A{}'.format(i)].value == None or str(self.worksheet['A{}'.format(i)].value).strip() == '':
+                if self.xlworksheet['A{}'.format(i)].value == None or str(self.xlworksheet['A{}'.format(i)].value).strip() == '':
                     break
                 # shipmentlist[index]['items'].append()
                 
                 dict = {
-                    'id': self.worksheet['A{}'.format(i)].value,
-                    'name': self.worksheet['B{}'.format(i)].value,
-                    'total': self.worksheet['C{}'.format(i)].value,
-                    'expiry': str(self.worksheet['D{}'.format(i)].value),
+                    'id': self.xlworksheet['A{}'.format(i)].value,
+                    'name': self.xlworksheet['B{}'.format(i)].value,
+                    'total': self.xlworksheet['C{}'.format(i)].value,
+                    'expiry': str(self.xlworksheet['D{}'.format(i)].value),
                     'boxes':[],
 
                 }
@@ -717,10 +717,10 @@ class AmazonShipment:
                 for ke, box in enumerate(boxes):
                     if ke == boxcount:
                         break
-                    if self.worksheet['{}{}'.format(box, i)].value == None or str(self.worksheet['{}{}'.format(box, i)].value).strip() == '':
+                    if self.xlworksheet['{}{}'.format(box, i)].value == None or str(self.xlworksheet['{}{}'.format(box, i)].value).strip() == '':
                         shipmentlist[index]['items'][ti]['boxes'].append(0)
                     else:                           
-                        shipmentlist[index]['items'][ti]['boxes'].append(self.worksheet['{}{}'.format(box, i)].value)
+                        shipmentlist[index]['items'][ti]['boxes'].append(self.xlworksheet['{}{}'.format(box, i)].value)
 
         
         #cleansing
@@ -1101,8 +1101,7 @@ def main():
     print('Opening the Source Excel File...', end="", flush=True)
     xlbook = xw.Book(args.xlsinput)
     xlsheet = xlbook.sheets[args.sheetname]
-    maxrow = xlsheet.range('B' + str(xlsheet.cells.last_cell.row)).end('up').row
-    input(maxrow)
+    
     print('OK')
     # the second handler is a file handler
     file_handler = logging.FileHandler('logs/amazonship-err.log')
@@ -1126,7 +1125,8 @@ def main():
             print("Process will be reapeated")
         try:    
             shipment = AmazonShipment(xlsfile=args.xlsinput, sname=args.sheetname, chrome_data=args.chromedata, download_folder=folderamazonship, xlworksheet=xlsheet)
-            shipment.data_sanitizer()
+            # shipment.data_sanitizer()
+            input(shipment.datalist)
             if len(shipment.datalist) == 0:
                 break
             shipment.parse()
