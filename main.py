@@ -22,7 +22,7 @@ elif platform == "win32":
 	from subprocess import CREATE_NEW_CONSOLE
 import json
 
-VERSION = "1.13"
+VERSION = "1.14"
 def getConfig():
 	file = open("setting.json", "r")
 	config = json.load(file)
