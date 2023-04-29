@@ -948,7 +948,7 @@ def main():
         try:    
             shipment = AmazonShipment(xlsfile=args.xlsinput, sname=args.sheetname, chrome_data=args.chromedata, download_folder=folderamazonship, xlworksheet=xlsheet)
             # shipment.data_sanitizer()
-            input(shipment.datareadylist)
+            # input(shipment.datareadylist)
             if len(shipment.datalist) == 0:
                 break
             shipment.parse()
@@ -973,7 +973,8 @@ def main():
             continue
         break
 
-
+    for rlist in shipment.datareadylist:
+        extract_pdf(download_folder=folderamazonship, box=rlist['boxname'], shipment_id=rlist['shipid'][0:12] )
     addressfile = Path("address.csv")
     resultfile = lib.join_pdfs(source_folder=folderamazonship + lib.file_delimeter() + "combined" , output_folder = folderamazonship, tag='Labels')
     if resultfile != "":
