@@ -618,7 +618,7 @@ class AmazonShipment:
             mfile.save(fname)
 
     def __data_generator(self):
-        print("Data Mounting... ", end="")
+        print("Data Mounting... ", end=" ", flush=True)
         shipmentlist = []
         maxrow = self.xlworksheet.range('B' + str(self.xlworksheet.cells.last_cell.row)).end('up').row
         for i in range(2, maxrow + 2):
@@ -632,6 +632,7 @@ class AmazonShipment:
                     y += 1
                     # skip if shipment_id was filled
                     if ''.join(str(self.xlworksheet['B{}'.format(y)].value)).strip() == 'Shipment ID':
+                        input(''.join(str(self.xlworksheet['E{}'.format(y)].value)).strip())
                         if ''.join(str(self.xlworksheet['E{}'.format(y)].value)).strip() != 'None':
                             shipment_empty = False
 
