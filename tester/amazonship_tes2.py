@@ -194,8 +194,9 @@ def data_generator():
     # print("Passed")
 
 datalist = data_generator()
-url = "https://sellercentral.amazon.ca/fba/sendtoamazon/enter_tracking_details_step?wf=wf7a0b0552-5b73-4916-8dd9-6d444822a00c"
-dlist = datalist[0]
+# url = "https://sellercentral.amazon.ca/fba/sendtoamazon/enter_tracking_details_step?wf=wf7a0b0552-5b73-4916-8dd9-6d444822a00c"
+url = "https://sellercentral.amazon.ca/fba/sendtoamazon/enter_tracking_details_step?wf=wf7f6f7d0f-ac84-4cf7-abe1-51da678f647f"
+dlist = datalist[1]
 print(dlist)
 driver = browser_init(dfolder)
 driver.get(url)
