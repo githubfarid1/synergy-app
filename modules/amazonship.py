@@ -220,6 +220,7 @@ class AmazonShipment:
         WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div[data-testid='sku-list']")))
         defsubmitter = self.driver.find_element(By.CSS_SELECTOR, "div[class='textBlock-60ch break-words']").text
         for idx, dlist in enumerate(self.datalist):
+            input(dlist)
             # original_window = self.driver.current_window_handle
             submitter = dlist['submitter'].split("(")[0].strip()
             addresstmp = dlist['address']
@@ -257,7 +258,6 @@ class AmazonShipment:
             self.driver.find_element(By.CSS_SELECTOR, "kat-dropdown[data-testid='search-dropdown']").find_element(By.CSS_SELECTOR, "div[class='select-options']").find_element(By.CSS_SELECTOR, "div[class='option-inner-container']").find_element(By.CSS_SELECTOR, "div[data-value='MSKU']").click()
             # explicit_wait()
             for item in dlist['items']:
-                print(item)
                 skutxtsearch = WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "kat-input[data-testid='search-input']")))
                 skutxtsearch.find_element(By.CSS_SELECTOR, "input").clear()
                 xlssku = item['id'].upper()
@@ -671,7 +671,7 @@ class AmazonShipment:
             for ke, box in enumerate(boxes):
                 if ke == boxcount:
                     break
-                shipmentlist[index]['weightboxes'].append(self.xlworksheet['{}{}'.format(box, rowsearch)].value)
+                shipmentlist[index]['weightboxes'].append(int(self.xlworksheet['{}{}'.format(box, rowsearch)].value)) #UP
 
             # get dimensionboxes
             rowsearch = 0
@@ -701,7 +701,7 @@ class AmazonShipment:
                 dict = {
                     'id': self.xlworksheet['A{}'.format(i)].value,
                     'name': self.xlworksheet['B{}'.format(i)].value,
-                    'total': int(self.xlworksheet['C{}'.format(i)].value),
+                    'total': int(self.xlworksheet['C{}'.format(i)].value), #UP
                     'expiry': str(self.xlworksheet['D{}'.format(i)].value),
                     'boxes':[],
 
@@ -714,7 +714,7 @@ class AmazonShipment:
                     if self.xlworksheet['{}{}'.format(box, i)].value == None or str(self.xlworksheet['{}{}'.format(box, i)].value).strip() == '':
                         shipmentlist[index]['items'][ti]['boxes'].append(0)
                     else:                           
-                        shipmentlist[index]['items'][ti]['boxes'].append(int(self.xlworksheet['{}{}'.format(box, i)].value))
+                        shipmentlist[index]['items'][ti]['boxes'].append(int(self.xlworksheet['{}{}'.format(box, i)].value)) #UP
         # input(shipreadylist)
         shipids = []
         for shipmentdata in shipreadylist:
