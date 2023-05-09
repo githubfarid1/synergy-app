@@ -714,7 +714,7 @@ class AmazonShipment:
                     if self.xlworksheet['{}{}'.format(box, i)].value == None or str(self.xlworksheet['{}{}'.format(box, i)].value).strip() == '':
                         shipmentlist[index]['items'][ti]['boxes'].append(0)
                     else:                           
-                        shipmentlist[index]['items'][ti]['boxes'].append(self.xlworksheet['{}{}'.format(box, i)].value)
+                        shipmentlist[index]['items'][ti]['boxes'].append(int(self.xlworksheet['{}{}'.format(box, i)].value))
         # input(shipreadylist)
         shipids = []
         for shipmentdata in shipreadylist:
