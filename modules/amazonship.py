@@ -220,7 +220,7 @@ class AmazonShipment:
         WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div[data-testid='sku-list']")))
         defsubmitter = self.driver.find_element(By.CSS_SELECTOR, "div[class='textBlock-60ch break-words']").text
         for idx, dlist in enumerate(self.datalist):
-            input(dlist)
+            # input(dlist)
             # original_window = self.driver.current_window_handle
             submitter = dlist['submitter'].split("(")[0].strip()
             addresstmp = dlist['address']
