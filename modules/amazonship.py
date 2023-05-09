@@ -701,7 +701,7 @@ class AmazonShipment:
                 dict = {
                     'id': self.xlworksheet['A{}'.format(i)].value,
                     'name': self.xlworksheet['B{}'.format(i)].value,
-                    'total': self.xlworksheet['C{}'.format(i)].value,
+                    'total': int(self.xlworksheet['C{}'.format(i)].value),
                     'expiry': str(self.xlworksheet['D{}'.format(i)].value),
                     'boxes':[],
 
