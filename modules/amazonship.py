@@ -257,6 +257,7 @@ class AmazonShipment:
             self.driver.find_element(By.CSS_SELECTOR, "kat-dropdown[data-testid='search-dropdown']").find_element(By.CSS_SELECTOR, "div[class='select-options']").find_element(By.CSS_SELECTOR, "div[class='option-inner-container']").find_element(By.CSS_SELECTOR, "div[data-value='MSKU']").click()
             # explicit_wait()
             for item in dlist['items']:
+                print(item)
                 skutxtsearch = WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "kat-input[data-testid='search-input']")))
                 skutxtsearch.find_element(By.CSS_SELECTOR, "input").clear()
                 xlssku = item['id'].upper()
