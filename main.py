@@ -216,7 +216,6 @@ class SettingFrame(ttk.Frame):
 			Popen([CHROME, "https://amazon.com","--user-data-dir={}".format(chromeUserData), "--profile-directory={}".format(chromeProfile)])
 
 	def gitPull(self):
-		messagebox.showinfo(title='Info', message='the scripts has updated..')
 		git_dir = os.getcwd() 
 		g = git.cmd.Git(git_dir)
 		g.pull()		
