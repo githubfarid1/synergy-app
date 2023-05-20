@@ -56,12 +56,6 @@ def getConfig():
 	config = json.load(file)
 	return config
 
-def getDownloadFolder():
-    download_folder = os.path.expanduser('~/Downloads')    
-    if platform == "win32":
-        download_folder = os.getenv('USERPROFILE') + r'\Downloads'
-    return download_folder
-
 def killAllChrome():
     if platform == "win32":
         os.system("taskkill /f /im chrome.exe")
@@ -99,7 +93,7 @@ class AmazonShipment:
  
         self.__driver = self.__browser_init()
         # input("pause")
-        self.__data_generator()
+        # self.__data_generator()
         # exit()
         # self.__data_sanitizer()
 
@@ -609,7 +603,7 @@ class AmazonShipment:
             page.set_rotation(90)
             mfile.save(fname)
 
-    def __data_generator(self):
+    def data_generator(self):
         print("Data Mounting...", end=" ", flush=True)
         shipmentlist = []
         shipreadylist = []
@@ -939,6 +933,7 @@ def main():
             print("Process will be reapeated")
         try:    
             shipment = AmazonShipment(xlsfile=args.xlsinput, sname=args.sheetname, chrome_data=args.chromedata, download_folder=folderamazonship, xlworksheet=xlsheet)
+            shipment.data_generator()
             if len(shipment.datalist) == 0:
                 break
             shipment.parse()
@@ -957,7 +952,8 @@ def main():
                 logger.error("Execution Limit reached, Please check the script")
             continue
         break
-
+    
+    shipment.data_generator()
     for rlist in shipment.datareadylist:
         extract_pdf(download_folder=folderamazonship, box=rlist['boxname'], shipment_id=rlist['shipid'][0:12], label=rlist['shipid'] )
     addressfile = Path("address.csv")
